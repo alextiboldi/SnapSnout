@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans, Manrope, Space_Grotesk } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
+import { SplashScreen } from "@/components/splash-screen";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -59,6 +60,7 @@ export default async function RootLayout({
         className={`${plusJakartaSans.variable} ${manrope.variable} ${spaceGrotesk.variable} antialiased`}
       >
         <NextIntlClientProvider messages={messages}>
+          <SplashScreen />
           {children}
         </NextIntlClientProvider>
       </body>

@@ -5,10 +5,17 @@ import { useTranslations } from "next-intl";
 
 export function SplashScreen() {
   const t = useTranslations("common");
-  const [splashVisible, setSplashVisible] = useState(true);
-  const [splashMounted, setSplashMounted] = useState(true);
+  const [splashVisible, setSplashVisible] = useState(false);
+  const [splashMounted, setSplashMounted] = useState(false);
 
   useEffect(() => {
+    // Only show splash once per browser session
+    if (sessionStorage.getItem("snapsnout_splash_seen")) return;
+    sessionStorage.setItem("snapsnout_splash_seen", "1");
+
+    setSplashMounted(true);
+    setSplashVisible(true);
+
     const fadeTimer = setTimeout(() => setSplashVisible(false), 2000);
     const unmountTimer = setTimeout(() => setSplashMounted(false), 2500);
 
