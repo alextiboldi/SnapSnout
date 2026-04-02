@@ -5,8 +5,10 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Icon } from "@/components/icon";
+import { useTranslations } from "next-intl";
 
 export default function SignupPage() {
+  const t = useTranslations("auth.signup");
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -21,7 +23,7 @@ export default function SignupPage() {
     setError(null);
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setError(t("passwordsMismatch"));
       return;
     }
 
@@ -52,17 +54,19 @@ export default function SignupPage() {
         <div className="bg-surface-container-low irregular-border p-6 md:p-8 shadow-ambient-lg text-center">
           <div className="text-5xl mb-4">📬</div>
           <h2 className="font-headline text-2xl font-bold text-on-surface mb-2">
-            Check your email
+            {t("checkEmail")}
           </h2>
           <p className="font-body text-sm text-on-surface-variant mb-6">
-            We sent a confirmation link to <strong>{email}</strong>. Click the
-            link to activate your account.
+            {t.rich("checkEmailDesc", {
+              email,
+              strong: (chunks) => <strong>{chunks}</strong>,
+            })}
           </p>
           <Link
             href="/login"
             className="inline-block py-3 px-8 btn-sculpted text-on-primary font-headline font-bold rounded-xl shadow-ambient spring-active"
           >
-            Back to Login
+            {t("backToLogin")}
           </Link>
         </div>
       </div>
@@ -80,10 +84,10 @@ export default function SignupPage() {
         {/* Header */}
         <header className="mb-10 text-center md:text-left">
           <h1 className="font-headline text-4xl sm:text-5xl font-extrabold text-on-surface tracking-tight mb-4">
-            Join the Pack
+            {t("title")}
           </h1>
           <p className="font-body text-on-surface-variant text-lg leading-relaxed max-w-md">
-            Start documenting your pet&apos;s journey today.
+            {t("subtitle")}
           </p>
         </header>
 
@@ -92,7 +96,7 @@ export default function SignupPage() {
           {/* Full Name */}
           <div className="space-y-2 group">
             <label className="font-label text-[11px] uppercase tracking-widest text-tertiary ml-4">
-              Your Name
+              {t("name")}
             </label>
             <div className="irregular-border bg-surface-container-low px-6 py-4 flex items-center gap-4 border-2 border-outline/20 focus-within:border-tertiary focus-within:shadow-[0_0_0_4px_rgba(132,190,243,0.2)] transition-all">
               <Icon name="person" className="text-outline-variant" />
@@ -102,7 +106,7 @@ export default function SignupPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="bg-transparent border-none focus:ring-0 w-full font-body text-on-surface placeholder:text-outline-variant/50 p-0"
-                placeholder="Alex"
+                placeholder={t("namePlaceholder")}
               />
             </div>
           </div>
@@ -110,7 +114,7 @@ export default function SignupPage() {
           {/* Email */}
           <div className="space-y-2 group">
             <label className="font-label text-[11px] uppercase tracking-widest text-tertiary ml-4">
-              Email
+              {t("email")}
             </label>
             <div className="irregular-border bg-surface-container-low px-6 py-4 flex items-center gap-4 border-2 border-outline/20 focus-within:border-tertiary focus-within:shadow-[0_0_0_4px_rgba(132,190,243,0.2)] transition-all">
               <Icon name="alternate_email" className="text-outline-variant" />
@@ -120,7 +124,7 @@ export default function SignupPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="bg-transparent border-none focus:ring-0 w-full font-body text-on-surface placeholder:text-outline-variant/50 p-0"
-                placeholder="you@example.com"
+                placeholder={t("emailPlaceholder")}
               />
             </div>
           </div>
@@ -129,7 +133,7 @@ export default function SignupPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <label className="font-label text-[11px] uppercase tracking-widest text-tertiary ml-4">
-                Password
+                {t("password")}
               </label>
               <div className="irregular-border bg-surface-container-low px-6 py-4 flex items-center gap-4 border-2 border-outline/20 focus-within:border-tertiary focus-within:shadow-[0_0_0_4px_rgba(132,190,243,0.2)] transition-all">
                 <Icon name="key" className="text-outline-variant" />
@@ -140,13 +144,13 @@ export default function SignupPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="bg-transparent border-none focus:ring-0 w-full font-body text-on-surface placeholder:text-outline-variant/50 p-0"
-                  placeholder="••••••••"
+                  placeholder={t("passwordPlaceholder")}
                 />
               </div>
             </div>
             <div className="space-y-2">
               <label className="font-label text-[11px] uppercase tracking-widest text-tertiary ml-4">
-                Confirm
+                {t("confirm")}
               </label>
               <div className="irregular-border bg-surface-container-low px-6 py-4 flex items-center gap-4 border-2 border-outline/20 focus-within:border-tertiary focus-within:shadow-[0_0_0_4px_rgba(132,190,243,0.2)] transition-all">
                 <Icon name="verified_user" className="text-outline-variant" />
@@ -157,7 +161,7 @@ export default function SignupPage() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className="bg-transparent border-none focus:ring-0 w-full font-body text-on-surface placeholder:text-outline-variant/50 p-0"
-                  placeholder="••••••••"
+                  placeholder={t("passwordPlaceholder")}
                 />
               </div>
             </div>
@@ -175,7 +179,7 @@ export default function SignupPage() {
               className="w-full bg-gradient-to-b from-secondary-fixed to-secondary-fixed-dim hover:from-secondary-fixed-dim hover:to-secondary-fixed py-5 px-8 rounded-full flex items-center justify-center gap-3 transition-all shadow-[0px_4px_12px_rgba(55,56,49,0.05),0px_2px_4px_rgba(139,69,19,0.1),inset_0px_2px_0px_rgba(154,81,30,0.3)] active:scale-95 disabled:opacity-50"
             >
               <span className="font-headline font-extrabold text-on-secondary-fixed text-xl">
-                {loading ? "Creating account..." : "Join the Pack"}
+                {loading ? t("submitting") : t("submit")}
               </span>
               <Icon name="arrow_forward" className="font-bold text-on-secondary-fixed" />
             </button>
@@ -189,7 +193,7 @@ export default function SignupPage() {
             className="group flex items-center justify-center gap-2 font-label text-[12px] uppercase tracking-widest text-tertiary-dim hover:text-primary transition-colors"
           >
             <Icon name="login" className="text-sm" />
-            Log in to an existing account
+            {t("hasAccount")}
           </Link>
         </footer>
 

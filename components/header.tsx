@@ -5,8 +5,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { Icon } from "./icon";
 import { signOut } from "@/lib/actions/auth";
+import { useTranslations } from "next-intl";
 
 export function Header() {
+  const t = useTranslations("header");
+  const tc = useTranslations("common");
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -21,7 +24,7 @@ export function Header() {
             className="w-8 h-8 md:w-9 md:h-9"
           />
           <h1 className="text-2xl md:text-3xl font-[800] italic text-primary font-headline tracking-tight">
-            SnapSnout
+            {tc("appName")}
           </h1>
         </Link>
         <div className="relative flex items-center gap-2">
@@ -45,7 +48,7 @@ export function Header() {
                   className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-surface-container transition-colors font-body text-sm text-on-surface"
                 >
                   <Icon name="settings" className="text-lg text-on-surface-variant" />
-                  Settings
+                  {t("settings")}
                 </Link>
                 <form action={signOut}>
                   <button
@@ -53,7 +56,7 @@ export function Header() {
                     className="flex w-full items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-surface-container transition-colors font-body text-sm text-on-surface"
                   >
                     <Icon name="logout" className="text-lg text-on-surface-variant" />
-                    Sign out
+                    {t("signOut")}
                   </button>
                 </form>
               </div>

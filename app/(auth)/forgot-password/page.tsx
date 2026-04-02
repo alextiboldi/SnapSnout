@@ -4,8 +4,10 @@ import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Icon } from "@/components/icon";
+import { useTranslations } from "next-intl";
 
 export default function ForgotPasswordPage() {
+  const t = useTranslations("auth.forgot");
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -44,10 +46,13 @@ export default function ForgotPasswordPage() {
 
         <div className="space-y-3">
           <h1 className="font-headline text-4xl font-extrabold text-primary tracking-tight">
-            Check Your Email
+            {t("successTitle")}
           </h1>
           <p className="font-body text-on-surface-variant text-lg max-w-[300px] mx-auto">
-            We sent a reset link to <strong className="text-on-surface">{email}</strong>. Click the link to set a new password.
+            {t.rich("successDesc", {
+              email,
+              strong: (chunks) => <strong className="text-on-surface">{chunks}</strong>,
+            })}
           </p>
         </div>
 
@@ -56,7 +61,7 @@ export default function ForgotPasswordPage() {
           className="flex items-center gap-2 font-label text-xs uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-colors font-bold group"
         >
           <Icon name="arrow_back" className="text-sm group-hover:-translate-x-1 transition-transform" />
-          Back to login
+          {t("backToLogin")}
         </Link>
       </div>
     );
@@ -76,10 +81,10 @@ export default function ForgotPasswordPage() {
       {/* Typography */}
       <div className="text-center space-y-3">
         <h1 className="font-headline text-5xl font-extrabold text-primary tracking-tight leading-tight">
-          Forgot Your Password?
+          {t("title")}
         </h1>
         <p className="font-body text-on-surface-variant text-lg max-w-[280px] mx-auto">
-          No worries, we&apos;ll send you a link to reset it.
+          {t("subtitle")}
         </p>
       </div>
 
@@ -87,7 +92,7 @@ export default function ForgotPasswordPage() {
       <form onSubmit={handleSubmit} className="w-full space-y-8">
         <div className="space-y-2">
           <label className="font-label text-xs uppercase tracking-widest text-on-surface-variant font-bold px-4">
-            Email
+            {t("email")}
           </label>
           <div className="relative group">
             <input
@@ -96,7 +101,7 @@ export default function ForgotPasswordPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full bg-surface-container-lowest irregular-border border-2 border-outline/20 px-6 py-5 text-on-surface placeholder:text-outline-variant focus:outline-none focus:border-tertiary transition-all duration-300 font-body"
-              placeholder="Enter your email"
+              placeholder={t("emailPlaceholder")}
             />
             <Icon
               name="alternate_email"
@@ -114,7 +119,7 @@ export default function ForgotPasswordPage() {
           disabled={loading}
           className="w-full bg-gradient-to-b from-secondary-fixed to-secondary-fixed-dim py-5 rounded-xl font-headline font-bold text-on-secondary-fixed text-xl shadow-[0px_4px_0px_#6d5a00,0px_8px_16px_rgba(154,81,30,0.15)] active:shadow-[0px_1px_0px_#6d5a00] active:translate-y-[3px] transition-all duration-200 flex items-center justify-center gap-3 disabled:opacity-50"
         >
-          {loading ? "Sending..." : "Send Reset Link"}
+          {loading ? t("submitting") : t("submit")}
           <Icon name="rocket_launch" className="font-bold" />
         </button>
       </form>
@@ -126,7 +131,7 @@ export default function ForgotPasswordPage() {
           className="flex items-center gap-2 font-label text-xs uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-colors font-bold group"
         >
           <Icon name="arrow_back" className="text-sm group-hover:-translate-x-1 transition-transform" />
-          Back to login
+          {t("backToLogin")}
         </Link>
       </footer>
 

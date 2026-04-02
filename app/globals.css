@@ -177,6 +177,15 @@
   animation: pulse-soft 3s ease-in-out infinite;
 }
 
+@keyframes bounce-gentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.animate-bounce-gentle {
+  animation: bounce-gentle 1.2s ease-in-out infinite;
+}
+
 /* ─── Base Resets ─── */
 body {
   background: var(--color-clay);

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 import { Icon } from "@/components/icon";
 import Link from "next/link";
 import { switchActivePet, deletePet } from "@/lib/actions/pets";
@@ -92,12 +93,15 @@ function DeleteDialog({
   onCancel,
   onConfirm,
   isDeleting,
+  t,
 }: {
   pet: Pet;
   onCancel: () => void;
   onConfirm: () => void;
   isDeleting: boolean;
+  t: ReturnType<typeof useTranslations<"settings">>;
 }) {
+  const tCommon = useTranslations("common");
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       {/* Backdrop */}
@@ -112,11 +116,10 @@ function DeleteDialog({
             <Icon name="delete_forever" filled className="text-3xl text-error" />
           </div>
           <h3 className="font-headline text-lg font-bold text-on-surface">
-            Delete {pet.name}?
+            {t("deletePet", { name: pet.name })}
           </h3>
           <p className="mt-2 font-body text-sm text-on-surface-variant max-w-[260px]">
-            This will permanently remove {pet.name} and all their milestones
-            and photos. This can&apos;t be undone.
+            {t("deleteConfirm", { name: pet.name })}
           </p>
         </div>
 
@@ -126,14 +129,14 @@ function DeleteDialog({
             disabled={isDeleting}
             className="flex-1 py-3 rounded-xl bg-surface-container-highest font-headline font-bold text-sm text-on-surface spring-active hover:shadow-ambient transition-shadow"
           >
-            Keep
+            {t("keep")}
           </button>
           <button
             onClick={onConfirm}
             disabled={isDeleting}
             className="flex-1 py-3 rounded-xl bg-error text-on-error font-headline font-bold text-sm spring-active disabled:opacity-50 transition-all"
           >
-            {isDeleting ? "Deleting..." : "Delete"}
+            {isDeleting ? t("deleting") : tCommon("delete")}
           </button>
         </div>
       </div>
@@ -141,7 +144,7 @@ function DeleteDialog({
   );
 }
 
-function PetManagementSection({ pets }: { pets: Pet[] }) {
+function PetManagementSection({ pets, t }: { pets: Pet[]; t: ReturnType<typeof useTranslations<"settings">> }) {
   const [isPending, startTransition] = useTransition();
   const [deletingPet, setDeletingPet] = useState<Pet | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -162,7 +165,7 @@ function PetManagementSection({ pets }: { pets: Pet[] }) {
       style={{ animationDelay: "0.05s" }}
     >
       <h2 className="font-label text-[11px] font-medium tracking-wider text-on-surface-variant/70 uppercase">
-        Your Pets
+        {t("yourPets")}
       </h2>
 
       {deletingPet && (
@@ -171,6 +174,7 @@ function PetManagementSection({ pets }: { pets: Pet[] }) {
           onCancel={() => { setDeletingPet(null); setIsDeleting(false); }}
           onConfirm={handleDelete}
           isDeleting={isDeleting}
+          t={t}
         />
       )}
 
@@ -212,7 +216,7 @@ function PetManagementSection({ pets }: { pets: Pet[] }) {
                     </p>
                     {pet.isActive && (
                       <span className="shrink-0 px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-label font-bold rounded-full">
-                        Active
+                        {t("active")}
                       </span>
                     )}
                   </div>
@@ -249,7 +253,7 @@ function PetManagementSection({ pets }: { pets: Pet[] }) {
       >
         <Icon name="add" className="text-xl text-primary" />
         <span className="font-headline text-sm font-semibold text-primary">
-          Add Another Pet
+          {t("addAnother")}
         </span>
       </Link>
     </section>
@@ -263,6 +267,7 @@ function NotificationsSection({
   setPhotoReminders,
   birthdayCountdown,
   setBirthdayCountdown,
+  t,
 }: {
   milestoneReminders: boolean;
   setMilestoneReminders: (v: boolean) => void;
@@ -270,6 +275,7 @@ function NotificationsSection({
   setPhotoReminders: (v: boolean) => void;
   birthdayCountdown: boolean;
   setBirthdayCountdown: (v: boolean) => void;
+  t: ReturnType<typeof useTranslations<"settings">>;
 }) {
   return (
     <section
@@ -277,28 +283,28 @@ function NotificationsSection({
       style={{ animationDelay: "0.1s" }}
     >
       <h2 className="font-label text-[11px] font-medium tracking-wider text-on-surface-variant/70 uppercase">
-        Notifications
+        {t("notifications")}
       </h2>
 
       <div className="mt-2 divide-y divide-outline-variant/15">
         <NotificationRow
           icon="flag"
-          label="Milestone Reminders"
-          description="Get notified when milestones are coming up"
+          label={t("milestoneReminders")}
+          description={t("milestoneRemindersDesc")}
           checked={milestoneReminders}
           onChange={setMilestoneReminders}
         />
         <NotificationRow
           icon="photo_camera"
-          label="Monthly Photo Reminders"
-          description="Never miss a monthly growth photo"
+          label={t("photoReminders")}
+          description={t("photoRemindersDesc")}
           checked={photoReminders}
           onChange={setPhotoReminders}
         />
         <NotificationRow
           icon="cake"
-          label="Birthday Countdown"
-          description="Celebrate with a special countdown"
+          label={t("birthdayCountdown")}
+          description={t("birthdayCountdownDesc")}
           checked={birthdayCountdown}
           onChange={setBirthdayCountdown}
         />
@@ -307,7 +313,63 @@ function NotificationsSection({
   );
 }
 
+function LanguageSection() {
+  const t = useTranslations("settings");
+  const [isPending, startTransition] = useTransition();
+
+  const handleLocaleChange = async (locale: string) => {
+    startTransition(async () => {
+      const { setLocale } = await import("@/lib/actions/locale");
+      await setLocale(locale);
+    });
+  };
+
+  return (
+    <section
+      className="irregular-border bg-surface-container-low p-5 shadow-ambient"
+      style={{ animationDelay: "0.12s" }}
+    >
+      <h2 className="font-label text-[11px] font-medium tracking-wider text-on-surface-variant/70 uppercase">
+        {t("language")}
+      </h2>
+      <div className={`mt-3 space-y-1 ${isPending ? "opacity-50" : ""}`}>
+        {(["en", "nl", "ro"] as const).map((locale) => {
+          const names: Record<string, string> = { en: "English", nl: "Nederlands", ro: "Română" };
+          const flags: Record<string, string> = { en: "🇬🇧", nl: "🇳🇱", ro: "🇷🇴" };
+          return (
+            <button
+              key={locale}
+              disabled={isPending}
+              onClick={() => handleLocaleChange(locale)}
+              className="spring-active flex w-full items-center gap-4 rounded-2xl p-3 text-left transition-colors hover:bg-surface-container/60"
+            >
+              <span className="text-2xl">{flags[locale]}</span>
+              <span className="flex-1 font-body text-sm font-medium text-on-surface">
+                {names[locale]}
+              </span>
+              <Icon
+                name="check_circle"
+                filled
+                className="text-xl text-primary opacity-0 transition-opacity"
+                // Will show for active locale via CSS — simplified: just show for current
+              />
+            </button>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 function SubscriptionSection() {
+  const t = useTranslations("settings");
+  const features = [
+    t("unlimitedPets"),
+    t("allTemplates"),
+    t("noWatermarks"),
+    t("growthComparisons"),
+  ];
+
   return (
     <section
       className="irregular-border overflow-hidden shadow-ambient-lg"
@@ -315,45 +377,32 @@ function SubscriptionSection() {
     >
       <div className="bg-gradient-to-br from-primary to-primary-dim p-6">
         <div className="flex items-start gap-3">
-          <Icon
-            name="auto_awesome"
-            filled
-            className="text-3xl text-white/90"
-          />
+          <Icon name="auto_awesome" filled className="text-3xl text-white/90" />
           <div>
             <h2 className="font-headline text-lg font-bold text-white">
-              SnapSnout Premium
+              {t("premium")}
             </h2>
             <p className="mt-0.5 font-body text-sm text-white/70">
-              Unlock everything for your fur family
+              {t("premiumDesc")}
             </p>
           </div>
         </div>
 
         <ul className="mt-4 space-y-2">
-          {[
-            "Unlimited pets",
-            "All card templates",
-            "No watermarks",
-            "Growth comparisons",
-          ].map((feature) => (
+          {features.map((feature) => (
             <li key={feature} className="flex items-center gap-2.5">
-              <Icon
-                name="check_circle"
-                filled
-                className="text-lg text-secondary-fixed"
-              />
+              <Icon name="check_circle" filled className="text-lg text-secondary-fixed" />
               <span className="font-body text-sm text-white/90">{feature}</span>
             </li>
           ))}
         </ul>
 
         <button className="spring-active mt-5 w-full rounded-2xl bg-secondary-fixed px-5 py-3 font-headline text-sm font-bold text-on-secondary-fixed shadow-ambient transition-shadow hover:shadow-ambient-lg">
-          Upgrade Now
+          {t("upgradeNow")}
         </button>
 
         <p className="mt-2.5 text-center font-label text-xs text-white/50">
-          $2.99/month &middot; Cancel anytime
+          {t("priceMonthly")}
         </p>
       </div>
     </section>
@@ -361,37 +410,36 @@ function SubscriptionSection() {
 }
 
 function AboutSection() {
+  const t = useTranslations("settings");
   return (
     <section
       className="irregular-border bg-surface-container-low p-5 shadow-ambient"
       style={{ animationDelay: "0.2s" }}
     >
       <h2 className="font-label text-[11px] font-medium tracking-wider text-on-surface-variant/70 uppercase">
-        About
+        {t("about")}
       </h2>
 
       <div className="mt-2 divide-y divide-outline-variant/15">
-        <AboutRow icon="shield" label="Privacy Policy" href="#privacy" />
-        <AboutRow icon="description" label="Terms of Service" href="#terms" />
-        <AboutRow icon="star" label="Rate on App Store" href="#rate" />
-        <AboutRow icon="mail" label="Contact Support" href="#support" />
+        <AboutRow icon="shield" label={t("privacyPolicy")} href="#privacy" />
+        <AboutRow icon="description" label={t("termsOfService")} href="#terms" />
+        <AboutRow icon="star" label={t("rateApp")} href="#rate" />
+        <AboutRow icon="mail" label={t("contactSupport")} href="#support" />
       </div>
 
       <p className="mt-4 text-center font-label text-xs text-on-surface-variant/40">
-        SnapSnout v1.0.0
+        {t("version")}
       </p>
     </section>
   );
 }
 
 function DangerZone() {
+  const t = useTranslations("settings");
   return (
-    <div
-      className="flex justify-center"
-      style={{ animationDelay: "0.25s" }}
-    >
+    <div className="flex justify-center" style={{ animationDelay: "0.25s" }}>
       <button className="spring-active rounded-2xl px-6 py-3 font-headline text-sm font-semibold text-error/70 transition-colors hover:bg-error/5 hover:text-error">
-        Delete Account
+        {t("deleteAccount")}
       </button>
     </div>
   );
@@ -400,19 +448,19 @@ function DangerZone() {
 /* ─── Client Shell ─── */
 
 export default function SettingsClient({ pets }: { pets: Pet[] }) {
+  const t = useTranslations("settings");
   const [milestoneReminders, setMilestoneReminders] = useState(true);
   const [photoReminders, setPhotoReminders] = useState(true);
   const [birthdayCountdown, setBirthdayCountdown] = useState(true);
 
   return (
     <div className="animate-fade-up mx-auto max-w-lg px-5 pb-8">
-      {/* Page title */}
       <h1 className="pt-2 font-headline text-2xl font-bold tracking-tight text-on-surface md:text-3xl">
-        Settings
+        {t("title")}
       </h1>
 
       <div className="mt-5 space-y-5">
-        <PetManagementSection pets={pets} />
+        <PetManagementSection pets={pets} t={t} />
 
         <NotificationsSection
           milestoneReminders={milestoneReminders}
@@ -421,7 +469,10 @@ export default function SettingsClient({ pets }: { pets: Pet[] }) {
           setPhotoReminders={setPhotoReminders}
           birthdayCountdown={birthdayCountdown}
           setBirthdayCountdown={setBirthdayCountdown}
+          t={t}
         />
+
+        <LanguageSection />
 
         <SubscriptionSection />
 

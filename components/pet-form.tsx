@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { Icon } from "@/components/icon";
 import { uploadPhoto } from "@/lib/actions/upload";
 
@@ -8,24 +9,25 @@ type Species = "dog" | "cat" | "horse" | "other" | null;
 type Lifestage = "puppy" | "kitten" | "adult" | "senior";
 
 function getLifestageOptions(
-  species: Species
+  species: Species,
+  t: (key: string) => string
 ): { id: Lifestage; label: string }[] {
   switch (species) {
     case "dog":
       return [
-        { id: "puppy", label: "Puppy" },
-        { id: "adult", label: "Adult" },
-        { id: "senior", label: "Senior" },
+        { id: "puppy", label: t("puppy") },
+        { id: "adult", label: t("adult") },
+        { id: "senior", label: t("senior") },
       ];
     case "cat":
       return [
-        { id: "kitten", label: "Kitten" },
-        { id: "adult", label: "Adult" },
-        { id: "senior", label: "Senior" },
+        { id: "kitten", label: t("kitten") },
+        { id: "adult", label: t("adult") },
+        { id: "senior", label: t("senior") },
       ];
     case "horse":
     case "other":
-      return [{ id: "adult", label: "Adult" }];
+      return [{ id: "adult", label: t("adult") }];
     default:
       return [];
   }
@@ -74,6 +76,7 @@ export function PetForm({
   submitLabel,
   submittingLabel,
 }: PetFormProps) {
+  const t = useTranslations("petForm");
   const [petName, setPetName] = useState(initialData?.name ?? "");
   const [species, setSpecies] = useState<Species>(
     initialData?.species ?? null
@@ -121,11 +124,11 @@ export function PetForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!petName.trim()) {
-      setError("Please enter your pet's name");
+      setError(t("nameRequired"));
       return;
     }
     if (!species) {
-      setError("Please select what kind of pet");
+      setError(t("speciesRequired"));
       return;
     }
     setIsSubmitting(true);
@@ -139,7 +142,7 @@ export function PetForm({
         uploadData.set("file", file);
         photoUrl = await uploadPhoto(uploadData);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Photo upload failed");
+        setError(err instanceof Error ? err.message : t("photoUploadFailed"));
         setIsSubmitting(false);
         return;
       }
@@ -163,19 +166,19 @@ export function PetForm({
       setIsSubmitting(false);
     } catch (err) {
       console.error("Form submit error:", err);
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      setError(err instanceof Error ? err.message : t("error"));
       setIsSubmitting(false);
     }
   };
 
   const speciesOptions: { id: Species; label: string; icon: string }[] = [
-    { id: "dog", label: "Dog", icon: "sound_detection_dog_barking" },
-    { id: "cat", label: "Cat", icon: "pets" },
-    { id: "horse", label: "Horse", icon: "kebab_dining" },
-    { id: "other", label: "Other", icon: "emoji_nature" },
+    { id: "dog", label: t("dog"), icon: "sound_detection_dog_barking" },
+    { id: "cat", label: t("cat"), icon: "pets" },
+    { id: "horse", label: t("horse"), icon: "kebab_dining" },
+    { id: "other", label: t("other"), icon: "emoji_nature" },
   ];
 
-  const lifestageOptions = getLifestageOptions(species);
+  const lifestageOptions = getLifestageOptions(species, t);
 
   return (
     <form className="space-y-8 md:space-y-12" onSubmit={handleSubmit}>
@@ -219,10 +222,10 @@ export function PetForm({
         </div>
         <div className="flex-1 space-y-2 text-center md:text-left">
           <h3 className="font-headline font-[800] text-lg md:text-xl text-primary">
-            Pet Photo
+            {t("petPhoto")}
           </h3>
           <p className="text-sm text-on-surface-variant">
-            Add your favourite photo of your pet. JPG or PNG.
+            {t("petPhotoDesc")}
           </p>
         </div>
       </section>
@@ -235,12 +238,12 @@ export function PetForm({
         {/* Name */}
         <div className="group">
           <label className="block font-label uppercase text-[10px] tracking-widest text-on-surface-variant mb-2 ml-3 md:ml-4">
-            Pet Name
+            {t("petName")}
           </label>
           <div className="relative">
             <input
               type="text"
-              placeholder="e.g. Barnaby Von Snout"
+              placeholder={t("petNamePlaceholder")}
               value={petName}
               onChange={(e) => setPetName(e.target.value)}
               className="w-full bg-surface-container-lowest irregular-border border border-outline/20 focus:border-primary text-lg md:text-xl font-body p-4 md:p-6 transition-all group-hover:shadow-ambient input-glow"
@@ -255,7 +258,7 @@ export function PetForm({
         {/* Species */}
         <div>
           <label className="block font-label uppercase text-[10px] tracking-widest text-on-surface-variant mb-3 ml-3 md:ml-4">
-            What kind of pet?
+            {t("whatKind")}
           </label>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {speciesOptions.map((opt) => (
@@ -292,7 +295,7 @@ export function PetForm({
         {species && lifestageOptions.length > 0 && (
           <div>
             <label className="block font-label uppercase text-[10px] tracking-widest text-on-surface-variant mb-3 ml-3 md:ml-4">
-              Life Stage
+              {t("lifeStage")}
             </label>
             <div className="inline-flex rounded-2xl bg-surface-container-lowest border border-outline/20 p-1 gap-1">
               {lifestageOptions.map((opt) => (
@@ -317,11 +320,11 @@ export function PetForm({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block font-label uppercase text-[10px] tracking-widest text-on-surface-variant mb-2 ml-3 md:ml-4">
-              Breed
+              {t("breed")}
             </label>
             <input
               type="text"
-              placeholder="Golden Retriever Mix"
+              placeholder={t("breedPlaceholder")}
               value={breed}
               onChange={(e) => setBreed(e.target.value)}
               className="w-full bg-surface-container-lowest irregular-border border border-outline/20 focus:border-primary font-body p-4 md:p-5 transition-all hover:shadow-ambient input-glow"
@@ -329,7 +332,7 @@ export function PetForm({
           </div>
           <div>
             <label className="block font-label uppercase text-[10px] tracking-widest text-on-surface-variant mb-2 ml-3 md:ml-4">
-              Date of Birth
+              {t("dateOfBirth")}
             </label>
             <input
               type="date"
@@ -342,7 +345,7 @@ export function PetForm({
 
         <div className="md:w-1/2">
           <label className="block font-label uppercase text-[10px] tracking-widest text-on-surface-variant mb-2 ml-3 md:ml-4">
-            Gotcha Day
+            {t("gotchaDay")}
           </label>
           <input
             type="date"
@@ -360,10 +363,10 @@ export function PetForm({
           <div className="flex items-center justify-between gap-4 mb-2">
             <div className="flex-1">
               <h4 className="font-headline font-bold text-primary text-sm md:text-base">
-                In Loving Memory
+                {t("inLovingMemory")}
               </h4>
               <p className="text-xs text-on-surface-variant mt-0.5">
-                Turn this on if your pet has crossed the rainbow bridge.
+                {t("inLovingMemoryDesc")}
               </p>
             </div>
             <button
@@ -395,7 +398,7 @@ export function PetForm({
             }`}
           >
             <label className="block font-label uppercase text-[10px] tracking-widest text-on-surface-variant mb-2 ml-3 md:ml-4">
-              Date Passed
+              {t("datePassed")}
             </label>
             <input
               type="date"
@@ -436,7 +439,7 @@ export function PetForm({
 
         <p className="mt-5 md:mt-6 font-label text-[10px] text-tertiary uppercase tracking-widest flex items-center justify-center gap-2">
           <span className="w-6 md:w-8 h-[1px] bg-tertiary/20" />
-          Every moment matters
+          {t("everyMomentMatters")}
           <span className="w-6 md:w-8 h-[1px] bg-tertiary/20" />
         </p>
       </div>

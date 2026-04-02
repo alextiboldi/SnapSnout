@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { Icon } from "@/components/icon";
 import { createClient } from "@/lib/supabase/server";
 import { getActivePet } from "@/lib/queries/pets";
@@ -7,6 +8,7 @@ import {
   formatDate,
   daysUntil,
   getMilestoneStatus,
+  isTranslationKey,
 } from "@/lib/utils";
 import type { Milestone } from "@/lib/generated/prisma/client";
 import type { MilestoneStatus } from "@/lib/utils";
@@ -16,9 +18,11 @@ type MilestoneWithStatus = Milestone & { status: MilestoneStatus };
 function FeaturedMilestone({
   completedMilestones,
   allMilestones,
+  t,
 }: {
   completedMilestones: MilestoneWithStatus[];
   allMilestones: MilestoneWithStatus[];
+  t: (key: string, values?: Record<string, string | number | Date>) => string;
 }) {
   const featured =
     completedMilestones[completedMilestones.length - 1] ?? allMilestones[0];
@@ -38,7 +42,7 @@ function FeaturedMilestone({
         {/* Rotated badge */}
         <div className="absolute top-6 -left-8 z-10">
           <div className="bg-secondary-fixed text-on-secondary-fixed font-label text-xs font-bold tracking-widest uppercase px-10 py-1.5 -rotate-45 shadow-ambient">
-            Major Milestone
+            {t("majorMilestone")}
           </div>
         </div>
 
@@ -172,7 +176,12 @@ export default async function MilestonesPage() {
 
   if (!user) redirect("/login");
 
-  const activePet = await getActivePet(user.id);
+  const [activePet, t, tHome, tPresets] = await Promise.all([
+    getActivePet(user.id),
+    getTranslations("milestones"),
+    getTranslations("home"),
+    getTranslations("presets"),
+  ]);
 
   // Empty state: no active pet
   if (!activePet) {
@@ -180,26 +189,28 @@ export default async function MilestonesPage() {
       <div className="animate-fade-up mx-auto flex max-w-lg flex-col items-center justify-center px-5 py-20 text-center">
         <Icon name="flag" filled className="text-6xl text-primary/40" />
         <h1 className="mt-4 font-headline text-2xl font-bold text-on-surface">
-          No active pet
+          {t("noActivePet")}
         </h1>
         <p className="mt-2 font-body text-sm text-on-surface-variant">
-          Add a pet to start tracking milestones.
+          {t("noActivePetDesc")}
         </p>
         <Link
           href="/create-pet"
           className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-label text-sm font-medium text-on-primary shadow-ambient transition-shadow hover:shadow-ambient-lg"
         >
           <Icon name="add" className="text-lg" />
-          Add your first pet
+          {tHome("addFirst")}
         </Link>
       </div>
     );
   }
 
-  // Compute milestone statuses
+  // Compute milestone statuses and resolve translation keys
   const allMilestones: MilestoneWithStatus[] = activePet.milestones.map(
     (m: Milestone) => ({
       ...m,
+      title: isTranslationKey(m.title) ? tPresets(m.title.replace("presets.", "")) : m.title,
+      description: isTranslationKey(m.description) ? tPresets(m.description.replace("presets.", "")) : m.description,
       status: getMilestoneStatus(m),
     })
   );
@@ -218,10 +229,10 @@ export default async function MilestonesPage() {
       <div className="flex items-center justify-between mb-6 animate-fade-up">
         <div>
           <p className="font-label text-xs tracking-widest text-on-surface-variant uppercase">
-            {activePet.name}&apos;s Journey
+            {t("journey", { name: activePet.name })}
           </p>
           <h1 className="font-headline text-2xl md:text-3xl font-bold text-on-surface mt-1">
-            Milestones
+            {t("title")}
           </h1>
         </div>
 
@@ -248,21 +259,21 @@ export default async function MilestonesPage() {
             className="text-primary text-base"
           />
           <span className="font-label text-sm text-on-surface-variant">
-            {completedMilestones.length} completed
+            {t("completed", { count: completedMilestones.length })}
           </span>
         </div>
         <div className="w-px h-4 bg-outline-variant/40" />
         <div className="flex items-center gap-1.5">
           <Icon name="today" className="text-secondary text-base" />
           <span className="font-label text-sm text-on-surface-variant">
-            {todayMilestones.length} today
+            {t("today", { count: todayMilestones.length })}
           </span>
         </div>
         <div className="w-px h-4 bg-outline-variant/40" />
         <div className="flex items-center gap-1.5">
           <Icon name="upcoming" className="text-tertiary text-base" />
           <span className="font-label text-sm text-on-surface-variant">
-            {upcomingMilestones.length} upcoming
+            {t("upcoming", { count: upcomingMilestones.length })}
           </span>
         </div>
       </div>
@@ -272,6 +283,7 @@ export default async function MilestonesPage() {
         <FeaturedMilestone
           completedMilestones={completedMilestones}
           allMilestones={allMilestones}
+          t={t}
         />
         <PhotoCollageCard />
         <LocationCard />
@@ -281,7 +293,7 @@ export default async function MilestonesPage() {
       {upcomingMilestones.length > 0 && (
         <div className="mt-8 animate-fade-up" style={{ animationDelay: "0.3s" }}>
           <h2 className="font-headline text-lg font-bold text-on-surface mb-4">
-            Coming Up
+            {t("comingUp")}
           </h2>
           <div className="space-y-3">
             {upcomingMilestones.map((milestone) => {
@@ -304,7 +316,7 @@ export default async function MilestonesPage() {
                   </div>
                   <div className="text-right shrink-0">
                     <p className="font-label text-xs text-primary font-bold">
-                      {days > 0 ? `${days}d` : "Today"}
+                      {days > 0 ? t("daysShort", { days }) : t("todayLabel")}
                     </p>
                     <p className="font-label text-[10px] text-outline">
                       {milestone.targetDate
@@ -323,7 +335,7 @@ export default async function MilestonesPage() {
       <Link
         href="/studio/generate"
         className="fixed bottom-24 right-5 md:bottom-8 md:right-8 z-40 w-14 h-14 rounded-full btn-sculpted text-on-primary flex items-center justify-center shadow-ambient-lg spring-active hover:scale-105 transition-transform duration-300"
-        aria-label="Create a card"
+        aria-label={t("createCard")}
       >
         <Icon name="auto_awesome" filled className="text-2xl" />
       </Link>

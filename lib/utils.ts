@@ -53,3 +53,8 @@ export function formatDate(date: Date): string {
     year: "numeric",
   });
 }
+
+// Check if a string is a translation key (starts with "presets.")
+export function isTranslationKey(str: string): boolean {
+  return str.startsWith("presets.");
+}

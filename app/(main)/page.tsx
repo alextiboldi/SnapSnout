@@ -1,16 +1,18 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { getPetsForUser, getActivePet } from "@/lib/queries/pets";
-import { getAge, daysUntil, formatDate, getMilestoneStatus } from "@/lib/utils";
+import { getAge, daysUntil, formatDate, getMilestoneStatus, isTranslationKey } from "@/lib/utils";
 import type { Pet, Milestone } from "@/lib/generated/prisma/client";
 import type { MilestoneStatus } from "@/lib/utils";
 import { PetSwitcher } from "./pet-switcher";
 import { Icon } from "@/components/icon";
+import { AppShell } from "@/components/home/app-shell";
 
 type MilestoneWithStatus = Milestone & { status: MilestoneStatus };
 
-function PetProfileHero({ pet }: { pet: Pet }) {
+function PetProfileHero({ pet, t }: { pet: Pet; t: (key: string, values?: Record<string, string | number | Date>) => string }) {
   const age = pet.dateOfBirth ? getAge(pet.dateOfBirth) : null;
   const monthsHome = Math.abs(
     Math.round(
@@ -47,12 +49,12 @@ function PetProfileHero({ pet }: { pet: Pet }) {
 
       {age && (
         <p className="mt-1 font-label text-sm tracking-wide text-on-surface-variant md:text-base">
-          {age} old
+          {t("old", { age })}
         </p>
       )}
 
       <p className="mt-0.5 font-body text-xs text-on-surface-variant/70 md:text-sm">
-        Home for {monthsHome} month{monthsHome !== 1 ? "s" : ""}
+        {t("homeFor", { months: monthsHome })}
         {pet.breed && (
           <>
             {" "}
@@ -66,8 +68,10 @@ function PetProfileHero({ pet }: { pet: Pet }) {
 
 function NextMilestoneCard({
   milestone,
+  t,
 }: {
   milestone: MilestoneWithStatus;
+  t: (key: string, values?: Record<string, string | number | Date>) => string;
 }) {
   const isToday = milestone.status === "today";
   const days = milestone.targetDate ? daysUntil(milestone.targetDate) : 0;
@@ -99,7 +103,7 @@ function NextMilestoneCard({
                 isToday ? "text-on-secondary-fixed/60" : "text-primary"
               }`}
             >
-              {isToday ? "Happening now" : "Up next"}
+              {isToday ? t("happeningNow") : t("upNext")}
             </p>
 
             <h2
@@ -122,7 +126,7 @@ function NextMilestoneCard({
 
             {!isToday && days > 0 && (
               <p className="mt-2 font-label text-xs font-medium text-tertiary">
-                in {days} day{days !== 1 ? "s" : ""}
+                {t("inDays", { days })}
               </p>
             )}
           </div>
@@ -143,8 +147,10 @@ function NextMilestoneCard({
 
 function RecentMilestones({
   milestones,
+  t,
 }: {
   milestones: MilestoneWithStatus[];
+  t: (key: string, values?: Record<string, string | number | Date>) => string;
 }) {
   const recent = milestones.slice(-3).reverse();
   if (recent.length === 0) return null;
@@ -152,7 +158,7 @@ function RecentMilestones({
   return (
     <div className="mt-6">
       <h3 className="px-5 font-label text-[11px] font-medium tracking-wider text-on-surface-variant/70 uppercase">
-        Recent memories
+        {t("recentMemories")}
       </h3>
 
       <div className="mt-2.5 flex gap-3 overflow-x-auto px-5 pb-2 scrollbar-hide">
@@ -190,30 +196,30 @@ function RecentMilestones({
   );
 }
 
-function QuickActions() {
+function QuickActions({ t }: { t: (key: string, values?: Record<string, string | number | Date>) => string }) {
   const actions = [
     {
-      label: "Add Photo",
+      label: t("addPhoto"),
       icon: "photo_camera",
-      description: "Snap a memory",
+      description: t("snapMemory"),
       href: "/milestones",
     },
     {
-      label: "New Milestone",
+      label: t("newMilestone"),
       icon: "flag",
-      description: "Mark a moment",
+      description: t("markMoment"),
       href: "/milestones",
     },
     {
-      label: "Create Card",
+      label: t("createCard"),
       icon: "auto_awesome",
-      description: "AI magic",
+      description: t("aiMagic"),
       href: "/studio/generate",
     },
     {
-      label: "Share",
+      label: t("share"),
       icon: "share",
-      description: "Show the world",
+      description: t("showWorld"),
       href: "/studio",
     },
   ];
@@ -221,7 +227,7 @@ function QuickActions() {
   return (
     <div className="mt-6 px-5">
       <h3 className="font-label text-[11px] font-medium tracking-wider text-on-surface-variant/70 uppercase">
-        Quick actions
+        {t("quickActions")}
       </h3>
 
       <div className="mt-2.5 grid grid-cols-2 gap-3">
@@ -261,28 +267,34 @@ export default async function HomePage() {
 
   if (!user) redirect("/login");
 
-  const pets = await getPetsForUser(user.id);
-  const activePet = await getActivePet(user.id);
+  const [pets, activePet, t, tPresets] = await Promise.all([
+    getPetsForUser(user.id),
+    getActivePet(user.id),
+    getTranslations("home"),
+    getTranslations("presets"),
+  ]);
 
   // Empty state: no pets yet
   if (pets.length === 0) {
     return (
-      <div className="animate-fade-up mx-auto flex max-w-lg flex-col items-center justify-center px-5 py-20 text-center">
-        <Icon name="pets" filled className="text-6xl text-primary/40" />
-        <h1 className="mt-4 font-headline text-2xl font-bold text-on-surface">
-          No pets yet
-        </h1>
-        <p className="mt-2 font-body text-sm text-on-surface-variant">
-          Start tracking your pet&apos;s milestones and memories.
-        </p>
-        <Link
-          href="/create-pet"
-          className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-label text-sm font-medium text-on-primary shadow-ambient transition-shadow hover:shadow-ambient-lg"
-        >
-          <Icon name="add" className="text-lg" />
-          Add your first pet
-        </Link>
-      </div>
+      <AppShell showOnboarding={true}>
+        <div className="animate-fade-up mx-auto flex max-w-lg flex-col items-center justify-center px-5 py-20 text-center">
+          <Icon name="pets" filled className="text-6xl text-primary/40" />
+          <h1 className="mt-4 font-headline text-2xl font-bold text-on-surface">
+            {t("noPets")}
+          </h1>
+          <p className="mt-2 font-body text-sm text-on-surface-variant">
+            {t("noPetsDesc")}
+          </p>
+          <Link
+            href="/create-pet"
+            className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-label text-sm font-medium text-on-primary shadow-ambient transition-shadow hover:shadow-ambient-lg"
+          >
+            <Icon name="add" className="text-lg" />
+            {t("addFirst")}
+          </Link>
+        </div>
+      </AppShell>
     );
   }
 
@@ -294,6 +306,8 @@ export default async function HomePage() {
     const allWithStatus: MilestoneWithStatus[] = activePet.milestones.map(
       (m: Milestone) => ({
         ...m,
+        title: isTranslationKey(m.title) ? tPresets(m.title.replace("presets.", "")) : m.title,
+        description: isTranslationKey(m.description) ? tPresets(m.description.replace("presets.", "")) : m.description,
         status: getMilestoneStatus(m),
       })
     );
@@ -307,12 +321,14 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="animate-fade-up mx-auto max-w-lg pb-6">
-      <PetSwitcher pets={pets} activePetId={activePet?.id ?? pets[0].id} />
-      {activePet && <PetProfileHero pet={activePet} />}
-      {nextMilestone && <NextMilestoneCard milestone={nextMilestone} />}
-      <RecentMilestones milestones={completedMilestones} />
-      <QuickActions />
-    </div>
+    <AppShell showOnboarding={false}>
+      <div className="animate-fade-up mx-auto max-w-lg pb-6">
+        <PetSwitcher pets={pets} activePetId={activePet?.id ?? pets[0].id} />
+        {activePet && <PetProfileHero pet={activePet} t={t} />}
+        {nextMilestone && <NextMilestoneCard milestone={nextMilestone} t={t} />}
+        <RecentMilestones milestones={completedMilestones} t={t} />
+        <QuickActions t={t} />
+      </div>
+    </AppShell>
   );
 }

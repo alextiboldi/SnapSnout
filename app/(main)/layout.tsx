@@ -20,7 +20,7 @@ export default async function MainLayout({
   return (
     <div className="min-h-dvh bg-clay blueprint-grid">
       <Header />
-      <main className="pt-16 md:pt-20 pb-28">{children}</main>
+      <main className="pt-16 md:pt-20 pb-24">{children}</main>
       <BottomNav />
     </div>
   );

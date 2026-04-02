@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Icon } from "@/components/icon";
 import Link from "next/link";
 
@@ -28,6 +29,7 @@ const STYLE_OPTIONS = [
 const TAGS = ["#GoldenLife", "#FieldNotes", "#SnapSnout"];
 
 export default function CardGeneratorPage() {
+  const t = useTranslations("cardGenerator");
   const [isAssembling, setIsAssembling] = useState(true);
   const [selectedStyle, setSelectedStyle] = useState("Field Journal");
   const [photoCount] = useState(2);
@@ -46,13 +48,13 @@ export default function CardGeneratorPage() {
           className="inline-flex items-center gap-1.5 text-sm font-label text-primary font-bold uppercase tracking-widest mb-3 hover:text-primary-dim transition-colors spring-active"
         >
           <Icon name="arrow_back" className="text-lg" />
-          <span>Back to Studio</span>
+          <span>{t("backToStudio")}</span>
         </Link>
         <h1 className="font-headline text-4xl md:text-5xl font-black tracking-tight text-on-primary-fixed-variant leading-none">
-          Card Creator
+          {t("title")}
         </h1>
         <p className="text-on-surface-variant mt-3 text-base md:text-lg max-w-md">
-          Turn your pet&apos;s photos into shareable masterpieces.
+          {t("subtitle")}
         </p>
       </div>
 
@@ -72,10 +74,10 @@ export default function CardGeneratorPage() {
 
             <div className="relative z-10">
               <h3 className="font-headline text-xl font-bold mb-1">
-                Source Material
+                {t("sourceMaterial")}
               </h3>
               <p className="text-sm text-on-surface-variant mb-5 font-label">
-                Your Photos
+                {t("yourPhotos")}
               </p>
 
               {/* Photo Slots Row */}
@@ -104,10 +106,9 @@ export default function CardGeneratorPage() {
 
               {/* Status */}
               <p className="text-sm text-on-surface-variant mb-6 font-label">
-                <span className="font-bold">STATUS:</span> READY
+                <span className="font-bold">{t("status")}:</span> {t("ready")}
                 <br />
-                <span className="font-bold">PHOTOS:</span> {photoCount} photos
-                ready
+                <span className="font-bold">{t("photos")}:</span> {t("photosReady", { count: photoCount })}
               </p>
 
               {/* Generate Button */}
@@ -116,7 +117,7 @@ export default function CardGeneratorPage() {
                 className="w-full py-4 md:py-5 px-6 bg-secondary-fixed text-on-secondary-fixed font-headline font-black text-lg md:text-xl rounded-full shadow-[0px_8px_0px_#6d5a00] active:translate-y-1 active:shadow-[0px_4px_0px_#6d5a00] transition-all flex items-center justify-center gap-3"
               >
                 <Icon name="bolt" filled className="text-2xl" />
-                Generate Card
+                {t("generateCard")}
               </button>
             </div>
           </div>
@@ -128,7 +129,7 @@ export default function CardGeneratorPage() {
           >
             <div className="flex justify-between items-start mb-4">
               <span className="font-label text-[10px] tracking-[0.2em] opacity-80 uppercase">
-                Style Settings
+                {t("styleSettings")}
               </span>
               <Icon name="settings_ethernet" className="text-sm opacity-80" />
             </div>
@@ -136,7 +137,7 @@ export default function CardGeneratorPage() {
             <div className="space-y-3">
               {/* Style Selector */}
               <div className="flex justify-between items-center text-xs">
-                <span className="font-label opacity-70">STYLE INFERENCE</span>
+                <span className="font-label opacity-70">{t("styleInference")}</span>
                 <select
                   value={selectedStyle}
                   onChange={(e) => setSelectedStyle(e.target.value)}
@@ -157,8 +158,8 @@ export default function CardGeneratorPage() {
 
               {/* Recognition Status */}
               <div className="flex justify-between items-center text-xs">
-                <span className="font-label opacity-70">IMAGE RECOGNITION</span>
-                <span className="font-bold">ACTIVE</span>
+                <span className="font-label opacity-70">{t("imageRecognition")}</span>
+                <span className="font-bold">{t("activeStatus")}</span>
               </div>
 
               {/* Progress Bar */}
@@ -205,7 +206,7 @@ export default function CardGeneratorPage() {
                 </div>
 
                 <p className="font-label text-tertiary mt-8 tracking-[0.3em] font-bold text-sm">
-                  Creating your card...
+                  {t("creatingCard")}
                 </p>
               </div>
             )}
@@ -236,12 +237,10 @@ export default function CardGeneratorPage() {
                 </div>
 
                 <h4 className="font-headline text-2xl font-black text-on-surface mb-2">
-                  The Urban Explorer
+                  {t("urbanExplorer")}
                 </h4>
                 <p className="text-sm text-on-surface-variant font-body leading-relaxed mb-5">
-                  &ldquo;Cooper demonstrated exceptional curiosity today. Our
-                  analysis shows a 94% increase in adventurous spirit during
-                  the morning walk.&rdquo;
+                  &ldquo;{t("urbanExplorerDesc")}&rdquo;
                 </p>
 
                 {/* Tag pills */}
@@ -271,14 +270,14 @@ export default function CardGeneratorPage() {
                 className="flex-1 py-3.5 md:py-4 bg-surface-container-highest text-on-surface font-headline font-bold rounded-xl hover:bg-outline-variant/20 transition-all flex items-center justify-center gap-2 spring-active"
               >
                 <Icon name="share" className="text-xl" />
-                Share
+                {t("shareBtn")}
               </button>
               <Link
                 href="/milestones"
                 className="flex-1 py-3.5 md:py-4 bg-primary text-on-primary font-headline font-bold rounded-xl shadow-lg hover:shadow-primary/20 transition-all flex items-center justify-center gap-2 spring-active"
               >
                 <Icon name="bookmark" filled className="text-xl" />
-                Save to Timeline
+                {t("saveToTimeline")}
               </Link>
             </div>
           </div>
