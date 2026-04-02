@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>SnapSnout - Create Pet Profile</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,800;1,800&amp;family=Manrope:wght@400;600&amp;family=Space+Grotesk:wght@400;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "error-container": "#fa7150",
+                        "on-primary": "#ffffff",
+                        "error": "#b23d21",
+                        "inverse-surface": "#0e0e0c",
+                        "tertiary-fixed-dim": "#77b0e5",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#00436a",
+                        "on-tertiary-fixed": "#00223a",
+                        "on-tertiary-container": "#003a5c",
+                        "tertiary": "#286999",
+                        "on-secondary-fixed": "#4c3e00",
+                        "surface-container": "#f6f4ec",
+                        "inverse-primary": "#f69a62",
+                        "surface-container-low": "#fcf9f3",
+                        "tertiary-dim": "#165c8c",
+                        "surface-dim": "#e4e3d6",
+                        "secondary-container": "#ffe174",
+                        "on-primary-fixed": "#451c00",
+                        "on-secondary-container": "#625000",
+                        "primary-dim": "#8b4513",
+                        "secondary-fixed": "#ffe174",
+                        "on-tertiary": "#ffffff",
+                        "secondary": "#776300",
+                        "error-dim": "#821a01",
+                        "surface-container-high": "#f0eee4",
+                        "inverse-on-surface": "#9e9d98",
+                        "primary": "#9a511e",
+                        "background": "#fffcf7",
+                        "secondary-fixed-dim": "#f6d241",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#ffae7f",
+                        "primary-fixed": "#ffae7f",
+                        "on-secondary-fixed-variant": "#6d5a00",
+                        "surface-tint": "#9a511e",
+                        "outline": "#818178",
+                        "on-surface": "#373831",
+                        "on-surface-variant": "#64655c",
+                        "on-error-container": "#671200",
+                        "surface-bright": "#fffcf7",
+                        "on-error": "#ffffff",
+                        "surface-variant": "#eae9dd",
+                        "outline-variant": "#babaaf",
+                        "surface": "#fffcf7",
+                        "secondary-dim": "#695700",
+                        "tertiary-container": "#84bef3",
+                        "on-background": "#373831",
+                        "primary-fixed-dim": "#f99d64",
+                        "tertiary-fixed": "#84bef3",
+                        "surface-container-highest": "#eae9dd",
+                        "on-primary-fixed-variant": "#733300",
+                        "on-primary-container": "#652c00"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Manrope"],
+                        "label": ["Space Grotesk"]
+                    },
+                    borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .blueprint-grid {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(40, 105, 153, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(40, 105, 153, 0.05) 1px, transparent 1px);
+        }
+
+        .irregular-border {
+            border-radius: 32px 28px 30px 34px;
+        }
+
+        .spring-active:active {
+            transform: scale(0.96);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .text-cursive {
+            font-family: 'Plus Jakarta Sans';
+            font-style: italic;
+            letter-spacing: -0.02em;
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body class="bg-background font-body text-on-surface min-h-screen blueprint-grid">
+    <!-- Header Navigation Shell (Suppressed for focused task) -->
+    <header
+        class="fixed top-0 left-0 right-0 z-50 bg-stone-50/80 backdrop-blur-md shadow-[0px_2px_4px_rgba(154,81,30,0.1)]">
+        <div class="flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto">
+            <div class="flex items-center gap-3">
+                <button class="p-2 hover:bg-[#ffe174]/20 rounded-full transition-colors active:scale-95">
+                    <span class="material-symbols-outlined text-primary">arrow_back</span>
+                </button>
+                <h1 class="text-3xl font-black italic text-primary font-headline tracking-tight">SnapSnout</h1>
+            </div>
+            <div class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden border-2 border-primary/20">
+                <img alt="Pet owner profile"
+                    data-alt="Close-up portrait of a friendly pet owner smiling against a soft warm studio background with natural lighting"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKWO1F7l4qgGixH0myK1fIIk-fiDifYuqo_ORkC4SiOyoTni7RfmsK5eT00IbXx9iJvXMp4bUSWwnbXXfoRJQwIRA34Jo5-Qpk-BHbuO5OYoGdRHXyrF2ssc1_3wt436W9gu5ix8Bcr2pfS7A7wMUISyLu3ZEpU_2UcwoenqE1hdI1kjrDVawjdui2hLnmxlg5zuF-zAhtTMu9jOOH-089hfTpljq8SNfAY_Cm1YcojTgD3Hf_P3qm9ajN-RKe3xwehqfm1I88pHrn" />
+            </div>
+        </div>
+    </header>
+    <main class="pt-28 pb-12 px-6 max-w-3xl mx-auto">
+        <!-- Hero Section -->
+        <div class="mb-12 relative">
+            <span class="font-label uppercase text-[10px] tracking-[0.2em] text-tertiary mb-2 block">New Schematic •
+                v1.0</span>
+            <h2 class="text-5xl md:text-6xl font-extrabold text-primary font-headline italic tracking-tighter mb-4">
+                Drafting Your <br /><span class="text-on-surface-variant">Furry Architect</span>
+            </h2>
+            <p class="text-body-lg text-on-surface-variant max-w-md">Every snout has a story. Let's document the
+                blueprints of your pet's journey.</p>
+            <!-- Abstract Blueprint Element -->
+            <div class="absolute -right-4 top-0 hidden md:block">
+                <div
+                    class="w-32 h-32 border-2 border-dashed border-tertiary/20 rounded-full flex items-center justify-center animate-pulse">
+                    <span class="material-symbols-outlined text-tertiary text-4xl"
+                        data-weight="fill">architecture</span>
+                </div>
+            </div>
+        </div>
+        <form class="space-y-12">
+            <!-- Avatar Section -->
+            <section class="flex flex-col md:flex-row gap-8 items-center bg-surface-container-low p-8 irregular-border">
+                <div class="relative group">
+                    <div
+                        class="w-40 h-40 rounded-[2.5rem] bg-surface-container-highest flex items-center justify-center overflow-hidden border-2 border-dashed border-outline-variant group-hover:border-primary transition-all cursor-pointer">
+                        <img alt="Pet Avatar Placeholder"
+                            class="opacity-50 grayscale group-hover:opacity-100 group-hover:grayscale-0 transition-all object-cover w-full h-full"
+                            data-alt="Candid high-quality portrait of a golden retriever puppy looking curiously at the camera with soft bokeh background"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPDr1mr-q6qyjC1KrdioX85qkAEt3z-HsLOq9uAFFdpCO7ZpGNPbMqncjCzaGQtYwQygZO4N8wOrw49BOVPqM31SFyCB6JT51uvP5_bDuc7h-igDvVEI2FVrzyhadG8lxt1daL2y-MIkg1EAHJ3r5SJt7hom0dx9xH9KIpiBK2PENKwkeCwrJC5Fry4IhZ2YsAsrq0Ppoh_ghEFR5mfyf_fX8czNKgB1-XKIrAUOOstnHnmAGGy6fBr3AWT0zhblpKWY0gil5DmQVa" />
+                        <div
+                            class="absolute inset-0 bg-primary/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span class="material-symbols-outlined text-white text-3xl">photo_camera</span>
+                        </div>
+                    </div>
+                    <div
+                        class="absolute -bottom-2 -right-2 bg-secondary-fixed text-on-secondary-fixed p-2 rounded-full shadow-lg">
+                        <span class="material-symbols-outlined text-sm">add_a_photo</span>
+                    </div>
+                </div>
+                <div class="flex-1 space-y-2 text-center md:text-left">
+                    <h3 class="font-headline font-extrabold text-xl text-primary">Identity Fragment</h3>
+                    <p class="text-sm text-on-surface-variant">Upload a high-resolution portrait for the digital ledger.
+                        JPG or PNG allowed.</p>
+                    <div class="flex gap-2 mt-4 justify-center md:justify-start">
+                        <span
+                            class="px-3 py-1 bg-tertiary-container/30 text-tertiary text-[10px] font-label rounded-full">GRID:
+                            ACTIVE</span>
+                        <span
+                            class="px-3 py-1 bg-secondary-container/30 text-secondary text-[10px] font-label rounded-full">ALPHA:
+                            0.85</span>
+                    </div>
+                </div>
+            </section>
+            <!-- Main Form Bento -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Name Input -->
+                <div class="md:col-span-2 group">
+                    <label
+                        class="block font-label uppercase text-[10px] tracking-widest text-on-surface-variant mb-2 ml-4">Full
+                        Name of Subject</label>
+                    <div class="relative">
+                        <input
+                            class="w-full bg-surface-container-lowest irregular-border border-outline/20 focus:border-primary focus:ring-0 text-xl font-body p-6 transition-all group-hover:shadow-md outline-none"
+                            placeholder="e.g. Barnaby Von Snout" type="text" />
+                        <span
+                            class="material-symbols-outlined absolute right-6 top-1/2 -translate-y-1/2 text-outline-variant">edit_note</span>
+                    </div>
+                </div>
+                <!-- Type & Breed -->
+                <div class="space-y-6">
+                    <div>
+                        <label
+                            class="block font-label uppercase text-[10px] tracking-widest text-on-surface-variant mb-2 ml-4">Species
+                            Type</label>
+                        <select
+                            class="w-full bg-surface-container-lowest irregular-border border-outline/20 focus:border-primary focus:ring-0 font-body p-5 appearance-none">
+                            <option>Canine (Dog)</option>
+                            <option>Feline (Cat)</option>
+                            <option>Equine (Horse)</option>
+                            <option>Other Archetype</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label
+                            class="block font-label uppercase text-[10px] tracking-widest text-on-surface-variant mb-2 ml-4">Breed/Ancestry</label>
+                        <input
+                            class="w-full bg-surface-container-lowest irregular-border border-outline/20 focus:border-primary focus:ring-0 font-body p-5"
+                            placeholder="Golden Retriever Mix" type="text" />
+                    </div>
+                </div>
+                <!-- Dates -->
+                <div class="space-y-6">
+                    <div>
+                        <label
+                            class="block font-label uppercase text-[10px] tracking-widest text-on-surface-variant mb-2 ml-4">Incarnation
+                            Date (Born)</label>
+                        <input
+                            class="w-full bg-surface-container-lowest irregular-border border-outline/20 focus:border-primary focus:ring-0 font-body p-5"
+                            type="date" />
+                    </div>
+                    <div>
+                        <label
+                            class="block font-label uppercase text-[10px] tracking-widest text-on-surface-variant mb-2 ml-4">Union
+                            Date (Joined Family)</label>
+                        <input
+                            class="w-full bg-surface-container-lowest irregular-border border-outline/20 focus:border-primary focus:ring-0 font-body p-5"
+                            type="date" />
+                    </div>
+                </div>
+                <!-- Deceased Toggle & Date (Visual Logic Only) -->
+                <div
+                    class="md:col-span-2 p-8 bg-surface-container-highest/50 irregular-border border-2 border-dashed border-outline-variant/30 mt-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h4 class="font-headline font-bold text-primary">Memorial Status</h4>
+                            <p class="text-xs text-on-surface-variant">Enable this only if documenting a beloved pet who
+                                has passed.</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input class="sr-only peer" type="checkbox" value="" />
+                            <div
+                                class="w-14 h-8 bg-outline-variant/30 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary">
+                            </div>
+                        </label>
+                    </div>
+                    <div class="mt-6 opacity-40">
+                        <label
+                            class="block font-label uppercase text-[10px] tracking-widest text-on-surface-variant mb-2 ml-4">Transition
+                            Date (Rest in Peace)</label>
+                        <input
+                            class="w-full bg-surface-container-lowest/50 irregular-border border-outline/20 font-body p-5 cursor-not-allowed"
+                            disabled="" type="date" />
+                    </div>
+                </div>
+            </div>
+            <!-- Action Button -->
+            <div class="pt-8 text-center">
+                <button
+                    class="group relative w-full md:w-auto px-12 py-6 bg-gradient-to-br from-secondary-fixed to-secondary-fixed-dim text-on-secondary-fixed font-headline font-black text-2xl italic tracking-tight rounded-xl shadow-[0px_8px_0px_#6d5a00,0px_12px_24px_rgba(109,90,0,0.3)] transition-all active:translate-y-[4px] active:shadow-[0px_4px_0px_#6d5a00] hover:scale-[1.02] spring-active overflow-hidden"
+                    type="submit">
+                    <span class="relative z-10 flex items-center justify-center gap-3">
+                        Create Profile
+                        <span class="material-symbols-outlined text-3xl">ink_pen</span>
+                    </span>
+                    <!-- Glassy Overlay -->
+                    <div
+                        class="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    </div>
+                    <div class="absolute -top-12 -left-12 w-24 h-24 bg-white/30 blur-2xl rounded-full"></div>
+                </button>
+                <p
+                    class="mt-6 font-label text-[10px] text-tertiary uppercase tracking-widest flex items-center justify-center gap-2">
+                    <span class="w-8 h-[1px] bg-tertiary/20"></span>
+                    Finalizing Structural Integrity
+                    <span class="w-8 h-[1px] bg-tertiary/20"></span>
+                </p>
+            </div>
+        </form>
+    </main>
+    <!-- Bottom Navigation (Filtered: Suppressed for focused Task) -->
+    <!-- Not visible due to Transactional/Focused Nature of Screen -->
+    <!-- Small Decorative Blueprint Element -->
+    <div class="fixed bottom-6 right-6 pointer-events-none opacity-20 hidden lg:block">
+        <svg fill="none" height="120" viewbox="0 0 100 100" width="120" xmlns="http://www.w3.org/2000/svg">
+            <rect class="text-tertiary" height="80" stroke="currentColor" stroke-dasharray="2 2" stroke-width="0.5"
+                width="80" x="10" y="10"></rect>
+            <circle class="text-tertiary" cx="50" cy="50" r="30" stroke="currentColor" stroke-width="0.5"></circle>
+            <path class="text-tertiary" d="M10 50H90M50 10V90" stroke="currentColor" stroke-opacity="0.5"
+                stroke-width="0.5"></path>
+            <text class="text-tertiary font-label" style="font-size: 4px;" x="12" y="25">COORD: 40.7128° N</text>
+        </svg>
+    </div>
+</body>
+
+</html>

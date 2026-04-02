@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400..800;1,400..800&amp;family=Manrope:wght@200..800&amp;family=Space+Grotesk:wght@300..700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "error-container": "#fa7150",
+                        "on-primary": "#ffffff",
+                        "error": "#b23d21",
+                        "inverse-surface": "#0e0e0c",
+                        "tertiary-fixed-dim": "#77b0e5",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#00436a",
+                        "on-tertiary-fixed": "#00223a",
+                        "on-tertiary-container": "#003a5c",
+                        "tertiary": "#286999",
+                        "on-secondary-fixed": "#4c3e00",
+                        "surface-container": "#f6f4ec",
+                        "inverse-primary": "#f69a62",
+                        "surface-container-low": "#fcf9f3",
+                        "tertiary-dim": "#165c8c",
+                        "surface-dim": "#e4e3d6",
+                        "secondary-container": "#ffe174",
+                        "on-primary-fixed": "#451c00",
+                        "on-secondary-container": "#625000",
+                        "primary-dim": "#8b4513",
+                        "secondary-fixed": "#ffe174",
+                        "on-tertiary": "#ffffff",
+                        "secondary": "#776300",
+                        "error-dim": "#821a01",
+                        "surface-container-high": "#f0eee4",
+                        "inverse-on-surface": "#9e9d98",
+                        "primary": "#9a511e",
+                        "background": "#fffcf7",
+                        "secondary-fixed-dim": "#f6d241",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#ffae7f",
+                        "primary-fixed": "#ffae7f",
+                        "on-secondary-fixed-variant": "#6d5a00",
+                        "surface-tint": "#9a511e",
+                        "outline": "#818178",
+                        "on-surface": "#373831",
+                        "on-surface-variant": "#64655c",
+                        "on-error-container": "#671200",
+                        "surface-bright": "#fffcf7",
+                        "on-error": "#ffffff",
+                        "surface-variant": "#eae9dd",
+                        "outline-variant": "#babaaf",
+                        "surface": "#fffcf7",
+                        "secondary-dim": "#695700",
+                        "tertiary-container": "#84bef3",
+                        "on-background": "#373831",
+                        "primary-fixed-dim": "#f99d64",
+                        "tertiary-fixed": "#84bef3",
+                        "surface-container-highest": "#eae9dd",
+                        "on-primary-fixed-variant": "#733300",
+                        "on-primary-container": "#652c00"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Manrope"],
+                        "label": ["Space Grotesk"]
+                    },
+                    borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        .blueprint-grid {
+            background-image: linear-gradient(to right, rgba(40, 105, 153, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(40, 105, 153, 0.1) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .isometric-blueprint {
+            transform: skewY(-5deg) rotateX(15deg);
+        }
+
+        .naive-border {
+            border-radius: 32px 28px 30px 34px;
+        }
+
+        .pressable-depth {
+            box-shadow: 0 8px 0 0 #6d5a00;
+        }
+
+        .pressable-depth:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 0 #6d5a00;
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body class="bg-surface font-body text-on-surface min-h-screen">
+    <!-- Top AppBar (Shared Component) -->
+    <header class="bg-stone-50 shadow-[0px_2px_4px_rgba(154,81,30,0.1)] sticky top-0 z-50">
+        <div class="flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full overflow-hidden bg-primary-container">
+                    <img class="w-full h-full object-cover"
+                        data-alt="close-up portrait of a smiling pet owner with their golden retriever in a sunlit garden"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJxLCd2BG7isA7q8aev9DaPeZTCZ75AWVm_Ed96bWSQlO4rAWCcifrEV7BK2A4IDHWBobW8JCdDi9W4ju8bD0QPxJoTIxDiTxJQ0KOVZvhoQe1g-3_KZ9Fk7Hf3gsMzdP6H73XxyYoLprZRHTt3xnG5db238xAAIg2io-Y8abWbKR3rpK6c0Eg5IBwnLaP4vXQjizVUPd3AzSYFqOrfn1HQr5P7JHWWLTQl0ihApNP_GfI40HIlIZvlB4h70sKXqJzLeGWiPvcaAmZ" />
+                </div>
+                <h1 class="font-headline tracking-tight font-extrabold text-3xl italic text-primary">SnapSnout</h1>
+            </div>
+            <div class="flex gap-4">
+                <button
+                    class="p-2 rounded-full hover:bg-secondary-fixed/20 transition-colors text-primary active:scale-95 duration-150">
+                    <span class="material-symbols-outlined" data-icon="search">search</span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <main class="max-w-4xl mx-auto px-6 py-8 pb-32">
+        <!-- Section Header -->
+        <div class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+                <span class="font-label text-primary font-bold uppercase tracking-widest text-xs mb-2 block">AI
+                    Laboratory</span>
+                <h2 class="font-headline text-5xl font-black tracking-tight text-on-primary-fixed-variant leading-none">
+                    Magic Card Generator</h2>
+                <p class="text-on-surface-variant mt-4 text-lg max-w-md">Transform your daily snaps into architectural
+                    masterpieces and timeless field journal entries.</p>
+            </div>
+            <div class="hidden md:block">
+                <div
+                    class="w-24 h-24 bg-tertiary-container/20 rounded-xl blueprint-grid flex items-center justify-center">
+                    <span class="material-symbols-outlined text-tertiary text-4xl"
+                        data-icon="auto_awesome">auto_awesome</span>
+                </div>
+            </div>
+        </div>
+        <!-- Workflow Container -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- Upload Area (Bento Left) -->
+            <div class="lg:col-span-5 space-y-6">
+                <div class="bg-surface-container-low naive-border p-8 relative overflow-hidden group">
+                    <!-- Technical Background Doodle -->
+                    <div class="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
+                        <span class="material-symbols-outlined text-8xl" data-icon="architecture">architecture</span>
+                    </div>
+                    <div class="relative z-10">
+                        <h3 class="font-headline text-xl font-bold mb-6">Source Material</h3>
+                        <div class="flex flex-wrap gap-4 mb-6">
+                            <div
+                                class="w-20 h-24 bg-surface-container-highest rounded-lg flex items-center justify-center border-2 border-dashed border-outline-variant hover:border-primary transition-colors cursor-pointer">
+                                <span class="material-symbols-outlined text-on-surface-variant"
+                                    data-icon="add_a_photo">add_a_photo</span>
+                            </div>
+                            <div class="relative w-20 h-24 rounded-lg overflow-hidden shadow-sm group">
+                                <img class="w-full h-full object-cover"
+                                    data-alt="cute french bulldog looking curiously into the camera lens in a bright modern living room"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsUPTpA-IQFeO0s9cAjy4o0XHmIuNrhvyIYDWR1MZ4arxuZovv856R_BlmnEF8lSJLB-BKPCPYOP2fSma3CpRQOQDg3Hw_KJLecLtGLzCaLQMzL405YHo7HjU8te_njWUuRhZFmYLTkfQefTmeBd2oQd-DH4TtMA93VBSRqVaGG6A4sCA2yhI9eoxnEt0wCl-PPRxtx0PihWdRpOaDlCn4BxHiCqZKGlPI9uHW6tJHU3Y2Qw2VVwvyW4oDAA8wxT-_mGU2lsX3dUDY" />
+                                <div class="absolute inset-0 bg-tertiary/40 mix-blend-overlay"></div>
+                            </div>
+                            <div class="relative w-20 h-24 rounded-lg overflow-hidden shadow-sm">
+                                <img class="w-full h-full object-cover"
+                                    data-alt="young man wearing a casual linen shirt laughing while playing with his dog outdoors"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtQpaVt-_W_-uXADUDAw02WtINQ1RWzmlII4Ln3a0Vwod1Pd_nX3inCXinp8CIMdkF3KzaLXYthl41bPJvlhl-tXSliRKwPu2rtL8kpbpt5LOaTKGgnhiMV2SJxHsaA8r_77puptmkBvYRJCCyI5AZhKMAlYB5EE1vgIXWFK1r0cJ8P_fcRyjdSqASW1yzONvYV1su-BfvD8oB4lqit1v_KQwqfwtpHgLNP21Ty0Tlmit6AU6-tcioL1wxz1d1COqcxyBGooF4NEgy" />
+                                <div class="absolute inset-0 bg-tertiary/40 mix-blend-overlay"></div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-on-surface-variant mb-8 font-label">
+                            <span class="font-bold">STATUS:</span> READY FOR COMPILATION
+                            <br />
+                            <span class="font-bold">DENSITY:</span> 2 NODES DETECTED
+                        </p>
+                        <button
+                            class="w-full py-5 px-6 bg-secondary-fixed text-on-secondary-fixed font-headline font-black text-xl rounded-full pressable-depth transition-all flex items-center justify-center gap-3">
+                            <span class="material-symbols-outlined" data-icon="bolt"
+                                style="font-variation-settings: 'FILL' 1;">bolt</span>
+                            Generate Magic
+                        </button>
+                    </div>
+                </div>
+                <!-- Technical Specs (Bento Bottom Left) -->
+                <div class="bg-tertiary text-on-tertiary p-6 rounded-xl blueprint-grid">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="font-label text-[10px] tracking-[0.2em] opacity-80">SCHEMATIC v2.4</span>
+                        <span class="material-symbols-outlined text-sm"
+                            data-icon="settings_ethernet">settings_ethernet</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="font-label opacity-70">IMAGE RECOGNITION</span>
+                            <span class="font-bold">ACTIVE</span>
+                        </div>
+                        <div class="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                            <div class="w-3/4 h-full bg-secondary-fixed"></div>
+                        </div>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="font-label opacity-70">STYLE INFERENCE</span>
+                            <span class="font-bold">FIELD JOURNAL</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Preview Area (Bento Right) -->
+            <div class="lg:col-span-7">
+                <div
+                    class="bg-surface-container p-4 md:p-10 rounded-xl relative overflow-hidden min-h-[500px] flex flex-col items-center justify-center">
+                    <!-- Assembling State (Visible when processing) -->
+                    <div
+                        class="absolute inset-0 bg-surface-container/95 backdrop-blur-md flex flex-col items-center justify-center z-20">
+                        <div class="relative w-64 h-64 isometric-blueprint">
+                            <div class="absolute inset-0 blueprint-grid border-2 border-tertiary/30 rounded-lg"></div>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="relative">
+                                    <span class="material-symbols-outlined text-8xl text-tertiary/20"
+                                        data-icon="pets">pets</span>
+                                    <!-- Animated Line Doodles simulated by static elements -->
+                                    <div
+                                        class="absolute -top-4 -left-4 w-12 h-12 border-t-2 border-l-2 border-tertiary">
+                                    </div>
+                                    <div
+                                        class="absolute -bottom-4 -right-4 w-12 h-12 border-b-2 border-r-2 border-tertiary">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Scanning Line -->
+                            <div class="absolute top-1/2 left-0 w-full h-0.5 bg-tertiary/50 shadow-[0_0_10px_#286999]">
+                            </div>
+                        </div>
+                        <p class="font-label text-tertiary mt-8 tracking-[0.3em] font-bold text-sm">ASSEMBLING
+                            BLUEPRINT...</p>
+                    </div>
+                    <!-- Result Card (Hidden under assembling state) -->
+                    <div
+                        class="w-full max-w-sm bg-surface-container-lowest rounded-lg shadow-xl overflow-hidden relative rotate-1">
+                        <!-- Dog-ear fold -->
+                        <div class="absolute top-0 right-0 w-12 h-12 bg-secondary-fixed rounded-bl-3xl shadow-md z-10">
+                        </div>
+                        <div class="p-4 bg-tertiary text-white flex justify-between items-center">
+                            <span class="font-label text-[10px] tracking-widest uppercase">Field Log #8821</span>
+                            <span class="font-label text-[10px]">12.04.2024</span>
+                        </div>
+                        <div class="p-6">
+                            <div class="relative rounded-lg overflow-hidden aspect-square mb-6">
+                                <img class="w-full h-full object-cover"
+                                    data-alt="painterly digital art of a french bulldog sitting on an antique explorer's map surrounded by botanical sketches and compasses"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCM55q8L3DhBsPhhgUzWVOGAX35vnUXmg2J9F0XRG3rkmt6zMLDoUAs3fIsmlHIvL8xKna3698lx-0rRGFdhOneZsScN4OnT3r0uWf_yfmgXXJ5PfLPw_ChbBXquCNoaCoZdUTBO_FmQ--02DJNOfFvkdTbtCnsWVnKVzQdtLmmLt2sjfxbeP2KsIfrGnBJgUNZwkHSSHY7sV785RArhMryYAECOpFehYBYr9Er1qm7ZkN5iZFivGl4tmEQXXmZ9v3XD_2nENHdggsE" />
+                                <!-- Technical Overlays -->
+                                <div
+                                    class="absolute inset-0 border-[1px] border-tertiary-container/30 pointer-events-none">
+                                </div>
+                                <div
+                                    class="absolute bottom-2 left-2 bg-tertiary/80 text-white font-label text-[8px] px-2 py-1 rounded">
+                                    COORD: 45.523° N, 122.676° W</div>
+                            </div>
+                            <h4 class="font-headline text-2xl font-black text-on-surface mb-2">The Urban Explorer</h4>
+                            <p class="text-sm text-on-surface-variant font-body leading-relaxed mb-6">"Hugo demonstrated
+                                exceptional curiosity today. AI synthesis indicates a 94% increase in adventurous spirit
+                                during the morning fog."</p>
+                            <div class="flex gap-2">
+                                <span
+                                    class="px-3 py-1 bg-surface-container text-xs font-label rounded-full">#FrenchieLife</span>
+                                <span
+                                    class="px-3 py-1 bg-surface-container text-xs font-label rounded-full">#GaiaPower</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Output Actions -->
+                    <div class="flex gap-4 mt-12 w-full max-w-sm">
+                        <button
+                            class="flex-1 py-4 bg-surface-container-highest text-on-surface font-headline font-bold rounded-xl hover:bg-outline-variant/20 transition-all flex items-center justify-center gap-2 active:scale-95">
+                            <span class="material-symbols-outlined text-xl" data-icon="share">share</span>
+                            Share
+                        </button>
+                        <button
+                            class="flex-1 py-4 bg-primary text-on-primary font-headline font-bold rounded-xl shadow-lg hover:shadow-primary/20 transition-all flex items-center justify-center gap-2 active:scale-95">
+                            <span class="material-symbols-outlined text-xl" data-icon="save"
+                                style="font-variation-settings: 'FILL' 1;">save</span>
+                            Save to Timeline
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Bottom Navigation (Shared Component) -->
+    <nav
+        class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-2 bg-primary dark:bg-[#733300] z-50 rounded-t-[3rem] shadow-[0_-4px_12px_rgba(0,0,0,0.15)] pb-safe">
+        <a class="flex flex-col items-center justify-center text-[#fffcf7]/80 p-3 hover:text-white transition-all active:scale-90 duration-300"
+            href="#">
+            <span class="material-symbols-outlined" data-icon="book_5">book_5</span>
+            <span class="font-label uppercase text-[10px] tracking-widest mt-1">Journal</span>
+        </a>
+        <a class="flex flex-col items-center justify-center text-[#fffcf7]/80 p-3 hover:text-white transition-all active:scale-90 duration-300"
+            href="#">
+            <span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+            <span class="font-label uppercase text-[10px] tracking-widest mt-1">Vitals</span>
+        </a>
+        <a class="flex flex-col items-center justify-center bg-secondary-fixed text-primary rounded-full p-3 shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)] active:scale-90 duration-300"
+            href="#">
+            <span class="material-symbols-outlined" data-icon="auto_awesome"
+                style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+            <!-- No label for center active-like aesthetic in this specific custom tool screen -->
+        </a>
+        <a class="flex flex-col items-center justify-center text-[#fffcf7]/80 p-3 hover:text-white transition-all active:scale-90 duration-300"
+            href="#">
+            <span class="material-symbols-outlined" data-icon="location_on">location_on</span>
+            <span class="font-label uppercase text-[10px] tracking-widest mt-1">Map</span>
+        </a>
+        <a class="flex flex-col items-center justify-center text-[#fffcf7]/80 p-3 hover:text-white transition-all active:scale-90 duration-300"
+            href="#">
+            <span class="material-symbols-outlined" data-icon="settings">settings</span>
+            <span class="font-label uppercase text-[10px] tracking-widest mt-1">Settings</span>
+        </a>
+    </nav>
+</body>
+
+</html>

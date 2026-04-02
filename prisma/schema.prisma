@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Species {
+  dog
+  cat
+  horse
+  other
+}
+
+enum Lifestage {
+  puppy
+  kitten
+  adult
+  senior
+}
+
+model User {
+  id        String   @id @db.Uuid
+  email     String   @unique
+  name      String?
+  avatarUrl String?  @map("avatar_url")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  pets Pet[]
+
+  @@map("users")
+}
+
+model Pet {
+  id           String    @id @default(uuid()) @db.Uuid
+  userId       String    @map("user_id") @db.Uuid
+  name         String
+  species      Species
+  breed        String?
+  lifestage    Lifestage @default(puppy)
+  dateOfBirth  DateTime? @map("date_of_birth")
+  gotchaDay    DateTime  @map("gotcha_day")
+  photoUrl     String?   @map("photo_url")
+  isDeceased   Boolean   @default(false) @map("is_deceased")
+  deceasedDate DateTime? @map("deceased_date")
+  isActive     Boolean   @default(true) @map("is_active")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  milestones Milestone[]
+  photos     Photo[]
+
+  @@map("pets")
+}
+
+model Milestone {
+  id            String    @id @default(uuid()) @db.Uuid
+  petId         String    @map("pet_id") @db.Uuid
+  title         String
+  description   String    @default("")
+  emoji         String    @default("🎯")
+  targetDate    DateTime? @map("target_date")
+  completedDate DateTime? @map("completed_date")
+  photoUrl      String?   @map("photo_url")
+  notes         String?
+  isShareable   Boolean   @default(true) @map("is_shareable")
+  isCustom      Boolean   @default(false) @map("is_custom")
+  tags          String[]  @default([])
+  sortOrder     Int       @default(0) @map("sort_order")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  pet    Pet     @relation(fields: [petId], references: [id], onDelete: Cascade)
+  photos Photo[]
+
+  @@map("milestones")
+}
+
+model Photo {
+  id             String    @id @default(uuid()) @db.Uuid
+  petId          String    @map("pet_id") @db.Uuid
+  milestoneId    String?   @map("milestone_id") @db.Uuid
+  url            String
+  capturedDate   DateTime  @default(now()) @map("captured_date")
+  caption        String?
+  isMonthlyPhoto Boolean   @default(false) @map("is_monthly_photo")
+  monthNumber    Int?      @map("month_number")
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  pet       Pet        @relation(fields: [petId], references: [id], onDelete: Cascade)
+  milestone Milestone? @relation(fields: [milestoneId], references: [id], onDelete: SetNull)
+
+  @@map("photos")
+}

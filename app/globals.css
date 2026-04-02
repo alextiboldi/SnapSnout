@@ -1,26 +1,207 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ─── Design System: Gaia's Blueprint ─── */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Core Earth Palette */
+  --color-clay: #fffcf7;
+  --color-surface: #fffcf7;
+  --color-surface-dim: #e4e3d6;
+  --color-surface-bright: #fffcf7;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #fcf9f3;
+  --color-surface-container: #f6f4ec;
+  --color-surface-container-high: #f0eee4;
+  --color-surface-container-highest: #eae9dd;
+  --color-surface-variant: #eae9dd;
+  --color-surface-tint: #9a511e;
+
+  /* Ochre Navigation */
+  --color-primary: #9a511e;
+  --color-primary-dim: #8b4513;
+  --color-primary-container: #ffae7f;
+  --color-primary-fixed: #ffae7f;
+  --color-primary-fixed-dim: #f99d64;
+  --color-on-primary: #ffffff;
+  --color-on-primary-fixed: #451c00;
+  --color-on-primary-fixed-variant: #733300;
+  --color-on-primary-container: #652c00;
+
+  /* Butter Accent */
+  --color-secondary: #776300;
+  --color-secondary-dim: #695700;
+  --color-secondary-container: #ffe174;
+  --color-secondary-fixed: #ffe174;
+  --color-secondary-fixed-dim: #f6d241;
+  --color-on-secondary: #ffffff;
+  --color-on-secondary-fixed: #4c3e00;
+  --color-on-secondary-fixed-variant: #6d5a00;
+  --color-on-secondary-container: #625000;
+
+  /* Blueprint Technicals */
+  --color-tertiary: #286999;
+  --color-tertiary-dim: #165c8c;
+  --color-tertiary-container: #84bef3;
+  --color-tertiary-fixed: #84bef3;
+  --color-tertiary-fixed-dim: #77b0e5;
+  --color-on-tertiary: #ffffff;
+  --color-on-tertiary-fixed: #00223a;
+  --color-on-tertiary-fixed-variant: #00436a;
+  --color-on-tertiary-container: #003a5c;
+
+  /* Text & Surface */
+  --color-on-surface: #373831;
+  --color-on-surface-variant: #64655c;
+  --color-on-background: #373831;
+  --color-outline: #818178;
+  --color-outline-variant: #babaaf;
+  --color-inverse-surface: #0e0e0c;
+  --color-inverse-on-surface: #9e9d98;
+  --color-inverse-primary: #f69a62;
+
+  /* Error */
+  --color-error: #b23d21;
+  --color-error-dim: #821a01;
+  --color-error-container: #fa7150;
+  --color-on-error: #ffffff;
+  --color-on-error-container: #671200;
+
+  /* Typography */
+  --font-headline: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-body: "Manrope", system-ui, sans-serif;
+  --font-label: "Space Grotesk", monospace, sans-serif;
+
+  /* Roundedness */
+  --radius-sm: 0.5rem;
+  --radius-DEFAULT: 1rem;
+  --radius-md: 1.5rem;
+  --radius-lg: 2rem;
+  --radius-xl: 3rem;
+  --radius-full: 9999px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ─── Blueprint Grid Background ─── */
+.blueprint-grid {
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, rgba(40, 105, 153, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(40, 105, 153, 0.04) 1px, transparent 1px);
+}
+
+/* ─── Irregular "Hand-Drawn" Borders ─── */
+.irregular-border {
+  border-radius: 32px 28px 30px 34px;
+}
+
+.irregular-border-sm {
+  border-radius: 18px 14px 16px 20px;
+}
+
+/* ─── Spring Active Press ─── */
+.spring-active:active {
+  transform: scale(0.96);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* ─── Ambient Shadows (Earthy) ─── */
+.shadow-ambient {
+  box-shadow:
+    0px 4px 12px rgba(55, 56, 49, 0.05),
+    0px 2px 4px rgba(139, 69, 19, 0.1);
+}
+
+.shadow-ambient-lg {
+  box-shadow:
+    0px 8px 24px rgba(55, 56, 49, 0.06),
+    0px 4px 8px rgba(139, 69, 19, 0.08);
+}
+
+/* ─── Ghost Border (Accessibility) ─── */
+.ghost-border {
+  border: 1px solid rgba(186, 186, 175, 0.15);
+}
+
+/* ─── Glassmorphism ─── */
+.glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* ─── Tactile Button Gradient ─── */
+.btn-sculpted {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dim) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-butter {
+  background: linear-gradient(135deg, var(--color-secondary-fixed) 0%, var(--color-secondary-fixed-dim) 100%);
+}
+
+/* ─── Custom Toggle ─── */
+.toggle-track {
+  transition: background-color 0.3s ease;
+}
+
+.toggle-thumb {
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* ─── Form Focus Glow ─── */
+.input-glow:focus {
+  box-shadow: 0 0 0 3px rgba(154, 81, 30, 0.12);
+}
+
+/* ─── Stagger Animation ─── */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
+.animate-fade-up {
+  animation: fade-up 0.5s ease-out both;
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.4; }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 3s ease-in-out infinite;
+}
+
+/* ─── Base Resets ─── */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-clay);
+  color: var(--color-on-surface);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Remove default focus outlines, use custom */
+input:focus, select:focus, textarea:focus, button:focus-visible {
+  outline: none;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom select arrow */
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23818178' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1.25rem center;
+  background-size: 1rem;
+  appearance: none;
+  -webkit-appearance: none;
 }

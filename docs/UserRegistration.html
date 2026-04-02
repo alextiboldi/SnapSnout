@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>SnapSnout - Join the Pack</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Manrope:wght@400;500;600&amp;family=Space+Grotesk:wght@400;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-fixed-dim": "#77b0e5",
+                        "outline": "#818178",
+                        "on-primary-fixed": "#451c00",
+                        "on-tertiary": "#ffffff",
+                        "inverse-primary": "#f69a62",
+                        "on-tertiary-fixed-variant": "#00436a",
+                        "error-container": "#fa7150",
+                        "tertiary-fixed": "#84bef3",
+                        "on-error-container": "#671200",
+                        "surface-container-high": "#f0eee4",
+                        "on-secondary-fixed-variant": "#6d5a00",
+                        "outline-variant": "#babaaf",
+                        "primary-dim": "#8b4513",
+                        "background": "#fffcf7",
+                        "surface-tint": "#9a511e",
+                        "primary-fixed-dim": "#f99d64",
+                        "inverse-surface": "#0e0e0c",
+                        "surface-variant": "#eae9dd",
+                        "primary-container": "#ffae7f",
+                        "secondary-container": "#ffe174",
+                        "on-primary-container": "#652c00",
+                        "tertiary": "#286999",
+                        "secondary-dim": "#695700",
+                        "surface-container-low": "#fcf9f3",
+                        "on-surface-variant": "#64655c",
+                        "on-tertiary-fixed": "#00223a",
+                        "surface-bright": "#fffcf7",
+                        "surface-container": "#f6f4ec",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#733300",
+                        "tertiary-container": "#84bef3",
+                        "primary-fixed": "#ffae7f",
+                        "on-surface": "#373831",
+                        "on-error": "#ffffff",
+                        "surface": "#fffcf7",
+                        "secondary-fixed": "#ffe174",
+                        "on-secondary-container": "#625000",
+                        "error-dim": "#821a01",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#f6d241",
+                        "error": "#b23d21",
+                        "on-background": "#373831",
+                        "surface-container-highest": "#eae9dd",
+                        "surface-dim": "#e4e3d6",
+                        "tertiary-dim": "#165c8c",
+                        "secondary": "#776300",
+                        "on-secondary-fixed": "#4c3e00",
+                        "inverse-on-surface": "#9e9d98",
+                        "on-tertiary-container": "#003a5c",
+                        "primary": "#9a511e",
+                        "surface-container-lowest": "#ffffff"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Manrope"],
+                        "label": ["Space Grotesk"]
+                    },
+                    borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            background-color: #fffcf7;
+            background-image:
+                radial-gradient(#286999 0.5px, transparent 0.5px),
+                linear-gradient(to right, rgba(40, 105, 153, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(40, 105, 153, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px, 20px 20px, 20px 20px;
+            font-family: 'Manrope', sans-serif;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .blueprint-border {
+            border: 2px solid rgba(129, 129, 120, 0.2);
+            border-radius: 32px 28px 30px 34px;
+        }
+
+        .blueprint-border:focus-within {
+            border-color: #286999;
+            box-shadow: 0 0 0 4px rgba(132, 190, 243, 0.2);
+        }
+
+        .tactile-button {
+            box-shadow:
+                0px 4px 12px rgba(55, 56, 49, 0.05),
+                0px 2px 4px rgba(139, 69, 19, 0.1),
+                inset 0px 2px 0px rgba(154, 81, 30, 0.3);
+        }
+
+        .tactile-button:active {
+            transform: scale(0.96);
+        }
+
+        .floating-sketch {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0.15;
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col items-center justify-center p-6 sm:p-12 overflow-x-hidden">
+    <!-- Brand Identity (Suppressed Nav for Transactional focus) -->
+    <div class="mb-12 text-center relative">
+        <div class="flex items-center justify-center gap-2 mb-2">
+            <span class="material-symbols-outlined text-primary text-4xl" data-icon="pets">pets</span>
+            <span class="font-headline font-black text-3xl text-primary tracking-tighter">SnapSnout</span>
+        </div>
+        <div class="font-label text-[10px] uppercase tracking-[0.3em] text-tertiary">Blueprint Serial: SS-2024-GAIA
+        </div>
+    </div>
+    <!-- Registration Container -->
+    <main class="w-full max-w-xl relative">
+        <!-- Background "Paper" Layers -->
+        <div class="absolute -inset-4 bg-surface-container-low rounded-xl -rotate-1"></div>
+        <div class="absolute -inset-2 bg-surface-container rounded-xl rotate-1"></div>
+        <!-- Content Card -->
+        <div
+            class="relative bg-surface-container-lowest p-8 sm:p-12 rounded-xl shadow-lg border border-outline-variant/10">
+            <!-- Header Section -->
+            <header class="mb-10 text-center md:text-left">
+                <h1 class="font-headline text-4xl sm:text-5xl font-extrabold text-on-surface tracking-tight mb-4">
+                    Join the Pack
+                </h1>
+                <p class="font-body text-on-surface-variant text-lg leading-relaxed max-w-md">
+                    Start documenting your pet's architectural journey today.
+                </p>
+            </header>
+            <!-- Form -->
+            <form action="#" class="space-y-6">
+                <!-- Full Name Field -->
+                <div class="space-y-2 group">
+                    <label class="font-label text-[11px] uppercase tracking-widest text-tertiary ml-4">Full Name</label>
+                    <div
+                        class="blueprint-border bg-surface-container-low px-6 py-4 flex items-center gap-4 transition-all">
+                        <span class="material-symbols-outlined text-outline-variant" data-icon="person">person</span>
+                        <input
+                            class="bg-transparent border-none focus:ring-0 w-full font-body text-on-surface placeholder:text-outline-variant/50"
+                            placeholder="Johnathan Doe" type="text" />
+                    </div>
+                </div>
+                <!-- Identifier (Email) -->
+                <div class="space-y-2 group">
+                    <label class="font-label text-[11px] uppercase tracking-widest text-tertiary ml-4">Identifier
+                        (Email)</label>
+                    <div
+                        class="blueprint-border bg-surface-container-low px-6 py-4 flex items-center gap-4 transition-all">
+                        <span class="material-symbols-outlined text-outline-variant"
+                            data-icon="alternate_email">alternate_email</span>
+                        <input
+                            class="bg-transparent border-none focus:ring-0 w-full font-body text-on-surface placeholder:text-outline-variant/50"
+                            placeholder="explorer@snapsnout.com" type="email" />
+                    </div>
+                </div>
+                <!-- Password Fields Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="font-label text-[11px] uppercase tracking-widest text-tertiary ml-4">Security
+                            Key</label>
+                        <div
+                            class="blueprint-border bg-surface-container-low px-6 py-4 flex items-center gap-4 transition-all">
+                            <span class="material-symbols-outlined text-outline-variant" data-icon="key">key</span>
+                            <input
+                                class="bg-transparent border-none focus:ring-0 w-full font-body text-on-surface placeholder:text-outline-variant/50"
+                                placeholder="••••••••" type="password" />
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="font-label text-[11px] uppercase tracking-widest text-tertiary ml-4">Confirm
+                            Key</label>
+                        <div
+                            class="blueprint-border bg-surface-container-low px-6 py-4 flex items-center gap-4 transition-all">
+                            <span class="material-symbols-outlined text-outline-variant"
+                                data-icon="verified_user">verified_user</span>
+                            <input
+                                class="bg-transparent border-none focus:ring-0 w-full font-body text-on-surface placeholder:text-outline-variant/50"
+                                placeholder="••••••••" type="password" />
+                        </div>
+                    </div>
+                </div>
+                <!-- Submit Button -->
+                <div class="pt-6">
+                    <button
+                        class="tactile-button w-full bg-gradient-to-b from-secondary-fixed to-secondary-fixed-dim hover:from-secondary-fixed-dim hover:to-secondary-fixed py-5 px-8 rounded-full flex items-center justify-center gap-3 transition-all"
+                        type="submit">
+                        <span class="font-headline font-extrabold text-on-secondary-fixed text-xl">Join the Pack</span>
+                        <span class="material-symbols-outlined font-bold text-on-secondary-fixed"
+                            data-icon="arrow_forward">arrow_forward</span>
+                    </button>
+                </div>
+            </form>
+            <!-- Footer Link -->
+            <footer class="mt-12 text-center">
+                <a class="group flex items-center justify-center gap-2 font-label text-[12px] uppercase tracking-widest text-tertiary-dim hover:text-primary transition-colors"
+                    href="/login">
+                    <span class="material-symbols-outlined text-sm" data-icon="login">login</span>
+                    Log in to an existing account
+                </a>
+            </footer>
+            <!-- Decorative Elements (The "Doodles") -->
+            <div class="absolute -top-12 -right-12 hidden lg:block opacity-20 rotate-12 pointer-events-none">
+                <span class="material-symbols-outlined text-[120px] text-tertiary"
+                    data-icon="architecture">architecture</span>
+            </div>
+            <div class="absolute -bottom-8 -left-8 hidden lg:block opacity-20 -rotate-12 pointer-events-none">
+                <span class="material-symbols-outlined text-[100px] text-primary" data-icon="ink_pen">ink_pen</span>
+            </div>
+        </div>
+        <!-- Asymmetric Detail: Metadata Coordinates -->
+        <div class="absolute top-1/2 -right-24 hidden xl:block rotate-90">
+            <p class="font-label text-[10px] uppercase tracking-[0.5em] text-outline-variant">
+                Lat: 34.0522° N // Long: 118.2437° W
+            </p>
+        </div>
+    </main>
+    <!-- Social Proof / Image Element -->
+    <section class="mt-16 w-full max-w-4xl grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-surface-container p-6 rounded-lg rotate-1 flex flex-col gap-4">
+            <div class="aspect-square w-full rounded-lg overflow-hidden grayscale contrast-125 opacity-80">
+                <img class="w-full h-full object-cover"
+                    data-alt="Monochrome architectural sketch of a puppy resting on a blueprint drafting table with technical pens nearby"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcl9pojYOsUCrRokcucJM2d5GZjVnpebYrkm3FvLhwsBorqBRzAEmQRW7ySBKilcnhwBLH_ye2JShSYWML3HyAbPtSGksOXFuHTfSQn0L1UFJzxsU9-pCqaqmEFVn-b2BpxWUTXcqzim1BIxr0c0p3HuIgjaYoe8TPgzrjxpS8GmdMeg-upBn6NpeiKsLoaSilftH9W5g7bztaZVtkIpC66vhkcu_ZUbO9NxjZAG4H2z25uEWqEvHPeXKlCLm91qMZCdrMWlJ3-zVs" />
+            </div>
+            <p class="font-label text-[10px] uppercase text-tertiary">Archive: Pet Perspective 01</p>
+        </div>
+        <div
+            class="md:col-span-2 bg-tertiary-container/10 p-8 rounded-xl -rotate-1 border border-tertiary-fixed-dim/20 flex flex-col justify-center">
+            <span class="material-symbols-outlined text-tertiary-dim text-4xl mb-4"
+                data-icon="format_quote">format_quote</span>
+            <p class="font-body italic text-tertiary-dim text-xl leading-relaxed">
+                "We don't just track walks; we document the expansion of our pack's territory with precision and
+                warmth."
+            </p>
+            <div class="mt-4 font-label text-xs uppercase tracking-widest text-on-tertiary-fixed-variant">
+                — Chief Architect @ SnapSnout
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

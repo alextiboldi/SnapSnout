@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>SnapSnout | Milestone Timeline</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,700;0,800;1,800&amp;family=Manrope:wght@400;500;700&amp;family=Space-Grotesk:wght@300;400;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "error-container": "#fa7150",
+                        "on-primary": "#ffffff",
+                        "error": "#b23d21",
+                        "inverse-surface": "#0e0e0c",
+                        "tertiary-fixed-dim": "#77b0e5",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#00436a",
+                        "on-tertiary-fixed": "#00223a",
+                        "on-tertiary-container": "#003a5c",
+                        "tertiary": "#286999",
+                        "on-secondary-fixed": "#4c3e00",
+                        "surface-container": "#f6f4ec",
+                        "inverse-primary": "#f69a62",
+                        "surface-container-low": "#fcf9f3",
+                        "tertiary-dim": "#165c8c",
+                        "surface-dim": "#e4e3d6",
+                        "secondary-container": "#ffe174",
+                        "on-primary-fixed": "#451c00",
+                        "on-secondary-container": "#625000",
+                        "primary-dim": "#8b4513",
+                        "secondary-fixed": "#ffe174",
+                        "on-tertiary": "#ffffff",
+                        "secondary": "#776300",
+                        "error-dim": "#821a01",
+                        "surface-container-high": "#f0eee4",
+                        "inverse-on-surface": "#9e9d98",
+                        "primary": "#9a511e",
+                        "background": "#fffcf7",
+                        "secondary-fixed-dim": "#f6d241",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#ffae7f",
+                        "primary-fixed": "#ffae7f",
+                        "on-secondary-fixed-variant": "#6d5a00",
+                        "surface-tint": "#9a511e",
+                        "outline": "#818178",
+                        "on-surface": "#373831",
+                        "on-surface-variant": "#64655c",
+                        "on-error-container": "#671200",
+                        "surface-bright": "#fffcf7",
+                        "on-error": "#ffffff",
+                        "surface-variant": "#eae9dd",
+                        "outline-variant": "#babaaf",
+                        "surface": "#fffcf7",
+                        "secondary-dim": "#695700",
+                        "tertiary-container": "#84bef3",
+                        "on-background": "#373831",
+                        "primary-fixed-dim": "#f99d64",
+                        "tertiary-fixed": "#84bef3",
+                        "surface-container-highest": "#eae9dd",
+                        "on-primary-fixed-variant": "#733300",
+                        "on-primary-container": "#652c00"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Manrope"],
+                        "label": ["Space Grotesk"]
+                    },
+                    borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .paper-texture {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+        }
+
+        .perspective-card {
+            transform: perspective(1000px) rotateX(1deg) rotateY(-1deg);
+            transition: transform 0.3s ease;
+        }
+
+        .perspective-card:hover {
+            transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1.02);
+        }
+
+        .stamp-rotate {
+            transform: rotate(-12deg);
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-surface font-body selection:bg-secondary-container">
+    <!-- TopAppBar -->
+    <header
+        class="bg-[#fffcf7] dark:bg-stone-950 docked full-width top-0 z-50 shadow-[0px_2px_4px_rgba(154,81,30,0.1)] tonal-shift bg-stone-50 dark:bg-stone-900 sticky">
+        <div class="flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary/20">
+                    <img alt="Pet owner profile" class="w-full h-full object-cover"
+                        data-alt="Close-up portrait of a smiling young man in a cozy brown knit sweater against a warm neutral background"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9vI7MD54J8SVUN7L5MEtBZJm-NWqkvyeFeqCdOgiGU4ub2c9_tpGbxWibh1F2QKIxCTr3tskcvBg8ChY90pU5cDC28TczwzcW2THHGwPSdcDuRKPrH9E5_omQAwflhIhj0bYn6ZLLJE7jtyL98OPwdwiVsqy-APm8oevQEXkkKoxCNpHGjiAYOSV6B4JyMY5Rd-m1REwXicCshHWNKznrskzLnK_53i2V35tAEMxrjNybHhPpOCAOE6QIxSGrhScdUtXwrpWQTdDZ" />
+                </div>
+                <h1
+                    class="text-3xl font-black italic text-[#9a511e] dark:text-[#ffe174] font-plus-jakarta-sans tracking-tight">
+                    SnapSnout</h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <button
+                    class="p-2 rounded-full hover:bg-[#ffe174]/20 transition-colors text-[#9a511e] dark:text-[#ffe174] active:scale-95 duration-150 ease-in-out">
+                    <span class="material-symbols-outlined" data-icon="search">search</span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <main class="max-w-7xl mx-auto px-6 pt-8 pb-32">
+        <!-- Header Section -->
+        <div class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+                <span class="font-label uppercase text-sm tracking-[0.2em] text-primary/60 mb-2 block">Explorer's
+                    Log</span>
+                <h2 class="font-headline text-5xl font-extrabold tracking-tight text-on-surface">Milestone Timeline</h2>
+            </div>
+            <div class="flex -space-x-4">
+                <div
+                    class="w-12 h-12 rounded-full border-4 border-background bg-secondary-container flex items-center justify-center text-primary font-bold">
+                    <span class="material-symbols-outlined" data-icon="add">add</span>
+                </div>
+                <div class="w-12 h-12 rounded-full border-4 border-background overflow-hidden">
+                    <img alt="Pet 1" class="w-full h-full object-cover"
+                        data-alt="Close up of a golden retriever puppy looking curious with head tilted"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIrPg0Km_JXLNm6n61-diIcu3O7xZhrXsi5mI2bBIoAhp1v26PVY4v2lG2fjZqD4Og8PGC4v1diIktEFv2PpVQah__ESZXuh2LBiAr5R12XPWaIM4GsCkiBd-gifURIkYo5O9_ctyTk7xMLxue28XaCMmc7jkKURbPck754xs6EQThS4aIgHoKtSG8WNP3tb0QpGTf0poAycp9nUWlK5Sh4oyEkiP0Yw-Kw5qA_YJxEneJ0LVQmd0W-ve11YtK8pZQGQMqnwspSYp4" />
+                </div>
+            </div>
+        </div>
+        <!-- Bento Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-12 gap-6">
+            <!-- Large Milestone Card: First Park Visit -->
+            <div class="md:col-span-4 lg:col-span-8 row-span-2 relative group">
+                <div
+                    class="h-full bg-surface-container-low rounded-xl overflow-hidden shadow-sm perspective-card paper-texture flex flex-col">
+                    <div class="relative h-2/3 overflow-hidden">
+                        <img alt="Park Visit"
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            data-alt="Two happy dogs running in a sun-drenched grassy park with golden hour light filtering through trees"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeA2boGXZnR8xmA197cHYhxr_hZZH7pRXma_qzaWR8X17iGxxfwvJ_8ac-OHgKlXloigeRaBu5c1jU5U_KPGCooo5QmqpHweSLIkgoiELZtChSQt73C1s7RRiriHVyxE2Q6Tjksy0M65Odirvqyoow4ZebGPdt2uT0l0zSPmLMqsslH8DPPmSfS1rxkkKK-0SCeOB6BsTrFXhN188yNGoo1G6flXOVaoA6TWxc-bxoLoe1FXCuWDkm94Eb5oAbPHZ320Wy6tDglu_t" />
+                        <div
+                            class="absolute top-4 left-4 bg-secondary-fixed text-on-secondary-fixed px-4 py-1 rounded-full font-label text-xs font-bold tracking-widest shadow-lg stamp-rotate uppercase">
+                            Major Milestone
+                        </div>
+                    </div>
+                    <div class="p-8 flex-grow">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-headline text-3xl font-extrabold text-primary-dim">First Trip to Central
+                                Park</h3>
+                            <span class="font-label text-sm text-outline">OCT 12, 2023</span>
+                        </div>
+                        <p class="text-on-surface-variant text-lg leading-relaxed mb-6">Cooper met his first golden
+                            retriever friend today! We walked for 3 miles and he didn't even pull on the leash once. A
+                            perfect day for a growing pup.</p>
+                        <div class="flex gap-2">
+                            <span
+                                class="bg-primary/10 text-primary px-3 py-1 rounded-lg text-sm font-medium">#FirstWalk</span>
+                            <span
+                                class="bg-tertiary/10 text-tertiary px-3 py-1 rounded-lg text-sm font-medium">#CentralPark</span>
+                        </div>
+                    </div>
+                    <!-- Decorative Doodle -->
+                    <div class="absolute -bottom-4 -right-4 opacity-20 pointer-events-none">
+                        <span class="material-symbols-outlined text-9xl" data-icon="pets"
+                            style="font-variation-settings: 'FILL' 1;">pets</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Small Daily Log: Breakfast Routine -->
+            <div class="md:col-span-2 lg:col-span-4 row-span-1">
+                <div
+                    class="h-full bg-surface-container-highest rounded-xl p-6 shadow-sm perspective-card flex flex-col justify-between border-t-8 border-secondary">
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="material-symbols-outlined text-secondary text-3xl"
+                                data-icon="restaurant">restaurant</span>
+                            <span class="font-label text-xs text-outline uppercase tracking-tighter">Daily Log</span>
+                        </div>
+                        <h4 class="font-headline text-xl font-bold mb-2">New Kibble Test</h4>
+                        <p class="text-sm text-on-surface-variant line-clamp-3">Tried the salmon-based diet today. He
+                            finished the whole bowl in under 2 minutes. Success!</p>
+                    </div>
+                    <div class="mt-4 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-secondary"></span>
+                        <span class="font-label text-xs font-bold">100% HEALTHY</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Health Schematic Card -->
+            <div class="md:col-span-2 lg:col-span-4 row-span-1">
+                <div
+                    class="h-full bg-tertiary text-on-tertiary rounded-xl p-6 shadow-md perspective-card relative overflow-hidden">
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+                            <span class="font-label text-xs uppercase tracking-[0.2em]">Vitals Schematic</span>
+                        </div>
+                        <div class="mb-6">
+                            <div class="text-4xl font-black italic tracking-tighter mb-1">12.4kg</div>
+                            <div class="text-xs font-label opacity-70">CURRENT WEIGHT (+0.5kg)</div>
+                        </div>
+                        <div class="h-12 flex items-end gap-1">
+                            <div class="flex-1 bg-white/20 h-1/2 rounded-t-sm"></div>
+                            <div class="flex-1 bg-white/20 h-2/3 rounded-t-sm"></div>
+                            <div class="flex-1 bg-white/20 h-1/3 rounded-t-sm"></div>
+                            <div class="flex-1 bg-white/50 h-full rounded-t-sm"></div>
+                            <div class="flex-1 bg-white/30 h-3/4 rounded-t-sm"></div>
+                        </div>
+                    </div>
+                    <!-- Isometric Grid Background -->
+                    <div class="absolute inset-0 opacity-10 pointer-events-none"
+                        style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 20px 20px;">
+                    </div>
+                </div>
+            </div>
+            <!-- Medium Milestone: Vet Visit -->
+            <div class="md:col-span-4 lg:col-span-5 row-span-2">
+                <div
+                    class="h-full bg-surface-container rounded-xl overflow-hidden shadow-sm perspective-card paper-texture flex flex-col border-2 border-dashed border-outline-variant">
+                    <div class="p-6 border-b border-outline-variant/30 bg-surface-container-low">
+                        <div class="flex justify-between items-center">
+                            <div
+                                class="bg-primary-container text-on-primary-container px-3 py-1 rounded-md text-xs font-bold font-label">
+                                CLINIC RECORD</div>
+                            <span class="material-symbols-outlined text-primary" data-icon="verified">verified</span>
+                        </div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-headline text-2xl font-extrabold mb-3">6-Month Checkup</h3>
+                            <p class="text-on-surface-variant text-sm mb-4">Dr. Miller says Cooper is in perfect shape.
+                                Heartbeat is strong and teeth are coming in nicely.</p>
+                            <div class="space-y-2">
+                                <div
+                                    class="flex items-center justify-between text-xs font-label p-2 bg-white/50 rounded-lg">
+                                    <span>VACCINATION STATUS</span>
+                                    <span class="text-green-600 font-bold">UP TO DATE</span>
+                                </div>
+                                <div
+                                    class="flex items-center justify-between text-xs font-label p-2 bg-white/50 rounded-lg">
+                                    <span>HEARTWORM PILL</span>
+                                    <span class="text-primary font-bold">ADMINISTERED</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="mt-6 pt-6 border-t border-outline-variant/20 italic text-sm text-outline flex items-center gap-2">
+                            <span class="material-symbols-outlined text-sm" data-icon="history_edu">history_edu</span>
+                            Digital Signature: Dr. Sarah Miller
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Photo Collage Card -->
+            <div class="md:col-span-4 lg:col-span-7 row-span-2">
+                <div
+                    class="h-full grid grid-cols-2 grid-rows-2 gap-3 p-3 bg-surface-container-high rounded-xl shadow-inner perspective-card">
+                    <div class="relative rounded-lg overflow-hidden row-span-2">
+                        <img alt="Nap time" class="w-full h-full object-cover"
+                            data-alt="Overhead view of a small dog curled up on a white textured blanket in bright natural morning light"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuD--xKbf1e_B6nkLvBDvD7Q-8pcxZtB-Rl1v9d0EHbU82X8vH3jD466BK5PcmB-cWig4yOG6zUsOmnw6WliuE0QMikE8tSUuAExV-OXZWy8ZQaSeQh0TUiB3IrebRQJ6-JFr3REe1aVMRhCX6OfMJvlhuGHZdUV2hBiLq31NLW2XFbt3zh-m15z7KgOKDHzOEnJ_E9S2bWyR-d1tCtSBpDJRPM77OvF8IJ4s_n4EBNG8Ld6Y8rGHVHw_prYAYeialTuqdT1-7vIYCt0" />
+                        <div
+                            class="absolute bottom-2 left-2 bg-white/80 backdrop-blur-md px-2 py-1 rounded text-[10px] font-label font-bold">
+                            Zzz...</div>
+                    </div>
+                    <div class="relative rounded-lg overflow-hidden">
+                        <img alt="Bath time" class="w-full h-full object-cover"
+                            data-alt="Wet dog in a bathtub looking grumpy with bubbles on its head, soft bathroom lighting"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTbZR-qQGIOEHRVLumM-PFSWLPf4It-p4OQy0FnLPC6OPdZnjQ5bpZZRo3E_qqiRZtskkt20CBIeSJsW15mfL0Eoe45bsjjF4Ov1S_TGrRTxyXHxclz09MVSnYHETe1xAK-2Y_-QaXebmImpkfglhT0qnslEmGSMg7SUHthHPhoE0wXhKwDJRkO2qoQEsqCabw0X52e_TWeHNXQ3OnUAAGdfYUGqHKxnozJnKa5fD6aGdBute_C_NITv4N4DksU4R6l1XUUGlmlfcf" />
+                    </div>
+                    <div
+                        class="relative rounded-lg overflow-hidden bg-secondary-fixed p-4 flex flex-col justify-center items-center text-center">
+                        <span class="material-symbols-outlined text-4xl text-on-secondary-fixed mb-2"
+                            data-icon="favorite" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                        <h5 class="font-headline font-bold text-on-secondary-fixed">Weekend Vibes</h5>
+                        <p class="text-xs text-on-secondary-fixed-variant">8 Photos Added</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Small Metadata Card: GPS -->
+            <div class="md:col-span-2 lg:col-span-3 row-span-1">
+                <div
+                    class="h-full bg-surface-container-lowest rounded-xl p-5 shadow-sm perspective-card border border-outline/10">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="material-symbols-outlined text-tertiary" data-icon="location_on">location_on</span>
+                        <span class="font-label text-[10px] uppercase tracking-widest text-outline">Last Known</span>
+                    </div>
+                    <div class="font-label text-sm font-bold text-on-surface mb-1">40.7128° N, 74.0060° W</div>
+                    <div class="text-xs text-on-surface-variant">New York City, NY</div>
+                </div>
+            </div>
+            <!-- Floating Action Button (FAB) - Suppression Logic: Milestone Screen is primary destination, keep FAB -->
+            <button
+                class="fixed bottom-24 right-6 w-16 h-16 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center active:scale-90 transition-transform z-50 border-4 border-white/20">
+                <span class="material-symbols-outlined text-3xl" data-icon="add_a_photo">add_a_photo</span>
+            </button>
+        </div>
+    </main>
+    <!-- BottomNavBar -->
+    <nav
+        class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-2 bg-[#9a511e] dark:bg-[#733300] z-50 rounded-t-[3rem] pb-safe shadow-[0_-4px_12px_rgba(0,0,0,0.15)] no-line elevation-shift">
+        <!-- Journal Active -->
+        <a class="flex flex-col items-center justify-center bg-[#ffe174] text-[#9a511e] rounded-full p-3 shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)] active:scale-90 spring-animation duration-300"
+            href="#">
+            <span class="material-symbols-outlined" data-icon="book_5"
+                style="font-variation-settings: 'FILL' 1;">book_5</span>
+            <span class="font-space-grotesk uppercase text-[10px] tracking-widest mt-1">Journal</span>
+        </a>
+        <a class="flex flex-col items-center justify-center text-[#fffcf7]/80 p-3 hover:text-white transition-all active:scale-90 spring-animation duration-300"
+            href="#">
+            <span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+            <span class="font-space-grotesk uppercase text-[10px] tracking-widest mt-1">Vitals</span>
+        </a>
+        <a class="flex flex-col items-center justify-center text-[#fffcf7]/80 p-3 hover:text-white transition-all active:scale-90 spring-animation duration-300"
+            href="#">
+            <span class="material-symbols-outlined" data-icon="location_on">location_on</span>
+            <span class="font-space-grotesk uppercase text-[10px] tracking-widest mt-1">Map</span>
+        </a>
+        <a class="flex flex-col items-center justify-center text-[#fffcf7]/80 p-3 hover:text-white transition-all active:scale-90 spring-animation duration-300"
+            href="#">
+            <span class="material-symbols-outlined" data-icon="settings">settings</span>
+            <span class="font-space-grotesk uppercase text-[10px] tracking-widest mt-1">Settings</span>
+        </a>
+    </nav>
+</body>
+
+</html>

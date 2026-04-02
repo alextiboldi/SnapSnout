@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Manrope:wght@400;500;600&amp;family=Space+Grotesk:wght@400;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "error-container": "#fa7150",
+                        "on-primary": "#ffffff",
+                        "error": "#b23d21",
+                        "inverse-surface": "#0e0e0c",
+                        "tertiary-fixed-dim": "#77b0e5",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#00436a",
+                        "on-tertiary-fixed": "#00223a",
+                        "on-tertiary-container": "#003a5c",
+                        "tertiary": "#286999",
+                        "on-secondary-fixed": "#4c3e00",
+                        "surface-container": "#f6f4ec",
+                        "inverse-primary": "#f69a62",
+                        "surface-container-low": "#fcf9f3",
+                        "tertiary-dim": "#165c8c",
+                        "surface-dim": "#e4e3d6",
+                        "secondary-container": "#ffe174",
+                        "on-primary-fixed": "#451c00",
+                        "on-secondary-container": "#625000",
+                        "primary-dim": "#8b4513",
+                        "secondary-fixed": "#ffe174",
+                        "on-tertiary": "#ffffff",
+                        "secondary": "#776300",
+                        "error-dim": "#821a01",
+                        "surface-container-high": "#f0eee4",
+                        "inverse-on-surface": "#9e9d98",
+                        "primary": "#9a511e",
+                        "background": "#fffcf7",
+                        "secondary-fixed-dim": "#f6d241",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#ffae7f",
+                        "primary-fixed": "#ffae7f",
+                        "on-secondary-fixed-variant": "#6d5a00",
+                        "surface-tint": "#9a511e",
+                        "outline": "#818178",
+                        "on-surface": "#373831",
+                        "on-surface-variant": "#64655c",
+                        "on-error-container": "#671200",
+                        "surface-bright": "#fffcf7",
+                        "on-error": "#ffffff",
+                        "surface-variant": "#eae9dd",
+                        "outline-variant": "#babaaf",
+                        "surface": "#fffcf7",
+                        "secondary-dim": "#695700",
+                        "tertiary-container": "#84bef3",
+                        "on-background": "#373831",
+                        "primary-fixed-dim": "#f99d64",
+                        "tertiary-fixed": "#84bef3",
+                        "surface-container-highest": "#eae9dd",
+                        "on-primary-fixed-variant": "#733300",
+                        "on-primary-container": "#652c00"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Manrope"],
+                        "label": ["Space Grotesk"]
+                    },
+                    borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .naive-header {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            line-height: 1;
+        }
+
+        .bento-card {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .bento-card:active {
+            transform: scale(0.96);
+        }
+
+        .paper-texture {
+            background-image: radial-gradient(#818178 0.5px, transparent 0.5px);
+            background-size: 16px 16px;
+            opacity: 0.05;
+        }
+
+        .glass-blur {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .custom-radius-irregular {
+            border-radius: 32px 28px 38px 34px;
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body class="bg-surface font-body text-on-surface selection:bg-secondary-container">
+    <!-- TopAppBar -->
+    <nav
+        class="bg-[#fffcf7] dark:bg-stone-950 docked full-width top-0 z-50 shadow-[0px_2px_4px_rgba(154,81,30,0.1)] tonal-shift bg-stone-50 dark:bg-stone-900 sticky">
+        <div class="flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary/20">
+                    <img class="w-full h-full object-cover"
+                        data-alt="close-up portrait of a smiling pet owner with a golden retriever in a sunlit garden"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqNY6DlPoZeKCxS6ySYHYV1jCccXRxtw4i99nSJV3M3F1k70j1XSFFxWkd45K9YEpjykVbUi6Y1tS0Goh4lhECewXNIZV_fPsoEeyvmqnaQY8xHB6DowTsGDdDb47M2IjsIRHzAoz1elTBr8W9uTcTJJH-ayUI_9NvDUURosELKBB3WNsfYBHDKCxUy-W-vKvVQkX4MHq8o4AX9l1EEVX7BqKBy_oZtqShwIMmnv-8PcRlJRfT_qenMwKSsLuJB8rfYY9cnsRQLz1M" />
+                </div>
+                <span
+                    class="text-3xl font-black italic text-[#9a511e] dark:text-[#ffe174] font-headline tracking-tight">SnapSnout</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <button
+                    class="p-2 rounded-full hover:bg-[#ffe174]/20 transition-colors text-[#9a511e] dark:text-[#ffe174] active:scale-95 duration-150 ease-in-out">
+                    <span class="material-symbols-outlined">search</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+    <main class="max-w-7xl mx-auto px-6 pt-12 pb-32">
+        <!-- Header Section -->
+        <header class="mb-12 relative">
+            <div class="absolute -top-6 -left-4 w-24 h-24 bg-tertiary-container/20 rounded-full blur-3xl"></div>
+            <h1 class="naive-header font-headline font-extrabold text-primary tracking-tighter mb-4 relative z-10">
+                AI Magic Studio
+            </h1>
+            <div class="flex items-center gap-2 font-label text-xs uppercase tracking-[0.2em] text-on-surface-variant">
+                <span class="w-8 h-[1px] bg-outline-variant/30"></span>
+                <span>The AI Menu v2.4</span>
+                <span class="px-2 py-0.5 bg-tertiary/10 text-tertiary rounded-sm">Beta Access</span>
+            </div>
+        </header>
+        <!-- Bento Box Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+            <!-- Christmas Cards - Large Featured -->
+            <div class="md:col-span-8 group">
+                <div
+                    class="bento-card h-full bg-surface-container-low custom-radius-irregular overflow-hidden flex flex-col md:flex-row relative shadow-sm hover:shadow-md">
+                    <div class="md:w-1/2 p-8 flex flex-col justify-between z-10">
+                        <div>
+                            <span
+                                class="font-label text-[10px] text-tertiary uppercase tracking-widest mb-2 block">Seasonals</span>
+                            <h2 class="text-4xl font-headline font-extrabold text-primary-dim mb-4">Christmas Cards</h2>
+                            <p class="text-on-surface-variant leading-relaxed mb-6">Transform your pet into a festive
+                                masterpiece for the holidays. Santa hats, snowy landscapes, and cozy vibes included.</p>
+                        </div>
+                        <button
+                            class="w-full md:w-fit bg-gradient-to-tr from-secondary-fixed to-secondary-container text-on-secondary-fixed font-bold py-4 px-8 rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.1),inset_0_2px_4px_rgba(255,255,255,0.4)] active:scale-95 transition-transform flex items-center justify-center gap-2 group">
+                            <span>Start Creating</span>
+                            <span class="material-symbols-outlined text-xl">magic_button</span>
+                        </button>
+                    </div>
+                    <div class="md:w-1/2 relative min-h-[300px]">
+                        <img class="w-full h-full object-cover"
+                            data-alt="a cute french bulldog wearing a miniature santa hat sitting in front of a warm fireplace with twinkling lights"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlppblgrJPc-Sl4RC0WntkLuIcHVuEd8LSLjFPnNp6QATFxCTx_FwvK8gfveuStEpSwAdP_Bi6jnITrswPWaYPCWGb3xvwkQYMe_bT0MMAB2OyARlga06zCxiprHxxmu0agWP5g_4phxFowEwhIkduFaKGCw1cJCrBYZ8chIz78rG2wnP0ky7EjfzQF-ZVPYopUMPdxumL5QQ0yly5nQIlwUZAL6u21QuN_1wO1BhEm4P9uErkhTp2hm0AM2wLJvAetjxGmMGGM_nn" />
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-surface-container-low via-transparent to-transparent">
+                        </div>
+                        <!-- Doodle overlay -->
+                        <div
+                            class="absolute top-4 right-4 bg-surface-container-lowest/80 glass-blur p-2 rounded-lg border border-outline-variant/10 shadow-sm rotate-3">
+                            <span class="material-symbols-outlined text-secondary"
+                                style="font-variation-settings: 'FILL' 1;">ac_unit</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Superhero Transformation - Vertical Medium -->
+            <div class="md:col-span-4 group">
+                <div
+                    class="bento-card h-full bg-tertiary-container/10 custom-radius-irregular overflow-hidden flex flex-col relative shadow-sm border border-tertiary/5">
+                    <div class="p-8 pb-0">
+                        <span
+                            class="font-label text-[10px] text-tertiary uppercase tracking-widest mb-2 block">Identity</span>
+                        <h2 class="text-3xl font-headline font-extrabold text-tertiary mb-2">Superhero</h2>
+                        <div class="font-label text-[9px] text-tertiary/60 flex items-center gap-2 mb-4">
+                            <span>RENDER: NEURAL_GEN_V4</span>
+                            <span class="w-1 h-1 rounded-full bg-tertiary/30"></span>
+                            <span>LATENCY: 400MS</span>
+                        </div>
+                    </div>
+                    <div class="relative flex-grow px-8 pb-8 flex flex-col justify-end">
+                        <div class="relative mb-6">
+                            <img class="w-full h-48 object-cover rounded-2xl shadow-lg rotate-[-2deg]"
+                                data-alt="majestic cat in cinematic superhero armor with glowing blue accents and a dramatic cape flapping in wind"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwdiWBFnDavdxxQNQv5ifzG6a44LUimDUtm7hB0wJ6PXU1qhyxlofpmW9uQpJrPhiVxBtbExOlRn1q1qEuHKTrJZSbJTlMz-inCQ7aTLBUOVs-u_Dx9TzY4RT4ote7WegKXMe1HMdRQEAAn7k9kPzP03vO0fV3PQysWbRxxLiG3cZRbslO-9P3i2LO3z7UOSguhkHeQ1Gebh7oQtvZshqar78LRSIq32YlBlkaD-VFuzMql1_JE5hjT3Zl3V6u0jN64noyAifeG37Y" />
+                            <div
+                                class="absolute -bottom-4 -right-2 bg-secondary-fixed text-on-secondary-fixed text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                                NEW THEME</div>
+                        </div>
+                        <button
+                            class="w-full bg-white text-primary font-bold py-4 px-6 rounded-xl shadow-sm border border-outline-variant/10 hover:bg-surface-container-lowest transition-colors flex items-center justify-center gap-2">
+                            <span>Start Creating</span>
+                            <span class="material-symbols-outlined">bolt</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Retro Blueprint Style - Wide Technical -->
+            <div class="md:col-span-6 group">
+                <div
+                    class="bento-card h-full bg-[#286999] text-white custom-radius-irregular overflow-hidden relative shadow-xl">
+                    <div class="absolute inset-0 paper-texture opacity-10"></div>
+                    <!-- Blueprint Grid Overlay -->
+                    <div class="absolute inset-0"
+                        style="background-image: linear-gradient(#ffffff05 1px, transparent 1px), linear-gradient(90deg, #ffffff05 1px, transparent 1px); background-size: 20px 20px;">
+                    </div>
+                    <div class="p-10 relative z-10 h-full flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start">
+                                <h2 class="text-3xl font-headline font-extrabold tracking-tight">Retro Blueprint</h2>
+                                <span class="material-symbols-outlined text-4xl opacity-50">architecture</span>
+                            </div>
+                            <p class="mt-4 text-tertiary-fixed font-body max-w-xs">Technical, architectural drawings of
+                                your pet's anatomy and personality traits.</p>
+                        </div>
+                        <div class="mt-8 flex items-end justify-between">
+                            <button
+                                class="bg-secondary-fixed text-on-secondary-fixed font-bold py-4 px-8 rounded-xl shadow-lg active:scale-95 transition-transform flex items-center gap-2">
+                                <span>Draft Now</span>
+                                <span class="material-symbols-outlined">straighten</span>
+                            </button>
+                            <div
+                                class="hidden sm:block text-[10px] font-label text-tertiary-fixed/40 leading-tight uppercase text-right">
+                                ISO_7001_COMPLIANT<br />DRAFT_MODE: ENABLED<br />VECTOR_OUTLINE: TRUE
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Small Square - Space Explorer -->
+            <div class="md:col-span-3 group">
+                <div
+                    class="bento-card h-full bg-surface-container-highest custom-radius-irregular p-8 flex flex-col justify-between border border-outline-variant/20 relative">
+                    <div class="absolute top-0 right-0 p-4">
+                        <span class="material-symbols-outlined text-primary/30">rocket_launch</span>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-headline font-extrabold text-on-surface mb-2">Space Explorer</h3>
+                        <p class="text-xs text-on-surface-variant font-body">Astronaut suits and cosmic backdrops.</p>
+                    </div>
+                    <button
+                        class="mt-6 w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center shadow-md hover:bg-primary-dim transition-colors group">
+                        <span
+                            class="material-symbols-outlined group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+                    </button>
+                </div>
+            </div>
+            <!-- Small Square - Oil Painting -->
+            <div class="md:col-span-3 group">
+                <div
+                    class="bento-card h-full bg-surface-container-high custom-radius-irregular p-8 flex flex-col justify-between border border-outline-variant/10 relative overflow-hidden">
+                    <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-secondary-fixed/20 rounded-full blur-2xl">
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-headline font-extrabold text-on-surface mb-2">Renaissance</h3>
+                        <p class="text-xs text-on-surface-variant font-body">Classic oil painting portraits in gold
+                            frames.</p>
+                    </div>
+                    <button
+                        class="mt-6 w-full py-3 rounded-xl bg-white text-on-surface font-bold text-sm border border-outline-variant/20 shadow-sm hover:shadow-md transition-shadow">
+                        Explore Art
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Field Journal Prompt (Signature Element) -->
+        <section class="mt-20">
+            <div
+                class="bg-surface-container-low rounded-xl p-8 relative overflow-hidden border border-outline-variant/5">
+                <div class="absolute top-0 right-0 w-16 h-16 bg-secondary-fixed rounded-bl-3xl shadow-sm">
+                    <div class="absolute top-4 right-4">
+                        <span class="material-symbols-outlined text-on-secondary-fixed">push_pin</span>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div class="flex-grow">
+                        <h4 class="font-headline font-bold text-2xl text-primary mb-2">Custom Magic Prompt</h4>
+                        <p class="text-on-surface-variant max-w-xl">Can't find what you're looking for? Describe any
+                            style—from Pixar animation to Cyberpunk—and our AI will bring it to life.</p>
+                        <div class="mt-6 flex flex-wrap gap-3 font-label text-[10px] uppercase">
+                            <span
+                                class="px-3 py-1 bg-surface-container rounded-full text-on-surface-variant">#watercolor</span>
+                            <span
+                                class="px-3 py-1 bg-surface-container rounded-full text-on-surface-variant">#cyberpunk</span>
+                            <span
+                                class="px-3 py-1 bg-surface-container rounded-full text-on-surface-variant">#pixelart</span>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-auto">
+                        <button
+                            class="w-full md:w-auto px-10 py-5 bg-primary-fixed-dim text-on-primary-fixed font-black uppercase tracking-tighter text-lg rounded-2xl shadow-xl border-b-4 border-primary-dim active:border-b-0 active:translate-y-1 transition-all">
+                            Open Prompt Engineer
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- BottomNavBar -->
+    <footer
+        class="bg-[#9a511e] dark:bg-[#733300] fixed bottom-0 w-full z-50 rounded-t-[3rem] pb-safe no-line elevation-shift shadow-[0_-4px_12px_rgba(0,0,0,0.15)]">
+        <div class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-2">
+            <a class="flex flex-col items-center justify-center text-[#fffcf7]/80 p-3 hover:text-white transition-all active:scale-90 spring-animation duration-300"
+                href="#">
+                <span class="material-symbols-outlined">book_5</span>
+                <span class="font-space-grotesk uppercase text-[10px] tracking-widest mt-1">Journal</span>
+            </a>
+            <a class="flex flex-col items-center justify-center text-[#fffcf7]/80 p-3 hover:text-white transition-all active:scale-90 spring-animation duration-300"
+                href="#">
+                <span class="material-symbols-outlined">analytics</span>
+                <span class="font-space-grotesk uppercase text-[10px] tracking-widest mt-1">Vitals</span>
+            </a>
+            <!-- Active State: Studio/Map context (Mocking Studio as the primary focus here) -->
+            <a class="flex flex-col items-center justify-center bg-[#ffe174] text-[#9a511e] rounded-full p-3 shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)] active:scale-90 spring-animation duration-300"
+                href="#">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">magic_button</span>
+                <span class="font-space-grotesk uppercase text-[10px] tracking-widest mt-1">Studio</span>
+            </a>
+            <a class="flex flex-col items-center justify-center text-[#fffcf7]/80 p-3 hover:text-white transition-all active:scale-90 spring-animation duration-300"
+                href="#">
+                <span class="material-symbols-outlined">location_on</span>
+                <span class="font-space-grotesk uppercase text-[10px] tracking-widest mt-1">Map</span>
+            </a>
+            <a class="flex flex-col items-center justify-center text-[#fffcf7]/80 p-3 hover:text-white transition-all active:scale-90 spring-animation duration-300"
+                href="#">
+                <span class="material-symbols-outlined">settings</span>
+                <span class="font-space-grotesk uppercase text-[10px] tracking-widest mt-1">Settings</span>
+            </a>
+        </div>
+    </footer>
+</body>
+
+</html>
