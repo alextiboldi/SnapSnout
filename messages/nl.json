@@ -93,7 +93,11 @@
     "comingUp": "Binnenkort",
     "todayLabel": "Vandaag",
     "daysShort": "{days}d",
-    "createCard": "Maak een kaart"
+    "createCard": "Maak een kaart",
+    "galleryTitle": "Fotogalerij",
+    "galleryCount": "{count, plural, =0 {Nog geen foto's} one {# foto van {name}} other {# foto's van {name}}}",
+    "galleryEmpty": "Nog geen foto's",
+    "galleryEmptyDesc": "Leg je eerste herinnering vast om deze galerij te vullen."
   },
   "settings": {
     "title": "Instellingen",
@@ -126,7 +130,19 @@
     "contactSupport": "Contact opnemen",
     "version": "SnapSnout v1.0.0",
     "deleteAccount": "Account verwijderen",
-    "language": "Taal"
+    "language": "Taal",
+    "account": "Account",
+    "signOut": "Uitloggen",
+    "signingOut": "Uitloggen...",
+    "deleteAccountTitle": "Je account verwijderen?",
+    "deleteAccountWarning": "Dit wist je account en alles wat eraan verbonden is permanent. Dit kan niet ongedaan worden gemaakt.",
+    "deleteAccount_lossPets": "Alle huisdieren en hun profielen",
+    "deleteAccount_lossPhotos": "Elke foto die je hebt geüpload",
+    "deleteAccount_lossMilestones": "Alle mijlpalen en herinneringen",
+    "deleteAccount_lossIrreversible": "Deze actie kan niet ongedaan worden gemaakt",
+    "deleteAccountTypePrompt": "Typ {word} om te bevestigen",
+    "deleteAccountConfirmWord": "VERWIJDER",
+    "deleteAccountConfirm": "Voorgoed verwijderen"
   },
   "petForm": {
     "petPhoto": "Huisdierfoto",

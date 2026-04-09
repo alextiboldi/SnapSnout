@@ -93,7 +93,11 @@
     "comingUp": "Coming Up",
     "todayLabel": "Today",
     "daysShort": "{days}d",
-    "createCard": "Create a card"
+    "createCard": "Create a card",
+    "galleryTitle": "Photo Gallery",
+    "galleryCount": "{count, plural, =0 {No photos yet} one {# photo of {name}} other {# photos of {name}}}",
+    "galleryEmpty": "No photos yet",
+    "galleryEmptyDesc": "Snap your first memory to start filling this gallery."
   },
   "settings": {
     "title": "Settings",
@@ -126,7 +130,19 @@
     "contactSupport": "Contact Support",
     "version": "SnapSnout v1.0.0",
     "deleteAccount": "Delete Account",
-    "language": "Language"
+    "language": "Language",
+    "account": "Account",
+    "signOut": "Sign out",
+    "signingOut": "Signing out...",
+    "deleteAccountTitle": "Delete your account?",
+    "deleteAccountWarning": "This will permanently erase your account and everything tied to it. There is no undo.",
+    "deleteAccount_lossPets": "All pets and their profiles",
+    "deleteAccount_lossPhotos": "Every photo you've uploaded",
+    "deleteAccount_lossMilestones": "All milestones and memories",
+    "deleteAccount_lossIrreversible": "This action cannot be reversed",
+    "deleteAccountTypePrompt": "Type {word} to confirm",
+    "deleteAccountConfirmWord": "DELETE",
+    "deleteAccountConfirm": "Delete forever"
   },
   "petForm": {
     "petPhoto": "Pet Photo",

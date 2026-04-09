@@ -93,7 +93,11 @@
     "comingUp": "In curand",
     "todayLabel": "Azi",
     "daysShort": "{days}z",
-    "createCard": "Creeaza un card"
+    "createCard": "Creeaza un card",
+    "galleryTitle": "Galerie foto",
+    "galleryCount": "{count, plural, =0 {Nicio poza inca} one {# poza cu {name}} few {# poze cu {name}} other {# de poze cu {name}}}",
+    "galleryEmpty": "Nicio poza inca",
+    "galleryEmptyDesc": "Imortalizeaza prima amintire pentru a umple galeria."
   },
   "settings": {
     "title": "Setari",
@@ -126,7 +130,19 @@
     "contactSupport": "Contacteaza suportul",
     "version": "SnapSnout v1.0.0",
     "deleteAccount": "Sterge contul",
-    "language": "Limba"
+    "language": "Limba",
+    "account": "Cont",
+    "signOut": "Deconecteaza-te",
+    "signingOut": "Se deconecteaza...",
+    "deleteAccountTitle": "Stergi contul?",
+    "deleteAccountWarning": "Aceasta actiune va sterge definitiv contul tau si tot ce tine de el. Nu se poate anula.",
+    "deleteAccount_lossPets": "Toate animalutele si profilurile lor",
+    "deleteAccount_lossPhotos": "Toate pozele incarcate",
+    "deleteAccount_lossMilestones": "Toate reperele si amintirile",
+    "deleteAccount_lossIrreversible": "Aceasta actiune este ireversibila",
+    "deleteAccountTypePrompt": "Scrie {word} pentru a confirma",
+    "deleteAccountConfirmWord": "STERGE",
+    "deleteAccountConfirm": "Sterge definitiv"
   },
   "petForm": {
     "petPhoto": "Poza animalutului",

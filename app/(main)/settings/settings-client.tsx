@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Icon } from "@/components/icon";
 import Link from "next/link";
 import { switchActivePet, deletePet } from "@/lib/actions/pets";
+import { signOut, deleteAccount } from "@/lib/actions/auth";
+import { locales, localeNames, type Locale } from "@/i18n/config";
 import type { Pet } from "@/lib/generated/prisma/client";
 
 /* ─── Toggle Switch ─── */
@@ -315,9 +317,11 @@ function NotificationsSection({
 
 function LanguageSection() {
   const t = useTranslations("settings");
+  const currentLocale = useLocale() as Locale;
   const [isPending, startTransition] = useTransition();
 
-  const handleLocaleChange = async (locale: string) => {
+  const handleLocaleChange = (locale: string) => {
+    if (locale === currentLocale) return;
     startTransition(async () => {
       const { setLocale } = await import("@/lib/actions/locale");
       await setLocale(locale);
@@ -332,32 +336,170 @@ function LanguageSection() {
       <h2 className="font-label text-[11px] font-medium tracking-wider text-on-surface-variant/70 uppercase">
         {t("language")}
       </h2>
-      <div className={`mt-3 space-y-1 ${isPending ? "opacity-50" : ""}`}>
-        {(["en", "nl", "ro"] as const).map((locale) => {
-          const names: Record<string, string> = { en: "English", nl: "Nederlands", ro: "Română" };
-          const flags: Record<string, string> = { en: "🇬🇧", nl: "🇳🇱", ro: "🇷🇴" };
-          return (
-            <button
-              key={locale}
-              disabled={isPending}
-              onClick={() => handleLocaleChange(locale)}
-              className="spring-active flex w-full items-center gap-4 rounded-2xl p-3 text-left transition-colors hover:bg-surface-container/60"
-            >
-              <span className="text-2xl">{flags[locale]}</span>
-              <span className="flex-1 font-body text-sm font-medium text-on-surface">
-                {names[locale]}
-              </span>
-              <Icon
-                name="check_circle"
-                filled
-                className="text-xl text-primary opacity-0 transition-opacity"
-                // Will show for active locale via CSS — simplified: just show for current
-              />
-            </button>
-          );
-        })}
+      <div className="relative mt-3">
+        <select
+          value={currentLocale}
+          disabled={isPending}
+          onChange={(e) => handleLocaleChange(e.target.value)}
+          className={`spring-active w-full appearance-none rounded-2xl bg-surface-container/60 px-4 py-3.5 pr-12 font-body text-sm font-medium text-on-surface shadow-inner focus:outline-none focus:ring-2 focus:ring-primary/40 transition-opacity ${
+            isPending ? "opacity-50" : ""
+          }`}
+        >
+          {locales.map((locale) => (
+            <option key={locale} value={locale}>
+              {localeNames[locale]}
+            </option>
+          ))}
+        </select>
+        <Icon
+          name="expand_more"
+          className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xl text-on-surface-variant"
+        />
       </div>
     </section>
+  );
+}
+
+function AccountActionsSection({
+  t,
+}: {
+  t: ReturnType<typeof useTranslations<"settings">>;
+}) {
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [isSigningOut, startSignOut] = useTransition();
+  const [isDeleting, startDeleting] = useTransition();
+
+  return (
+    <section
+      className="irregular-border bg-surface-container-low p-5 shadow-ambient"
+      style={{ animationDelay: "0.22s" }}
+    >
+      <h2 className="font-label text-[11px] font-medium tracking-wider text-on-surface-variant/70 uppercase">
+        {t("account")}
+      </h2>
+
+      <div className="mt-3 space-y-2">
+        <button
+          onClick={() => startSignOut(() => signOut())}
+          disabled={isSigningOut}
+          className="spring-active flex w-full items-center gap-4 rounded-2xl bg-surface-container/60 p-3 text-left transition-shadow hover:shadow-ambient disabled:opacity-50"
+        >
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+            <Icon name="logout" className="text-xl text-primary" />
+          </div>
+          <span className="flex-1 font-headline text-sm font-semibold text-on-surface">
+            {isSigningOut ? t("signingOut") : t("signOut")}
+          </span>
+          <Icon name="chevron_right" className="text-xl text-outline-variant" />
+        </button>
+
+        <button
+          onClick={() => setConfirmDelete(true)}
+          className="spring-active flex w-full items-center gap-4 rounded-2xl bg-error/5 p-3 text-left transition-colors hover:bg-error/10"
+        >
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-error/10">
+            <Icon name="delete_forever" filled className="text-xl text-error" />
+          </div>
+          <span className="flex-1 font-headline text-sm font-semibold text-error">
+            {t("deleteAccount")}
+          </span>
+          <Icon name="chevron_right" className="text-xl text-error/50" />
+        </button>
+      </div>
+
+      {confirmDelete && (
+        <DeleteAccountDialog
+          onCancel={() => setConfirmDelete(false)}
+          onConfirm={() => startDeleting(() => deleteAccount())}
+          isDeleting={isDeleting}
+          t={t}
+        />
+      )}
+    </section>
+  );
+}
+
+function DeleteAccountDialog({
+  onCancel,
+  onConfirm,
+  isDeleting,
+  t,
+}: {
+  onCancel: () => void;
+  onConfirm: () => void;
+  isDeleting: boolean;
+  t: ReturnType<typeof useTranslations<"settings">>;
+}) {
+  const tCommon = useTranslations("common");
+  const [typed, setTyped] = useState("");
+  const confirmWord = t("deleteAccountConfirmWord");
+  const canDelete = typed.trim().toUpperCase() === confirmWord.toUpperCase();
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      <div
+        className="absolute inset-0 bg-on-surface/50 backdrop-blur-sm"
+        onClick={isDeleting ? undefined : onCancel}
+      />
+      <div
+        role="alertdialog"
+        aria-modal="true"
+        className="relative w-full max-w-sm bg-surface-container-lowest irregular-border p-6 shadow-ambient-lg animate-fade-up"
+      >
+        <div className="flex flex-col items-center text-center">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-error/10">
+            <Icon name="warning" filled className="text-3xl text-error" />
+          </div>
+          <h3 className="mt-4 font-headline text-lg font-bold text-on-surface">
+            {t("deleteAccountTitle")}
+          </h3>
+          <p className="mt-2 max-w-[280px] font-body text-sm text-on-surface-variant">
+            {t("deleteAccountWarning")}
+          </p>
+          <ul className="mt-3 w-full space-y-1.5 rounded-xl bg-error/5 p-3 text-left">
+            {["lossPets", "lossPhotos", "lossMilestones", "lossIrreversible"].map(
+              (key) => (
+                <li
+                  key={key}
+                  className="flex items-start gap-2 font-body text-xs text-error/90"
+                >
+                  <Icon name="close" className="text-sm mt-0.5 shrink-0" />
+                  <span>{t(`deleteAccount_${key}`)}</span>
+                </li>
+              )
+            )}
+          </ul>
+          <p className="mt-4 font-body text-xs text-on-surface-variant">
+            {t("deleteAccountTypePrompt", { word: confirmWord })}
+          </p>
+          <input
+            type="text"
+            value={typed}
+            onChange={(e) => setTyped(e.target.value)}
+            disabled={isDeleting}
+            placeholder={confirmWord}
+            className="mt-2 w-full rounded-xl border-2 border-error/20 bg-surface-container-low px-4 py-2.5 text-center font-headline text-sm font-bold tracking-widest text-on-surface uppercase focus:border-error focus:outline-none"
+          />
+        </div>
+
+        <div className="mt-5 flex gap-3">
+          <button
+            onClick={onCancel}
+            disabled={isDeleting}
+            className="flex-1 rounded-xl bg-surface-container-highest py-3 font-headline text-sm font-bold text-on-surface spring-active transition-shadow hover:shadow-ambient disabled:opacity-50"
+          >
+            {tCommon("cancel")}
+          </button>
+          <button
+            onClick={onConfirm}
+            disabled={!canDelete || isDeleting}
+            className="flex-1 rounded-xl bg-error py-3 font-headline text-sm font-bold text-on-error spring-active transition-all disabled:opacity-40"
+          >
+            {isDeleting ? t("deleting") : t("deleteAccountConfirm")}
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -434,17 +576,6 @@ function AboutSection() {
   );
 }
 
-function DangerZone() {
-  const t = useTranslations("settings");
-  return (
-    <div className="flex justify-center" style={{ animationDelay: "0.25s" }}>
-      <button className="spring-active rounded-2xl px-6 py-3 font-headline text-sm font-semibold text-error/70 transition-colors hover:bg-error/5 hover:text-error">
-        {t("deleteAccount")}
-      </button>
-    </div>
-  );
-}
-
 /* ─── Client Shell ─── */
 
 export default function SettingsClient({ pets }: { pets: Pet[] }) {
@@ -478,7 +609,7 @@ export default function SettingsClient({ pets }: { pets: Pet[] }) {
 
         <AboutSection />
 
-        <DangerZone />
+        <AccountActionsSection t={t} />
       </div>
     </div>
   );

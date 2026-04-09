@@ -3,7 +3,8 @@ import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Icon } from "@/components/icon";
 import { createClient } from "@/lib/supabase/server";
-import { getActivePet } from "@/lib/queries/pets";
+import { getActivePet, getPetsForUser } from "@/lib/queries/pets";
+import { PetSwitcher } from "@/app/(main)/pet-switcher";
 import {
   formatDate,
   daysUntil,
@@ -95,8 +96,9 @@ function PhotoCollageCard() {
   const icons = ["pets", "landscape", "photo_camera"];
 
   return (
-    <div
-      className="col-span-1 md:col-span-8 animate-fade-up"
+    <Link
+      href="/milestones/gallery"
+      className="col-span-1 md:col-span-8 animate-fade-up spring-active block"
       style={{ animationDelay: "0.1s" }}
     >
       <div className="irregular-border-sm overflow-hidden shadow-ambient h-full">
@@ -129,7 +131,7 @@ function PhotoCollageCard() {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
@@ -176,8 +178,9 @@ export default async function MilestonesPage() {
 
   if (!user) redirect("/login");
 
-  const [activePet, t, tHome, tPresets] = await Promise.all([
+  const [activePet, pets, t, tHome, tPresets] = await Promise.all([
     getActivePet(user.id),
+    getPetsForUser(user.id),
     getTranslations("milestones"),
     getTranslations("home"),
     getTranslations("presets"),
@@ -236,15 +239,7 @@ export default async function MilestonesPage() {
           </h1>
         </div>
 
-        {/* Pet avatar stack */}
-        <div className="flex -space-x-3">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-container to-primary-fixed-dim border-2 border-surface flex items-center justify-center shadow-ambient">
-            <span className="text-lg">🐕</span>
-          </div>
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-tertiary-container to-tertiary border-2 border-surface flex items-center justify-center shadow-ambient">
-            <span className="text-lg">🐈</span>
-          </div>
-        </div>
+        <PetSwitcher pets={pets} activePetId={activePet.id} />
       </div>
 
       {/* Summary bar */}
