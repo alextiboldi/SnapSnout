@@ -36,9 +36,14 @@ function FeaturedMilestone({
         className="relative overflow-hidden irregular-border shadow-ambient-lg bg-surface-container-lowest h-full min-h-[340px] md:min-h-[400px] spring-active cursor-pointer transition-transform duration-300 hover:-translate-y-1"
         style={{ perspective: "800px" }}
       >
-        {/* Gradient placeholder for photo */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-container via-secondary-fixed-dim to-primary opacity-60" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
+        {/* Hero photo */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/assets/milestone-bath.jpg"
+          alt="Featured milestone moment"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
         {/* Rotated badge */}
         <div className="absolute top-6 -left-8 z-10">
@@ -88,12 +93,11 @@ function FeaturedMilestone({
 }
 
 function PhotoCollageCard() {
-  const gradients = [
-    "from-primary-container to-primary-fixed-dim",
-    "from-tertiary-container to-tertiary",
-    "from-primary-fixed-dim to-secondary-fixed-dim",
+  const tiles = [
+    { src: "/assets/milestone-park.jpg", alt: "Two dogs running in a sunlit park", corner: "rounded-tl-[18px]" },
+    { src: "/assets/milestone-pet.jpg", alt: "Golden retriever puppy", corner: "" },
+    { src: "/assets/milestone-nap.jpg", alt: "Small dog napping on a blanket", corner: "rounded-bl-[18px]" },
   ];
-  const icons = ["pets", "landscape", "photo_camera"];
 
   return (
     <Link
@@ -103,15 +107,11 @@ function PhotoCollageCard() {
     >
       <div className="irregular-border-sm overflow-hidden shadow-ambient h-full">
         <div className="grid grid-cols-2 grid-rows-2 gap-1.5 h-full min-h-[240px] md:min-h-[280px]">
-          {gradients.map((gradient, i) => (
-            <div
-              key={i}
-              className={`relative bg-gradient-to-br ${gradient} flex items-center justify-center ${i === 0 ? "rounded-tl-[18px]" : ""} ${i === 2 ? "rounded-bl-[18px]" : ""}`}
-            >
-              <Icon
-                name={icons[i]}
-                className="text-white/40 text-3xl"
-              />
+          {tiles.map((tile) => (
+            <div key={tile.src} className={`relative overflow-hidden ${tile.corner}`}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={tile.src} alt={tile.alt} className="h-full w-full object-cover" />
+              <div className="absolute inset-0 bg-tertiary/10 mix-blend-multiply" />
             </div>
           ))}
 
@@ -126,7 +126,7 @@ function PhotoCollageCard() {
               Weekend Vibes
             </p>
             <p className="font-label text-[11px] text-on-secondary-fixed-variant">
-              8 Photos Added
+              View gallery
             </p>
           </div>
         </div>
@@ -159,7 +159,13 @@ function LocationCard() {
             </p>
           </div>
 
-          <div className="mt-4 pt-3 border-t border-outline-variant/30">
+          <div className="mt-4 flex items-center gap-2 pt-3 border-t border-outline-variant/30">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/assets/milestone-owner.jpg"
+              alt="Owner"
+              className="h-6 w-6 rounded-full object-cover"
+            />
             <p className="font-label text-[10px] text-outline tracking-wider">
               40.6602 N, 73.9690 W
             </p>

@@ -4,7 +4,9 @@ import { createClient } from "@/lib/supabase/server";
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/";
+  // New signups land directly on /create-pet to avoid a race with the
+  // home-page onboarding modal. Callers can override with ?next=...
+  const next = searchParams.get("next") ?? "/create-pet";
 
   if (code) {
     const supabase = await createClient();

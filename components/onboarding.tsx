@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
@@ -44,6 +44,14 @@ export function Onboarding() {
     router.push("/create-pet");
   }, [router]);
 
+  // Belt-and-suspenders: if onboarding has already been seen, never render.
+  const [dismissed, setDismissed] = useState(false);
+  useEffect(() => {
+    if (localStorage.getItem("snapsnout_onboarding_seen") === "true") {
+      setDismissed(true);
+    }
+  }, []);
+
   const goNext = useCallback(() => {
     setCurrentSlide((prev) => Math.min(prev + 1, slideConfig.length - 1));
   }, []);
@@ -75,6 +83,8 @@ export function Onboarding() {
     touchStartX.current = null;
     touchEndX.current = null;
   }, [goNext, goPrev]);
+
+  if (dismissed) return null;
 
   return (
     <div

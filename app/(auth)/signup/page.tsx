@@ -1,19 +1,41 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState, useTransition } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Icon } from "@/components/icon";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { locales, localeNames, type Locale } from "@/i18n/config";
 
 export default function SignupPage() {
+  return (
+    <Suspense fallback={null}>
+      <SignupInner />
+    </Suspense>
+  );
+}
+
+function SignupInner() {
   const t = useTranslations("auth.signup");
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const currentLocale = useLocale() as Locale;
+  const [localePending, startLocaleTransition] = useTransition();
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [email, setEmail] = useState(searchParams.get("email") ?? "");
+  const [password, setPassword] = useState(searchParams.get("password") ?? "");
+  const [confirmPassword, setConfirmPassword] = useState(
+    searchParams.get("password") ?? ""
+  );
+
+  const handleLocaleChange = (next: string) => {
+    if (next === currentLocale) return;
+    startLocaleTransition(async () => {
+      const { setLocale } = await import("@/lib/actions/locale");
+      await setLocale(next);
+    });
+  };
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -81,6 +103,29 @@ export default function SignupPage() {
 
       {/* Content Card */}
       <div className="relative bg-surface-container-lowest p-8 sm:p-12 rounded-xl shadow-lg border border-outline-variant/10">
+        {/* Language selector */}
+        <div className="absolute top-4 right-4 z-10">
+          <div className="relative">
+            <select
+              value={currentLocale}
+              disabled={localePending}
+              onChange={(e) => handleLocaleChange(e.target.value)}
+              aria-label={t("language")}
+              className="appearance-none rounded-full bg-surface-container/70 pl-4 pr-9 py-2 font-label text-xs font-bold uppercase tracking-widest text-on-surface shadow-inner focus:outline-none focus:ring-2 focus:ring-tertiary/40 cursor-pointer"
+            >
+              {locales.map((loc) => (
+                <option key={loc} value={loc}>
+                  {localeNames[loc]}
+                </option>
+              ))}
+            </select>
+            <Icon
+              name="expand_more"
+              className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-base text-on-surface-variant"
+            />
+          </div>
+        </div>
+
         {/* Header */}
         <header className="mb-10 text-center md:text-left">
           <h1 className="font-headline text-4xl sm:text-5xl font-extrabold text-on-surface tracking-tight mb-4">
@@ -197,9 +242,19 @@ export default function SignupPage() {
           </Link>
         </footer>
 
-        {/* Decorative Doodles */}
-        <div className="absolute -top-12 -right-12 hidden lg:block opacity-20 rotate-12 pointer-events-none">
-          <Icon name="architecture" className="text-[120px] text-tertiary" />
+        {/* Decorative Archive Sketch */}
+        <div className="absolute -top-10 -right-10 hidden lg:block rotate-[4deg] pointer-events-none">
+          <div className="bg-surface-container-lowest p-2 shadow-ambient-lg rotate-[2deg]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/assets/signup-sketch.jpg"
+              alt="Puppy resting on a blueprint drafting table"
+              className="h-36 w-36 object-cover grayscale mix-blend-multiply opacity-90"
+            />
+            <p className="mt-1 text-center font-label text-[9px] uppercase tracking-widest text-tertiary/70">
+              Archive · Pet 01
+            </p>
+          </div>
         </div>
         <div className="absolute -bottom-8 -left-8 hidden lg:block opacity-20 -rotate-12 pointer-events-none">
           <Icon name="ink_pen" className="text-[100px] text-primary" />

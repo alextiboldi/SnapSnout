@@ -47,10 +47,12 @@ export default function StudioPage() {
               </div>
             </div>
             <div className="relative min-h-[240px] md:min-h-[300px] md:w-1/2">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary-container to-primary-fixed-dim" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <Icon name="ac_unit" filled className="text-6xl text-white/40" />
-              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/assets/studio-christmas.jpg"
+                alt="French bulldog in festive Christmas scene"
+                className="absolute inset-0 h-full w-full object-cover"
+              />
               <div className="absolute inset-0 bg-gradient-to-r from-surface-container-low via-transparent to-transparent" />
               <div className="absolute top-4 right-4 rotate-3 rounded-lg border border-outline-variant/10 bg-surface-container-lowest/80 p-2 shadow-ambient glass">
                 <Icon name="ac_unit" filled className="text-secondary" />
@@ -75,10 +77,13 @@ export default function StudioPage() {
             </div>
             <div className="relative flex flex-grow flex-col justify-end px-6 pb-6 md:px-8 md:pb-8">
               <div className="relative mb-6">
-                <div className="h-48 w-full -rotate-2 rounded-2xl bg-gradient-to-br from-tertiary/30 to-tertiary-container/60 shadow-lg">
-                  <div className="flex h-full w-full items-center justify-center">
-                    <Icon name="bolt" filled className="text-5xl text-tertiary/40" />
-                  </div>
+                <div className="h-48 w-full -rotate-2 overflow-hidden rounded-2xl shadow-lg">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/assets/studio-superhero.jpg"
+                    alt="Cat in superhero armor with glowing cape"
+                    className="h-full w-full object-cover"
+                  />
                 </div>
                 <div className="absolute -right-2 -bottom-4 rounded-full bg-secondary-fixed px-3 py-1 text-xs font-bold text-on-secondary-fixed shadow-md">
                   {t("newTheme")}
@@ -182,6 +187,16 @@ export default function StudioPage() {
             </div>
           </div>
           <div className="flex flex-col items-center gap-6 md:flex-row md:gap-8">
+            <div className="hidden md:block shrink-0 -rotate-2">
+              <div className="bg-surface-container-lowest p-1.5 shadow-ambient">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/assets/studio-owner.jpg"
+                  alt="Pet owner in sunlit garden"
+                  className="h-24 w-24 object-cover"
+                />
+              </div>
+            </div>
             <div className="flex-grow">
               <h4 className="font-headline text-xl font-bold text-primary md:text-2xl">
                 {t("customPrompt")}

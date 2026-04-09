@@ -72,7 +72,12 @@ export default function ForgotPasswordPage() {
       {/* Illustration */}
       <div className="relative w-48 h-48 bg-surface-container-high irregular-border flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 opacity-10 blueprint-grid" />
-        <Icon name="lock_reset" className="text-7xl text-primary/40 relative z-10" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/assets/forgot-dog.jpg"
+          alt="Confused dog tilting its head"
+          className="relative z-10 h-32 w-32 rounded-full object-cover grayscale mix-blend-multiply opacity-85"
+        />
         <div className="absolute -top-2 -right-2 bg-secondary-fixed p-3 rounded-full shadow-lg">
           <Icon name="key" className="text-on-secondary-fixed" />
         </div>

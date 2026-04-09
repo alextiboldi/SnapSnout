@@ -57,11 +57,12 @@ export default function CreatePetPage() {
             {t("subtitle")}
           </p>
           <div className="absolute -right-4 top-0 hidden md:block">
-            <div className="w-28 h-28 lg:w-32 lg:h-32 border-2 border-dashed border-tertiary/20 rounded-full flex items-center justify-center animate-pulse-soft">
-              <Icon
-                name="architecture"
-                filled
-                className="text-tertiary text-3xl lg:text-4xl"
+            <div className="relative w-32 h-32 lg:w-36 lg:h-36 rounded-full overflow-hidden border-2 border-dashed border-tertiary/40 shadow-ambient animate-pulse-soft">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/assets/createpet-owner.jpg"
+                alt="Pet owner portrait"
+                className="h-full w-full object-cover"
               />
             </div>
           </div>

@@ -19,6 +19,7 @@ enum Lifestage {
   kitten
   adult
   senior
+  memorial
 }
 
 model User {

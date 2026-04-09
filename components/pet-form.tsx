@@ -1,33 +1,42 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Icon } from "@/components/icon";
+import { DatePicker } from "@/components/date-picker";
 import { uploadPhoto } from "@/lib/actions/upload";
+import { getBreedsFor } from "@/lib/breeds";
+import type { Locale } from "@/i18n/config";
 
 type Species = "dog" | "cat" | "horse" | "other" | null;
-type Lifestage = "puppy" | "kitten" | "adult" | "senior";
+type Lifestage = "puppy" | "kitten" | "adult" | "senior" | "memorial";
 
 function getLifestageOptions(
   species: Species,
   t: (key: string) => string
 ): { id: Lifestage; label: string }[] {
+  const memorial = { id: "memorial" as const, label: t("inLovingMemory") };
   switch (species) {
     case "dog":
       return [
         { id: "puppy", label: t("puppy") },
         { id: "adult", label: t("adult") },
         { id: "senior", label: t("senior") },
+        memorial,
       ];
     case "cat":
       return [
         { id: "kitten", label: t("kitten") },
         { id: "adult", label: t("adult") },
         { id: "senior", label: t("senior") },
+        memorial,
       ];
     case "horse":
     case "other":
-      return [{ id: "adult", label: t("adult") }];
+      return [
+        { id: "adult", label: t("adult") },
+        memorial,
+      ];
     default:
       return [];
   }
@@ -77,12 +86,13 @@ export function PetForm({
   submittingLabel,
 }: PetFormProps) {
   const t = useTranslations("petForm");
+  const locale = useLocale() as Locale;
   const [petName, setPetName] = useState(initialData?.name ?? "");
   const [species, setSpecies] = useState<Species>(
     initialData?.species ?? null
   );
   const [lifestage, setLifestage] = useState<Lifestage>(
-    initialData?.lifestage ?? "puppy"
+    initialData?.isDeceased ? "memorial" : initialData?.lifestage ?? "puppy"
   );
   const [breed, setBreed] = useState(initialData?.breed ?? "");
   const [birthDate, setBirthDate] = useState(
@@ -91,12 +101,10 @@ export function PetForm({
   const [gotchaDate, setGotchaDate] = useState(
     formatDateForInput(initialData?.gotchaDay)
   );
-  const [isDeceased, setIsDeceased] = useState(
-    initialData?.isDeceased ?? false
-  );
   const [deceasedDate, setDeceasedDate] = useState(
     formatDateForInput(initialData?.deceasedDate)
   );
+  const isDeceased = lifestage === "memorial";
   const [avatarPreview, setAvatarPreview] = useState<string | null>(
     initialData?.photoUrl ?? null
   );
@@ -156,7 +164,7 @@ export function PetForm({
     formData.set("birthDate", birthDate);
     formData.set("gotchaDate", gotchaDate);
     formData.set("isDeceased", String(isDeceased));
-    formData.set("deceasedDate", deceasedDate);
+    formData.set("deceasedDate", isDeceased ? deceasedDate : "");
     if (photoUrl) {
       formData.set("photoUrl", photoUrl);
     }
@@ -179,6 +187,7 @@ export function PetForm({
   ];
 
   const lifestageOptions = getLifestageOptions(species, t);
+  const breedSuggestions = getBreedsFor(species, locale);
 
   return (
     <form className="space-y-8 md:space-y-12" onSubmit={handleSubmit}>
@@ -216,9 +225,6 @@ export function PetForm({
               <Icon name="photo_camera" className="text-white text-3xl" />
             </div>
           </button>
-          <div className="absolute -bottom-2 -right-2 bg-secondary-fixed text-on-secondary-fixed p-2 rounded-full shadow-ambient">
-            <Icon name="add_a_photo" className="text-sm" />
-          </div>
         </div>
         <div className="flex-1 space-y-2 text-center md:text-left">
           <h3 className="font-headline font-[800] text-lg md:text-xl text-primary">
@@ -228,6 +234,21 @@ export function PetForm({
             {t("petPhotoDesc")}
           </p>
         </div>
+        {!avatarPreview && (
+          <div className="hidden md:block shrink-0 -rotate-3">
+            <div className="bg-surface-container-lowest p-1.5 shadow-ambient rotate-[2deg]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/assets/createpet-puppy.jpg"
+                alt="Example pet portrait"
+                className="h-24 w-24 object-cover opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all"
+              />
+              <p className="mt-1 text-center font-label text-[9px] uppercase tracking-widest text-on-surface-variant">
+                Example
+              </p>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* Main Form */}
@@ -324,22 +345,26 @@ export function PetForm({
             </label>
             <input
               type="text"
+              list={breedSuggestions.length > 0 ? "breed-suggestions" : undefined}
               placeholder={t("breedPlaceholder")}
               value={breed}
               onChange={(e) => setBreed(e.target.value)}
               className="w-full bg-surface-container-lowest irregular-border border border-outline/20 focus:border-primary font-body p-4 md:p-5 transition-all hover:shadow-ambient input-glow"
+              autoComplete="off"
             />
+            {breedSuggestions.length > 0 && (
+              <datalist id="breed-suggestions">
+                {breedSuggestions.map((b) => (
+                  <option key={b} value={b} />
+                ))}
+              </datalist>
+            )}
           </div>
           <div>
             <label className="block font-label uppercase text-[10px] tracking-widest text-on-surface-variant mb-2 ml-3 md:ml-4">
               {t("dateOfBirth")}
             </label>
-            <input
-              type="date"
-              value={birthDate}
-              onChange={(e) => setBirthDate(e.target.value)}
-              className="w-full bg-surface-container-lowest irregular-border border border-outline/20 focus:border-primary font-body p-4 md:p-5 transition-all hover:shadow-ambient input-glow"
-            />
+            <DatePicker value={birthDate} onChange={setBirthDate} />
           </div>
         </div>
 
@@ -347,72 +372,26 @@ export function PetForm({
           <label className="block font-label uppercase text-[10px] tracking-widest text-on-surface-variant mb-2 ml-3 md:ml-4">
             {t("gotchaDay")}
           </label>
-          <input
-            type="date"
-            value={gotchaDate}
-            onChange={(e) => setGotchaDate(e.target.value)}
-            className="w-full bg-surface-container-lowest irregular-border border border-outline/20 focus:border-primary font-body p-4 md:p-5 transition-all hover:shadow-ambient input-glow"
-          />
+          <DatePicker value={gotchaDate} onChange={setGotchaDate} />
         </div>
 
-        {/* Memorial Status */}
-        <div
-          className="p-6 md:p-8 bg-surface-container-highest/50 irregular-border border-2 border-dashed border-outline-variant/30 animate-fade-up"
-          style={{ animationDelay: "0.3s" }}
-        >
-          <div className="flex items-center justify-between gap-4 mb-2">
-            <div className="flex-1">
-              <h4 className="font-headline font-bold text-primary text-sm md:text-base">
-                {t("inLovingMemory")}
-              </h4>
-              <p className="text-xs text-on-surface-variant mt-0.5">
-                {t("inLovingMemoryDesc")}
-              </p>
-            </div>
-            <button
-              type="button"
-              role="switch"
-              aria-checked={isDeceased}
-              onClick={() => setIsDeceased(!isDeceased)}
-              className={`relative inline-flex h-8 w-14 shrink-0 cursor-pointer rounded-full transition-colors duration-300 ${
-                isDeceased ? "bg-primary" : "bg-outline-variant/30"
-              }`}
-            >
-              <span
-                className={`pointer-events-none inline-block h-6 w-6 rounded-full bg-white shadow-lg transform transition-transform duration-300 mt-1 ${
-                  isDeceased ? "translate-x-7 ml-0" : "translate-x-1"
-                }`}
-                style={{
-                  transition:
-                    "transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
-                }}
-              />
-            </button>
-          </div>
-
+        {lifestage === "memorial" && (
           <div
-            className={`mt-5 transition-all duration-300 ${
-              isDeceased
-                ? "opacity-100 max-h-32"
-                : "opacity-30 max-h-32 pointer-events-none"
-            }`}
+            className="p-6 md:p-8 bg-surface-container-highest/50 irregular-border border-2 border-dashed border-outline-variant/30 animate-fade-up"
           >
-            <label className="block font-label uppercase text-[10px] tracking-widest text-on-surface-variant mb-2 ml-3 md:ml-4">
+            <h4 className="font-headline font-bold text-primary text-sm md:text-base">
+              {t("inLovingMemory")}
+            </h4>
+            <p className="text-xs text-on-surface-variant mt-0.5">
+              {t("inLovingMemoryDesc")}
+            </p>
+            <label className="mt-5 block font-label uppercase text-[10px] tracking-widest text-on-surface-variant mb-2 ml-3 md:ml-4">
               {t("datePassed")}
             </label>
-            <input
-              type="date"
-              value={deceasedDate}
-              onChange={(e) => setDeceasedDate(e.target.value)}
-              disabled={!isDeceased}
-              className={`w-full irregular-border border border-outline/20 font-body p-4 md:p-5 transition-all ${
-                isDeceased
-                  ? "bg-surface-container-lowest focus:border-primary input-glow"
-                  : "bg-surface-container-lowest/50 cursor-not-allowed"
-              }`}
-            />
+            <DatePicker value={deceasedDate} onChange={setDeceasedDate} />
           </div>
-        </div>
+        )}
+
       </div>
 
       {error && (

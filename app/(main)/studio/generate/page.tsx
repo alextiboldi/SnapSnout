@@ -8,13 +8,18 @@ import Link from "next/link";
 const PHOTO_SLOTS = [
   {
     id: 1,
-    gradient: "from-primary-container/60 to-tertiary-container/40",
-    hasPhoto: true,
+    src: "/assets/cardgen-frenchie.jpg",
+    alt: "French bulldog looking into camera",
   },
   {
     id: 2,
-    gradient: "from-tertiary-container/50 to-secondary-fixed/30",
-    hasPhoto: true,
+    src: "/assets/cardgen-outdoor.jpg",
+    alt: "Man playing outdoors with dog",
+  },
+  {
+    id: 3,
+    src: "/assets/cardgen-owner.jpg",
+    alt: "Pet owner with golden retriever in garden",
   },
 ];
 
@@ -96,10 +101,13 @@ export default function CardGeneratorPage() {
                     key={slot.id}
                     className="relative w-20 h-24 rounded-lg overflow-hidden shadow-sm"
                   >
-                    <div
-                      className={`w-full h-full bg-gradient-to-br ${slot.gradient}`}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={slot.src}
+                      alt={slot.alt}
+                      className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-tertiary/30 mix-blend-overlay" />
+                    <div className="absolute inset-0 bg-tertiary/20 mix-blend-overlay" />
                   </div>
                 ))}
               </div>
@@ -226,10 +234,14 @@ export default function CardGeneratorPage() {
 
               {/* Card body */}
               <div className="p-5 md:p-6">
-                {/* Image placeholder */}
+                {/* Generated art */}
                 <div className="relative rounded-lg overflow-hidden aspect-square mb-5">
-                  <div className="w-full h-full bg-gradient-to-br from-primary-container/50 via-tertiary-container/40 to-secondary-fixed/30" />
-                  {/* Technical overlay */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/assets/cardgen-explorer.jpg"
+                    alt="French bulldog as an antique explorer"
+                    className="w-full h-full object-cover"
+                  />
                   <div className="absolute inset-0 border border-tertiary-container/30 pointer-events-none" />
                   <div className="absolute bottom-2 left-2 bg-tertiary/80 text-white font-label text-[8px] px-2 py-1 rounded">
                     COORD: 45.523 N, 122.676 W
