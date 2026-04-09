@@ -139,6 +139,51 @@ export function PetForm({
       setError(t("speciesRequired"));
       return;
     }
+
+    // Date validation — use midnight-UTC comparisons and ignore empty values.
+    const today = new Date();
+    today.setHours(23, 59, 59, 999);
+    const hundredYearsAgo = new Date();
+    hundredYearsAgo.setFullYear(hundredYearsAgo.getFullYear() - 100);
+    hundredYearsAgo.setHours(0, 0, 0, 0);
+
+    const birth = birthDate ? new Date(birthDate) : null;
+    const gotcha = gotchaDate ? new Date(gotchaDate) : null;
+    const deceased = isDeceased && deceasedDate ? new Date(deceasedDate) : null;
+
+    if (birth && birth > today) {
+      setError(t("dateBirthFuture"));
+      return;
+    }
+    if (birth && birth < hundredYearsAgo) {
+      setError(t("dateBirthTooOld"));
+      return;
+    }
+    if (gotcha && gotcha > today) {
+      setError(t("dateGotchaFuture"));
+      return;
+    }
+    if (birth && gotcha && gotcha < birth) {
+      setError(t("dateGotchaBeforeBirth"));
+      return;
+    }
+    if (isDeceased && !deceasedDate) {
+      setError(t("dateDeceasedRequired"));
+      return;
+    }
+    if (deceased && deceased > today) {
+      setError(t("dateDeceasedFuture"));
+      return;
+    }
+    if (deceased && birth && deceased < birth) {
+      setError(t("dateDeceasedBeforeBirth"));
+      return;
+    }
+    if (deceased && gotcha && deceased < gotcha) {
+      setError(t("dateDeceasedBeforeGotcha"));
+      return;
+    }
+
     setIsSubmitting(true);
     setError(null);
 
