@@ -51,12 +51,19 @@ function SignupInner() {
 
     setLoading(true);
 
+    const inviteToken = searchParams.get("invite");
+    const nextPath = inviteToken
+      ? `/invite/${encodeURIComponent(inviteToken)}`
+      : "/create-pet";
+    const emailRedirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`;
+
     const supabase = createClient();
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: { full_name: name },
+        emailRedirectTo,
       },
     });
 

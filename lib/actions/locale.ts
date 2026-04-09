@@ -16,14 +16,17 @@ export async function setLocale(locale: string) {
     sameSite: "lax",
   });
 
-  // If authenticated, persist to DB
+  // If authenticated and the user row exists, persist the preference. We
+  // intentionally don't bootstrap the user here (that happens on the first
+  // authenticated page/action via getSession) — locale changes on the public
+  // signup page are cookie-only.
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (user) {
-    await prisma.user.update({
+    await prisma.user.updateMany({
       where: { id: user.id },
       data: { locale },
     });
@@ -37,20 +40,18 @@ export async function syncLocaleFromDb() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
   if (!user) return;
 
   const dbUser = await prisma.user.findUnique({
     where: { id: user.id },
     select: { locale: true },
   });
+  if (!dbUser?.locale) return;
 
-  if (dbUser?.locale) {
-    const cookieStore = await cookies();
-    cookieStore.set("NEXT_LOCALE", dbUser.locale, {
-      path: "/",
-      maxAge: 60 * 60 * 24 * 365,
-      sameSite: "lax",
-    });
-  }
+  const cookieStore = await cookies();
+  cookieStore.set("NEXT_LOCALE", dbUser.locale, {
+    path: "/",
+    maxAge: 60 * 60 * 24 * 365,
+    sameSite: "lax",
+  });
 }

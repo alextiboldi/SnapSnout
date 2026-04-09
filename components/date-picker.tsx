@@ -34,7 +34,7 @@ export function DatePicker({
 
   const currentYear = new Date().getFullYear();
   const top = maxYear ?? currentYear;
-  const bottom = minYear ?? currentYear - 40;
+  const bottom = minYear ?? currentYear - 100;
   const years: number[] = [];
   for (let y = top; y >= bottom; y--) years.push(y);
 

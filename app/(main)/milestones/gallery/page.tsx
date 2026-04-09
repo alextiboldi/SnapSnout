@@ -1,21 +1,16 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Icon } from "@/components/icon";
-import { createClient } from "@/lib/supabase/server";
-import { getActivePet } from "@/lib/queries/pets";
+import { requireSession } from "@/lib/auth/session";
+import { getActivePetForMember } from "@/lib/queries/pets";
 import { getPhotosForPet } from "@/lib/queries/photos";
 import { formatDate } from "@/lib/utils";
 
 export default async function MilestoneGalleryPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
+  const session = await requireSession();
 
   const [activePet, t] = await Promise.all([
-    getActivePet(user.id),
+    getActivePetForMember(session.family.id, session.member.id),
     getTranslations("milestones"),
   ]);
 
@@ -101,9 +96,18 @@ export default async function MilestoneGalleryPage() {
               />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-on-surface/70 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               <figcaption className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                <span className="truncate font-body text-xs text-white/90">
-                  {photo.caption || formatDate(photo.capturedDate)}
-                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate font-body text-xs text-white/90">
+                    {photo.caption || formatDate(photo.capturedDate)}
+                  </p>
+                  {photo.uploader && (
+                    <p className="truncate font-label text-[10px] uppercase tracking-wider text-white/60">
+                      {t("addedBy", {
+                        name: photo.uploader.name?.trim() || photo.uploader.email,
+                      })}
+                    </p>
+                  )}
+                </div>
                 {photo.isMonthlyPhoto && (
                   <span className="shrink-0 rounded-full bg-secondary-fixed px-2 py-0.5 font-label text-[10px] font-bold text-on-secondary-fixed">
                     {photo.monthNumber ? `M${photo.monthNumber}` : "M"}

@@ -8,6 +8,8 @@ import { switchActivePet, deletePet } from "@/lib/actions/pets";
 import { signOut, deleteAccount } from "@/lib/actions/auth";
 import { locales, localeNames, type Locale } from "@/i18n/config";
 import type { Pet } from "@/lib/generated/prisma/client";
+import type { FamilyDetails } from "@/lib/queries/family";
+import { FamilySection } from "./family-section";
 
 /* ─── Toggle Switch ─── */
 
@@ -146,7 +148,17 @@ function DeleteDialog({
   );
 }
 
-function PetManagementSection({ pets, t }: { pets: Pet[]; t: ReturnType<typeof useTranslations<"settings">> }) {
+function PetManagementSection({
+  pets,
+  activePetId,
+  canDelete,
+  t,
+}: {
+  pets: Pet[];
+  activePetId: string | null;
+  canDelete: boolean;
+  t: ReturnType<typeof useTranslations<"settings">>;
+}) {
   const [isPending, startTransition] = useTransition();
   const [deletingPet, setDeletingPet] = useState<Pet | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -190,7 +202,7 @@ function PetManagementSection({ pets, t }: { pets: Pet[]; t: ReturnType<typeof u
               <button
                 disabled={isPending}
                 onClick={() => {
-                  if (pet.id !== pets.find((p) => p.isActive)?.id) {
+                  if (pet.id !== activePetId) {
                     startTransition(() => switchActivePet(pet.id));
                   }
                 }}
@@ -216,7 +228,7 @@ function PetManagementSection({ pets, t }: { pets: Pet[]; t: ReturnType<typeof u
                     <p className="font-headline text-sm font-bold text-on-surface truncate">
                       {pet.name}
                     </p>
-                    {pet.isActive && (
+                    {pet.id === activePetId && (
                       <span className="shrink-0 px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-label font-bold rounded-full">
                         {t("active")}
                       </span>
@@ -236,13 +248,15 @@ function PetManagementSection({ pets, t }: { pets: Pet[]; t: ReturnType<typeof u
                 >
                   <Icon name="edit" className="text-lg text-primary" />
                 </Link>
-                <button
-                  onClick={() => setDeletingPet(pet)}
-                  className="p-2 rounded-full hover:bg-error/10 transition-colors spring-active"
-                  aria-label={`Delete ${pet.name}`}
-                >
-                  <Icon name="delete" className="text-lg text-error/60 hover:text-error" />
-                </button>
+                {canDelete && (
+                  <button
+                    onClick={() => setDeletingPet(pet)}
+                    className="p-2 rounded-full hover:bg-error/10 transition-colors spring-active"
+                    aria-label={`Delete ${pet.name}`}
+                  >
+                    <Icon name="delete" className="text-lg text-error/60 hover:text-error" />
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -362,8 +376,14 @@ function LanguageSection() {
 
 function AccountActionsSection({
   t,
+  ownerWithMembers,
+  ownedFamilyName,
+  ownedMemberCount,
 }: {
   t: ReturnType<typeof useTranslations<"settings">>;
+  ownerWithMembers: boolean;
+  ownedFamilyName: string;
+  ownedMemberCount: number;
 }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [isSigningOut, startSignOut] = useTransition();
@@ -410,8 +430,13 @@ function AccountActionsSection({
       {confirmDelete && (
         <DeleteAccountDialog
           onCancel={() => setConfirmDelete(false)}
-          onConfirm={() => startDeleting(() => deleteAccount())}
+          onConfirm={(confirmDeleteFamily) =>
+            startDeleting(() => deleteAccount({ confirmDeleteFamily }))
+          }
           isDeleting={isDeleting}
+          ownerWithMembers={ownerWithMembers}
+          ownedFamilyName={ownedFamilyName}
+          ownedMemberCount={ownedMemberCount}
           t={t}
         />
       )}
@@ -423,14 +448,21 @@ function DeleteAccountDialog({
   onCancel,
   onConfirm,
   isDeleting,
+  ownerWithMembers,
+  ownedFamilyName,
+  ownedMemberCount,
   t,
 }: {
   onCancel: () => void;
-  onConfirm: () => void;
+  onConfirm: (confirmDeleteFamily: boolean) => void;
   isDeleting: boolean;
+  ownerWithMembers: boolean;
+  ownedFamilyName: string;
+  ownedMemberCount: number;
   t: ReturnType<typeof useTranslations<"settings">>;
 }) {
   const tCommon = useTranslations("common");
+  const tFamily = useTranslations("family");
   const [typed, setTyped] = useState("");
   const confirmWord = t("deleteAccountConfirmWord");
   const canDelete = typed.trim().toUpperCase() === confirmWord.toUpperCase();
@@ -456,6 +488,23 @@ function DeleteAccountDialog({
           <p className="mt-2 max-w-[280px] font-body text-sm text-on-surface-variant">
             {t("deleteAccountWarning")}
           </p>
+          {ownerWithMembers && (
+            <div className="mt-3 w-full rounded-xl border-2 border-dashed border-error/40 bg-error/10 p-3 text-left">
+              <p className="font-headline text-xs font-bold text-error">
+                {t("deleteAccountOwnerWarningTitle", { family: ownedFamilyName })}
+              </p>
+              <p className="mt-1 font-body text-xs text-error/90">
+                {t("deleteAccountOwnerWarningBody", { count: ownedMemberCount - 1 })}
+              </p>
+              <p className="mt-2 font-body text-xs text-on-surface-variant">
+                {t.rich("deleteAccountOwnerHint", {
+                  link: (chunks) => (
+                    <span className="font-bold text-tertiary">{chunks}</span>
+                  ),
+                })}
+              </p>
+            </div>
+          )}
           <ul className="mt-3 w-full space-y-1.5 rounded-xl bg-error/5 p-3 text-left">
             {["lossPets", "lossPhotos", "lossMilestones", "lossIrreversible"].map(
               (key) => (
@@ -491,11 +540,15 @@ function DeleteAccountDialog({
             {tCommon("cancel")}
           </button>
           <button
-            onClick={onConfirm}
+            onClick={() => onConfirm(ownerWithMembers)}
             disabled={!canDelete || isDeleting}
             className="flex-1 rounded-xl bg-error py-3 font-headline text-sm font-bold text-on-error spring-active transition-all disabled:opacity-40"
           >
-            {isDeleting ? t("deleting") : t("deleteAccountConfirm")}
+            {isDeleting
+              ? t("deleting")
+              : ownerWithMembers
+                ? tFamily("deleteAccountFamilyConfirm")
+                : t("deleteAccountConfirm")}
           </button>
         </div>
       </div>
@@ -578,7 +631,21 @@ function AboutSection() {
 
 /* ─── Client Shell ─── */
 
-export default function SettingsClient({ pets }: { pets: Pet[] }) {
+export default function SettingsClient({
+  pets,
+  activePetId,
+  isOwner,
+  isPremium,
+  currentUserId,
+  familyDetails,
+}: {
+  pets: Pet[];
+  activePetId: string | null;
+  isOwner: boolean;
+  isPremium: boolean;
+  currentUserId: string;
+  familyDetails: FamilyDetails;
+}) {
   const t = useTranslations("settings");
   const [milestoneReminders, setMilestoneReminders] = useState(true);
   const [photoReminders, setPhotoReminders] = useState(true);
@@ -591,7 +658,19 @@ export default function SettingsClient({ pets }: { pets: Pet[] }) {
       </h1>
 
       <div className="mt-5 space-y-5">
-        <PetManagementSection pets={pets} t={t} />
+        <PetManagementSection
+          pets={pets}
+          activePetId={activePetId}
+          canDelete={isOwner}
+          t={t}
+        />
+
+        <FamilySection
+          details={familyDetails}
+          currentUserId={currentUserId}
+          isOwner={isOwner}
+          isPremium={isPremium}
+        />
 
         <NotificationsSection
           milestoneReminders={milestoneReminders}
@@ -605,11 +684,16 @@ export default function SettingsClient({ pets }: { pets: Pet[] }) {
 
         <LanguageSection />
 
-        <SubscriptionSection />
+        {isOwner && <SubscriptionSection />}
 
         <AboutSection />
 
-        <AccountActionsSection t={t} />
+        <AccountActionsSection
+          t={t}
+          ownerWithMembers={isOwner && familyDetails.members.length > 1}
+          ownedFamilyName={familyDetails.family.name}
+          ownedMemberCount={familyDetails.members.length}
+        />
       </div>
     </div>
   );

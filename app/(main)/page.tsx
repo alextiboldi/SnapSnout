@@ -1,8 +1,7 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { createClient } from "@/lib/supabase/server";
-import { getPetsForUser, getActivePet } from "@/lib/queries/pets";
+import { getPetsForFamily, getActivePetForMember } from "@/lib/queries/pets";
+import { requireSession } from "@/lib/auth/session";
 import { getAge, daysUntil, formatDate, getMilestoneStatus, isTranslationKey } from "@/lib/utils";
 import type { Pet, Milestone } from "@/lib/generated/prisma/client";
 import type { MilestoneStatus } from "@/lib/utils";
@@ -260,16 +259,11 @@ function QuickActions({ t }: { t: (key: string, values?: Record<string, string |
 }
 
 export default async function HomePage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) redirect("/login");
+  const session = await requireSession();
 
   const [pets, activePet, t, tPresets] = await Promise.all([
-    getPetsForUser(user.id),
-    getActivePet(user.id),
+    getPetsForFamily(session.family.id),
+    getActivePetForMember(session.family.id, session.member.id),
     getTranslations("home"),
     getTranslations("presets"),
   ]);
