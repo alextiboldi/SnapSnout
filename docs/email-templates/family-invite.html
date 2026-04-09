@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="x-apple-disable-message-reformatting" />
+    <title>You're invited to join a SnapSnout family</title>
+  </head>
+  <body style="margin:0;padding:0;background-color:#fffcf7;font-family:'Manrope','Helvetica Neue',Helvetica,Arial,sans-serif;color:#373831;-webkit-font-smoothing:antialiased;">
+    <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;mso-hide:all;">
+      You've been invited to join a SnapSnout family — pets, photos, and milestones, all shared.
+    </div>
+
+    <!--
+      Variables expected from the sending integration:
+        {{family_name}}    — display name of the family
+        {{inviter_name}}   — display name of the person who sent the invite
+        {{invite_url}}     — full URL of /invite/<token>
+        {{expires_in}}     — e.g. "7 days"
+    -->
+
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#fffcf7;">
+      <tr>
+        <td align="center" style="padding:40px 20px;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;background-color:#ffffff;border:1px solid #eae9dd;border-radius:20px;overflow:hidden;">
+            <!-- Header band — primary brown -->
+            <tr>
+              <td style="background:linear-gradient(135deg,#9a511e 0%,#8b4513 100%);padding:36px 40px 32px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td style="font-family:'Plus Jakarta Sans','Helvetica Neue',Arial,sans-serif;font-weight:800;font-style:italic;font-size:28px;letter-spacing:-0.5px;color:#ffffff;">
+                      SnapSnout
+                    </td>
+                    <td align="right" style="font-family:'Manrope',Arial,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:2px;color:#ffe174;">
+                      Family Invite
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="height:6px;background-color:#ffe174;line-height:6px;font-size:0;">&nbsp;</td>
+            </tr>
+
+            <!-- Body -->
+            <tr>
+              <td style="padding:48px 40px 16px;">
+                <p style="margin:0 0 12px;font-family:'Manrope',Arial,sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:2.5px;color:#64655c;">
+                  You're invited
+                </p>
+                <h1 style="margin:0 0 20px;font-family:'Plus Jakarta Sans','Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:34px;line-height:1.05;letter-spacing:-0.8px;color:#373831;">
+                  Join<br />
+                  <span style="color:#9a511e;font-style:italic;">{{family_name}}.</span>
+                </h1>
+                <p style="margin:0 0 28px;font-family:'Manrope',Arial,sans-serif;font-size:15px;line-height:1.6;color:#64655c;">
+                  {{inviter_name}} invited you to join their family on SnapSnout. You'll get instant access to every pet, photo, and milestone they've documented — and you can add your own.
+                </p>
+
+                <!-- CTA Button -->
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 32px;">
+                  <tr>
+                    <td align="center" bgcolor="#ffe174" style="border-radius:12px;box-shadow:0 6px 0 #6d5a00;">
+                      <a href="{{invite_url}}"
+                         style="display:inline-block;padding:16px 36px;font-family:'Plus Jakarta Sans','Helvetica Neue',Arial,sans-serif;font-weight:900;font-size:16px;letter-spacing:0.3px;color:#4c3e00;text-decoration:none;border-radius:12px;">
+                        Accept invitation &nbsp;&rarr;
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+
+                <p style="margin:0 0 8px;font-family:'Manrope',Arial,sans-serif;font-size:12px;color:#64655c;">
+                  Button not working? Paste this into your browser:
+                </p>
+                <p style="margin:0 0 32px;word-break:break-all;">
+                  <a href="{{invite_url}}" style="font-family:'Manrope',Arial,sans-serif;font-size:12px;color:#286999;text-decoration:underline;">{{invite_url}}</a>
+                </p>
+
+                <!-- What's shared card -->
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#fcf9f3;border:1px dashed #eae9dd;border-radius:14px;">
+                  <tr>
+                    <td style="padding:20px 24px;">
+                      <p style="margin:0 0 10px;font-family:'Manrope',Arial,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:1.8px;color:#9a511e;">
+                        What you'll share
+                      </p>
+                      <p style="margin:0 0 6px;font-family:'Manrope',Arial,sans-serif;font-size:13px;line-height:1.55;color:#373831;">
+                        &middot; All pets in the family
+                      </p>
+                      <p style="margin:0 0 6px;font-family:'Manrope',Arial,sans-serif;font-size:13px;line-height:1.55;color:#373831;">
+                        &middot; Every photo and milestone
+                      </p>
+                      <p style="margin:0;font-family:'Manrope',Arial,sans-serif;font-size:13px;line-height:1.55;color:#373831;">
+                        &middot; Your own contributions, attributed to you
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:28px 40px 36px;border-top:1px solid #f0eee4;">
+                <p style="margin:0 0 6px;font-family:'Manrope',Arial,sans-serif;font-size:11px;color:#64655c;">
+                  This invitation expires in {{expires_in}}. If you weren't expecting it, you can safely ignore this email.
+                </p>
+                <p style="margin:0;font-family:'Manrope',Arial,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:2px;color:#9e9d98;">
+                  SnapSnout &middot; Every moment matters
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

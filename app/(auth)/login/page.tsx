@@ -1,16 +1,26 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Icon } from "@/components/icon";
 import { useTranslations } from "next-intl";
 
 export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginInner />
+    </Suspense>
+  );
+}
+
+function LoginInner() {
   const t = useTranslations("auth.login");
   const tc = useTranslations("common");
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const inviteToken = searchParams.get("invite");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -33,9 +43,9 @@ export default function LoginPage() {
       // and bounce to signup with the fields prefilled — signup will
       // surface "user already exists" if it was actually a wrong password.
       if (/invalid login credentials/i.test(error.message)) {
-        router.push(
-          `/signup?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
-        );
+        const params = new URLSearchParams({ email, password });
+        if (inviteToken) params.set("invite", inviteToken);
+        router.push(`/signup?${params.toString()}`);
         return;
       }
       setError(error.message);
@@ -43,7 +53,7 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/");
+    router.push(inviteToken ? `/invite/${inviteToken}` : "/");
     router.refresh();
   }
 

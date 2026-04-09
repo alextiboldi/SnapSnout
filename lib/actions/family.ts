@@ -5,6 +5,136 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { requireSession, assertOwner } from "@/lib/auth/session";
+import type { FamilyInvite } from "@/lib/generated/prisma/client";
+
+export type InviteValidation =
+  | { status: "valid"; invite: FamilyInvite; familyName: string }
+  | { status: "expired" }
+  | { status: "revoked" }
+  | { status: "accepted" }
+  | { status: "not_found" };
+
+/** Public lookup — does not require auth. Used by /invite/[token] page. */
+export async function validateInvite(token: string): Promise<InviteValidation> {
+  const invite = await prisma.familyInvite.findUnique({
+    where: { token },
+    include: { family: { select: { name: true } } },
+  });
+  if (!invite) return { status: "not_found" };
+  if (invite.acceptedAt) return { status: "accepted" };
+  if (invite.revokedAt) return { status: "revoked" };
+  if (invite.expiresAt < new Date()) return { status: "expired" };
+  return {
+    status: "valid",
+    invite,
+    familyName: invite.family.name,
+  };
+}
+
+export type AcceptInvitePreview =
+  | { status: "already_member" }
+  | {
+      status: "ready";
+      currentFamilyName: string;
+      currentFamilyPetCount: number;
+      currentRoleIsOwner: boolean;
+      destructive: boolean;
+    }
+  | {
+      status: "blocked_owner";
+      reason: "has_other_members";
+    };
+
+/** Returns what will happen if the current user accepts this invite. */
+export async function previewAcceptInvite(
+  token: string
+): Promise<AcceptInvitePreview> {
+  const session = await requireSession();
+  const validation = await validateInvite(token);
+  if (validation.status !== "valid") {
+    throw new Error("Invite is no longer valid");
+  }
+
+  if (validation.invite.familyId === session.family.id) {
+    return { status: "already_member" };
+  }
+
+  const [memberCount, petCount] = await Promise.all([
+    prisma.familyMember.count({ where: { familyId: session.family.id } }),
+    prisma.pet.count({ where: { familyId: session.family.id } }),
+  ]);
+
+  const isOwner = session.member.role === "owner";
+  if (isOwner && memberCount > 1) {
+    return { status: "blocked_owner", reason: "has_other_members" };
+  }
+
+  return {
+    status: "ready",
+    currentFamilyName: session.family.name,
+    currentFamilyPetCount: petCount,
+    currentRoleIsOwner: isOwner,
+    destructive: petCount > 0,
+  };
+}
+
+/**
+ * Accept an invite. Removes the user from their current family (deleting it
+ * if they were the sole owner) and joins them to the inviting family.
+ */
+export async function acceptInvite(token: string) {
+  const session = await requireSession();
+
+  const validation = await validateInvite(token);
+  if (validation.status !== "valid") {
+    throw new Error(`Invite ${validation.status}`);
+  }
+  const invite = validation.invite;
+
+  if (invite.familyId === session.family.id) {
+    redirect("/");
+  }
+
+  const memberCount = await prisma.familyMember.count({
+    where: { familyId: session.family.id },
+  });
+  const isOwner = session.member.role === "owner";
+  if (isOwner && memberCount > 1) {
+    throw new Error(
+      "You own a family with other members. Transfer ownership before joining another family."
+    );
+  }
+
+  await prisma.$transaction(async (tx) => {
+    // Detach from current family.
+    await tx.familyMember.delete({ where: { id: session.member.id } });
+
+    if (isOwner) {
+      // Sole owner — delete the entire family (cascades to pets/photos).
+      await tx.family.delete({ where: { id: session.family.id } });
+    }
+
+    // Join the inviting family as a member.
+    await tx.user.update({
+      where: { id: session.user.id },
+      data: { familyId: invite.familyId },
+    });
+    await tx.familyMember.create({
+      data: {
+        familyId: invite.familyId,
+        userId: session.user.id,
+        role: "member",
+      },
+    });
+    await tx.familyInvite.update({
+      where: { id: invite.id },
+      data: { acceptedAt: new Date() },
+    });
+  });
+
+  revalidatePath("/", "layout");
+  redirect("/");
+}
 
 const INVITE_TTL_DAYS = 7;
 const MAX_FAMILY_NAME_LENGTH = 60;
