@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { Icon } from "@/components/icon";
 import {
@@ -8,6 +8,10 @@ import {
   getOrCreateMilestoneShare,
   revokeMilestoneShare,
 } from "@/lib/actions/milestone-shares";
+import {
+  addMilestonePhoto,
+  getMilestonePhotos,
+} from "@/lib/actions/milestones";
 import { formatDate } from "@/lib/utils";
 
 export type MilestoneDetailData = {
@@ -19,6 +23,13 @@ export type MilestoneDetailData = {
   photoUrl: string | null;
   completedDate: Date | null;
   targetDate: Date | null;
+};
+
+type MilestonePhoto = {
+  id: string;
+  url: string;
+  caption: string | null;
+  capturedDate: Date;
 };
 
 export function MilestoneDetailModal({
@@ -35,19 +46,28 @@ export function MilestoneDetailModal({
 
   const [loadingStatus, setLoadingStatus] = useState(true);
   const [shareUrl, setShareUrl] = useState<string | null>(null);
+  const [photos, setPhotos] = useState<MilestonePhoto[]>([]);
+  const [heroUrl, setHeroUrl] = useState<string | null>(milestone.photoUrl);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [confirmRevoke, setConfirmRevoke] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Load existing share state on open
+  // Load existing share state + photos on open
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
-        const status = await getMilestoneShareStatus(milestone.id);
+        const [status, loadedPhotos] = await Promise.all([
+          getMilestoneShareStatus(milestone.id),
+          getMilestonePhotos(milestone.id),
+        ]);
         if (cancelled) return;
         setShareUrl(status.shared ? status.url : null);
+        setPhotos(loadedPhotos);
       } catch (e) {
         if (cancelled) return;
         setError(e instanceof Error ? e.message : t("errorGeneric"));
@@ -59,6 +79,26 @@ export function MilestoneDetailModal({
       cancelled = true;
     };
   }, [milestone.id, t]);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadError(null);
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.set("file", file);
+      const photo = await addMilestonePhoto(milestone.id, formData);
+      setPhotos((prev) => [...prev, photo]);
+      if (!heroUrl) setHeroUrl(photo.url);
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : t("errorGeneric"));
+    } finally {
+      setUploading(false);
+      // Reset input so the same file can be reselected later if needed.
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
 
   const handleShare = () => {
     setError(null);
@@ -130,11 +170,11 @@ export function MilestoneDetailModal({
         </button>
 
         {/* Hero */}
-        {milestone.photoUrl ? (
+        {heroUrl ? (
           <div className="overflow-hidden">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={milestone.photoUrl}
+              src={heroUrl}
               alt={milestone.title}
               className="aspect-[4/3] w-full object-cover"
             />
@@ -148,7 +188,7 @@ export function MilestoneDetailModal({
         <div className="p-6">
           {/* Title + date */}
           <div className="text-center">
-            {milestone.photoUrl && (
+            {heroUrl && (
               <span className="text-3xl">{milestone.emoji}</span>
             )}
             <h2 className="mt-1 font-headline text-2xl font-bold text-on-surface">
@@ -176,6 +216,62 @@ export function MilestoneDetailModal({
               )}
             </div>
           )}
+
+          {/* Photos */}
+          <div className="mt-6 border-t border-outline-variant/20 pt-5">
+            <div className="flex items-center justify-between">
+              <p className="font-label text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/70">
+                {t("photosLabel")}
+              </p>
+              <label className="cursor-pointer rounded-full bg-primary/10 px-3 py-1.5 font-label text-[10px] font-bold uppercase text-primary spring-active hover:bg-primary/20 transition-colors flex items-center gap-1.5">
+                <Icon
+                  name={uploading ? "progress_activity" : "add_a_photo"}
+                  className={`text-base ${uploading ? "animate-spin" : ""}`}
+                />
+                {uploading ? t("uploading") : t("addPhoto")}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  className="hidden"
+                  onChange={handleFileChange}
+                  disabled={uploading}
+                />
+              </label>
+            </div>
+
+            {photos.length > 0 ? (
+              <div className="mt-3 grid grid-cols-3 gap-1.5">
+                {photos.map((p) => (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <a
+                    key={p.id}
+                    href={p.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="aspect-square overflow-hidden rounded-lg bg-surface-container shadow-ambient hover:opacity-90 transition-opacity"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={p.url}
+                      alt={p.caption ?? ""}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                    />
+                  </a>
+                ))}
+              </div>
+            ) : (
+              <p className="mt-2 font-body text-xs text-on-surface-variant/60">
+                {t("noPhotosYet")}
+              </p>
+            )}
+
+            {uploadError && (
+              <p className="mt-2 font-body text-xs text-error">{uploadError}</p>
+            )}
+          </div>
 
           {/* Share section */}
           <div className="mt-6 border-t border-outline-variant/20 pt-5">

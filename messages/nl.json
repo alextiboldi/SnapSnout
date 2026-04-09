@@ -305,6 +305,10 @@
     "signOut": "Uitloggen"
   },
   "milestoneShare": {
+    "photosLabel": "Foto's",
+    "addPhoto": "Foto toevoegen",
+    "uploading": "Uploaden...",
+    "noPhotosYet": "Nog geen foto's — voeg er een toe om deze mijlpaal tot leven te brengen.",
     "shareMilestone": "Mijlpaal delen",
     "shareMilestoneTitle": "Deel dit moment",
     "shareMilestoneSubtitle": "Iedereen met de link kan deze mijlpaal bekijken.",
@@ -320,6 +324,18 @@
     "revoke": "Stoppen met delen",
     "cancel": "Annuleren",
     "errorGeneric": "Er is iets misgegaan"
+  },
+  "activeShares": {
+    "sectionTitle": "Actieve gedeelde links",
+    "empty": "Er worden nu geen mijlpalen gedeeld. Open een mijlpaal om een deellink te maken.",
+    "views": "{count, plural, =0 {Nog geen weergaven} one {# weergave} other {# weergaven}}",
+    "lastViewed": "laatst geopend {date}",
+    "copyLink": "Link kopiëren",
+    "copied": "Gekopieerd",
+    "revoke": "Stop",
+    "revokeConfirmTitle": "Stoppen met \"{title}\" te delen?",
+    "revokeConfirmBody": "De link werkt direct niet meer. Je kunt later altijd een nieuwe maken.",
+    "cancel": "Annuleren"
   },
   "share": {
     "unavailableTitle": "Deze deel-link is niet beschikbaar",

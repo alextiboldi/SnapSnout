@@ -9,7 +9,9 @@ import { signOut, deleteAccount } from "@/lib/actions/auth";
 import { locales, localeNames, type Locale } from "@/i18n/config";
 import type { Pet } from "@/lib/generated/prisma/client";
 import type { FamilyDetails } from "@/lib/queries/family";
+import type { ActiveShare } from "@/lib/queries/milestone-shares";
 import { FamilySection } from "./family-section";
+import { ActiveSharesSection } from "./active-shares-section";
 
 /* ─── Toggle Switch ─── */
 
@@ -638,6 +640,7 @@ export default function SettingsClient({
   isPremium,
   currentUserId,
   familyDetails,
+  activeShares,
 }: {
   pets: Pet[];
   activePetId: string | null;
@@ -645,6 +648,7 @@ export default function SettingsClient({
   isPremium: boolean;
   currentUserId: string;
   familyDetails: FamilyDetails;
+  activeShares: ActiveShare[];
 }) {
   const t = useTranslations("settings");
   const [milestoneReminders, setMilestoneReminders] = useState(true);
@@ -671,6 +675,8 @@ export default function SettingsClient({
           isOwner={isOwner}
           isPremium={isPremium}
         />
+
+        <ActiveSharesSection shares={activeShares} />
 
         <NotificationsSection
           milestoneReminders={milestoneReminders}

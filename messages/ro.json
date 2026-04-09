@@ -305,6 +305,10 @@
     "signOut": "Deconectare"
   },
   "milestoneShare": {
+    "photosLabel": "Poze",
+    "addPhoto": "Adauga poza",
+    "uploading": "Se incarca...",
+    "noPhotosYet": "Nicio poza inca — adauga una pentru a da viata acestui reper.",
     "shareMilestone": "Partajeaza reperul",
     "shareMilestoneTitle": "Partajeaza acest moment",
     "shareMilestoneSubtitle": "Oricine are link-ul poate vedea acest reper.",
@@ -320,6 +324,18 @@
     "revoke": "Opreste partajarea",
     "cancel": "Anuleaza",
     "errorGeneric": "Ceva nu a functionat"
+  },
+  "activeShares": {
+    "sectionTitle": "Link-uri active",
+    "empty": "Niciun reper nu este partajat acum. Deschide un reper pentru a crea un link.",
+    "views": "{count, plural, =0 {Nicio vizualizare inca} one {# vizualizare} few {# vizualizari} other {# de vizualizari}}",
+    "lastViewed": "ultima accesare {date}",
+    "copyLink": "Copiaza link",
+    "copied": "Copiat",
+    "revoke": "Opreste",
+    "revokeConfirmTitle": "Opresti partajarea \"{title}\"?",
+    "revokeConfirmBody": "Link-ul va inceta sa functioneze imediat. Poti crea unul nou oricand.",
+    "cancel": "Anuleaza"
   },
   "share": {
     "unavailableTitle": "Acest link nu este disponibil",

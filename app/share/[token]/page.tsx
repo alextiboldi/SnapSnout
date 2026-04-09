@@ -24,6 +24,21 @@ async function loadShare(token: string) {
   return share;
 }
 
+/** Fire-and-forget view counter. Never throws — analytics shouldn't break the page. */
+async function bumpViewCount(token: string) {
+  try {
+    await prisma.milestoneShare.update({
+      where: { token },
+      data: {
+        viewCount: { increment: 1 },
+        lastViewedAt: new Date(),
+      },
+    });
+  } catch {
+    // Swallow — race conditions or transient DB errors shouldn't 500 the share page.
+  }
+}
+
 const SPECIES_EMOJI: Record<string, string> = {
   dog: "🐕",
   cat: "🐈",
@@ -81,6 +96,11 @@ export default async function SharePage({
   const share = await loadShare(token);
   const t = await getTranslations("share");
   const tPresets = await getTranslations("presets");
+
+  if (share) {
+    // Track the visit. Don't await — keeps the response snappy.
+    bumpViewCount(token);
+  }
 
   if (!share) {
     return (

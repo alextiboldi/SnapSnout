@@ -214,6 +214,10 @@
     "signOut": "Sign out"
   },
   "milestoneShare": {
+    "photosLabel": "Photos",
+    "addPhoto": "Add photo",
+    "uploading": "Uploading...",
+    "noPhotosYet": "No photos yet — add one to bring this milestone to life.",
     "shareMilestone": "Share milestone",
     "shareMilestoneTitle": "Share this moment",
     "shareMilestoneSubtitle": "Anyone with the link can view this milestone.",
@@ -229,6 +233,18 @@
     "revoke": "Stop sharing",
     "cancel": "Cancel",
     "errorGeneric": "Something went wrong"
+  },
+  "activeShares": {
+    "sectionTitle": "Active shares",
+    "empty": "No milestones are being shared right now. Open a milestone to create a share link.",
+    "views": "{count, plural, =0 {No views yet} one {# view} other {# views}}",
+    "lastViewed": "last opened {date}",
+    "copyLink": "Copy link",
+    "copied": "Copied",
+    "revoke": "Stop",
+    "revokeConfirmTitle": "Stop sharing \"{title}\"?",
+    "revokeConfirmBody": "The link will stop working immediately. You can always create a new one later.",
+    "cancel": "Cancel"
   },
   "share": {
     "unavailableTitle": "This share isn't available",

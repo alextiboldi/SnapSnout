@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth/session";
 import { getActivePetForMember, getPetsForFamily } from "@/lib/queries/pets";
 import { PetSwitcher } from "@/app/(main)/pet-switcher";
 import { MilestonesList } from "./milestones-list";
+import { MilestoneOpener } from "./milestone-opener";
 import {
   formatDate,
   getMilestoneStatus,
@@ -18,10 +19,12 @@ type MilestoneWithStatus = Milestone & { status: MilestoneStatus };
 function FeaturedMilestone({
   completedMilestones,
   allMilestones,
+  petName,
   t,
 }: {
   completedMilestones: MilestoneWithStatus[];
   allMilestones: MilestoneWithStatus[];
+  petName: string;
   t: (key: string, values?: Record<string, string | number | Date>) => string;
 }) {
   const featured =
@@ -31,9 +34,19 @@ function FeaturedMilestone({
 
   return (
     <div className="col-span-1 md:col-span-8 group animate-fade-up">
-      <div
-        className="relative overflow-hidden irregular-border shadow-ambient-lg bg-surface-container-lowest h-full min-h-[340px] md:min-h-[400px] spring-active cursor-pointer transition-transform duration-300 hover:-translate-y-1"
-        style={{ perspective: "800px" }}
+      <MilestoneOpener
+        milestone={{
+          id: featured.id,
+          emoji: featured.emoji,
+          title: featured.title,
+          description: featured.description,
+          notes: featured.notes,
+          photoUrl: featured.photoUrl,
+          completedDate: featured.completedDate,
+          targetDate: featured.targetDate,
+        }}
+        petName={petName}
+        className="relative block w-full text-left overflow-hidden irregular-border shadow-ambient-lg bg-surface-container-lowest h-full min-h-[340px] md:min-h-[400px] spring-active cursor-pointer transition-transform duration-300 hover:-translate-y-1"
       >
         {/* Hero photo */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -51,8 +64,13 @@ function FeaturedMilestone({
           </div>
         </div>
 
+        {/* Share affordance */}
+        <div className="absolute top-5 right-5 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-white shadow-ambient group-hover:bg-white/30 transition-colors">
+          <Icon name="share" className="text-lg" />
+        </div>
+
         {/* Emoji floating */}
-        <div className="absolute top-6 right-6 text-5xl opacity-80 group-hover:scale-110 transition-transform duration-300">
+        <div className="absolute top-20 right-6 text-5xl opacity-80 group-hover:scale-110 transition-transform duration-300">
           {featured.emoji}
         </div>
 
@@ -86,7 +104,7 @@ function FeaturedMilestone({
             </div>
           )}
         </div>
-      </div>
+      </MilestoneOpener>
     </div>
   );
 }
@@ -278,6 +296,7 @@ export default async function MilestonesPage() {
         <FeaturedMilestone
           completedMilestones={completedMilestones}
           allMilestones={allMilestones}
+          petName={activePet.name}
           t={t}
         />
         <PhotoCollageCard />
