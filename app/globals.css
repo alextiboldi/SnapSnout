@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
-/* ─── Design System: Gaia's Blueprint ─── */
+/* ─── Design System: Gaia's Blueprint → Pawprint Clay overhaul ─── */
+/* Foundation tokens for the warm, family-friendly clay direction.
+   See docs/design-system.md for the full spec. */
 
 @theme inline {
   /* Core Earth Palette */
@@ -66,10 +68,35 @@
   --color-on-error: #ffffff;
   --color-on-error-container: #671200;
 
+  /* Coral Pop — celebrations + "today" highlights (Pawprint Clay) */
+  --color-pop: #ff6b6b;
+  --color-pop-dim: #ee5a52;
+  --color-pop-container: #ffd5d2;
+  --color-on-pop: #ffffff;
+  --color-on-pop-container: #5a0d09;
+
+  /* Sage — calm "done" success states (Pawprint Clay) */
+  --color-sage: #6b9d7e;
+  --color-sage-dim: #4f7d61;
+  --color-sage-container: #d6ebdc;
+  --color-on-sage: #ffffff;
+  --color-on-sage-container: #143420;
+
   /* Typography */
   --font-headline: "Plus Jakarta Sans", system-ui, sans-serif;
   --font-body: "Manrope", system-ui, sans-serif;
   --font-label: "Space Grotesk", monospace, sans-serif;
+  /* Pawprint Clay display + body — rolled out per surface, not globally */
+  --font-display: "Fredoka", system-ui, sans-serif;
+  --font-friendly: "Nunito", system-ui, sans-serif;
+
+  /* Motion tokens (Pawprint Clay) */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-warm: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-tap: 120ms;
+  --dur-micro: 200ms;
+  --dur-modal: 320ms;
+  --dur-celebrate: 600ms;
 
   /* Roundedness */
   --radius-sm: 0.5rem;
@@ -114,6 +141,41 @@
   box-shadow:
     0px 8px 24px rgba(55, 56, 49, 0.06),
     0px 4px 8px rgba(139, 69, 19, 0.08);
+}
+
+/* ─── Claymorphism Shadows (Pawprint Clay) ─── */
+/* Pillow cards — soft outer + faint inner highlight for the dough feel. */
+.shadow-clay {
+  box-shadow:
+    0 14px 28px -10px rgba(154, 81, 30, 0.18),
+    0 4px 10px rgba(55, 56, 49, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -2px 4px rgba(154, 81, 30, 0.08);
+}
+
+.shadow-clay-lg {
+  box-shadow:
+    0 24px 44px -14px rgba(154, 81, 30, 0.22),
+    0 8px 16px rgba(55, 56, 49, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -3px 6px rgba(154, 81, 30, 0.1);
+}
+
+/* Pressed primary buttons — flips the elevation inward. */
+.shadow-clay-pressed {
+  box-shadow:
+    inset 0 4px 8px rgba(154, 81, 30, 0.25),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* Pop sticker — slight tilt for the playful sticker-book feel.
+   Use sparingly: today/new/streak badges and celebrations. */
+.sticker-tilt {
+  transform: rotate(-3deg);
+  transition: transform var(--dur-micro) var(--ease-spring);
+}
+.sticker-tilt:hover {
+  transform: rotate(0deg) scale(1.04);
 }
 
 /* ─── Ghost Border (Accessibility) ─── */
@@ -184,6 +246,30 @@
 
 .animate-bounce-gentle {
   animation: bounce-gentle 1.2s ease-in-out infinite;
+}
+
+/* Pawprint Clay — one-shot celebration pop for milestone unlocks */
+@keyframes celebrate-pop {
+  0%   { transform: scale(0.8) rotate(-6deg); opacity: 0; }
+  60%  { transform: scale(1.15) rotate(2deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.animate-celebrate {
+  animation: celebrate-pop var(--dur-celebrate) var(--ease-spring) both;
+}
+
+/* Respect reduced-motion: kill the bouncy stuff for users who asked. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-pulse-soft,
+  .animate-bounce-gentle,
+  .animate-celebrate,
+  .sticker-tilt {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
 }
 
 /* ─── Base Resets ─── */

@@ -1,5 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans, Manrope, Space_Grotesk } from "next/font/google";
+import {
+  Plus_Jakarta_Sans,
+  Manrope,
+  Space_Grotesk,
+  Fredoka,
+  Nunito,
+} from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { SplashScreen } from "@/components/splash-screen";
@@ -24,6 +30,22 @@ const spaceGrotesk = Space_Grotesk({
   variable: "--font-label",
   subsets: ["latin"],
   weight: ["400", "700"],
+  display: "swap",
+});
+
+// Pawprint Clay overhaul — playful, family-friendly pair.
+// See docs/design-system.md.
+const fredoka = Fredoka({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  display: "swap",
+});
+
+const nunito = Nunito({
+  variable: "--font-friendly",
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
   display: "swap",
 });
 
@@ -57,7 +79,7 @@ export default async function RootLayout({
         />
       </head>
       <body
-        className={`${plusJakartaSans.variable} ${manrope.variable} ${spaceGrotesk.variable} antialiased`}
+        className={`${plusJakartaSans.variable} ${manrope.variable} ${spaceGrotesk.variable} ${fredoka.variable} ${nunito.variable} antialiased`}
       >
         <NextIntlClientProvider messages={messages}>
           <SplashScreen />
