@@ -1,21 +1,16 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Icon } from "@/components/icon";
-import { createClient } from "@/lib/supabase/server";
-import { getActivePet } from "@/lib/queries/pets";
+import { requireSession } from "@/lib/auth/session";
+import { getActivePetForMember } from "@/lib/queries/pets";
 import { getPhotosForPet } from "@/lib/queries/photos";
 import { formatDate } from "@/lib/utils";
 
 export default async function MilestoneGalleryPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
+  const session = await requireSession();
 
   const [activePet, t] = await Promise.all([
-    getActivePet(user.id),
+    getActivePetForMember(session.family.id, session.member.id),
     getTranslations("milestones"),
   ]);
 

@@ -4,24 +4,19 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { seedMilestonesForPet } from "@/lib/milestones/seed";
+import {
+  requireSession,
+  assertOwner,
+  assertPetInFamily,
+} from "@/lib/auth/session";
 import type { Species, Lifestage } from "@/lib/generated/prisma/client";
 
 export async function createPet(formData: FormData) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) throw new Error("Unauthorized");
-
-  // Deactivate other pets for this user
-  await prisma.pet.updateMany({
-    where: { userId: user.id },
-    data: { isActive: false },
-  });
+  const session = await requireSession();
 
   const pet = await prisma.pet.create({
     data: {
-      userId: user.id,
+      familyId: session.family.id,
       name: formData.get("name") as string,
       species: (formData.get("species") as Species) || "dog",
       breed: (formData.get("breed") as string) || null,
@@ -37,53 +32,39 @@ export async function createPet(formData: FormData) {
       deceasedDate: formData.get("deceasedDate")
         ? new Date(formData.get("deceasedDate") as string)
         : null,
-      isActive: true,
     },
   });
 
-  // Auto-seed milestones based on species + lifestage
+  // Auto-seed milestones based on species + lifestage.
   await seedMilestonesForPet(pet);
 
+  // Make this the creating member's active pet.
+  await prisma.familyMember.update({
+    where: { id: session.member.id },
+    data: { activePetId: pet.id },
+  });
+
   revalidatePath("/");
+  revalidatePath("/milestones");
+  revalidatePath("/settings");
 }
 
 export async function switchActivePet(petId: string) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) throw new Error("Unauthorized");
+  const session = await requireSession();
+  await assertPetInFamily(session, petId);
 
-  // Verify the pet belongs to this user
-  const pet = await prisma.pet.findFirst({
-    where: { id: petId, userId: user.id },
-  });
-  if (!pet) throw new Error("Pet not found");
-
-  // Deactivate all, activate selected
-  await prisma.pet.updateMany({
-    where: { userId: user.id },
-    data: { isActive: false },
-  });
-  await prisma.pet.update({
-    where: { id: petId },
-    data: { isActive: true },
+  await prisma.familyMember.update({
+    where: { id: session.member.id },
+    data: { activePetId: petId },
   });
 
   revalidatePath("/");
+  revalidatePath("/milestones");
 }
 
 export async function updatePet(petId: string, formData: FormData) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) throw new Error("Unauthorized");
-
-  const pet = await prisma.pet.findFirst({
-    where: { id: petId, userId: user.id },
-  });
-  if (!pet) throw new Error("Pet not found");
+  const session = await requireSession();
+  const pet = await assertPetInFamily(session, petId);
 
   await prisma.pet.update({
     where: { id: petId },
@@ -108,25 +89,28 @@ export async function updatePet(petId: string, formData: FormData) {
 
   revalidatePath("/");
   revalidatePath("/settings");
+  revalidatePath("/milestones");
 }
 
 export async function deletePet(petId: string) {
+  const session = await requireSession();
+  assertOwner(session); // Only owners can delete pets.
+  await assertPetInFamily(session, petId);
+
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) throw new Error("Unauthorized");
-
-  const pet = await prisma.pet.findFirst({
-    where: { id: petId, userId: user.id },
-    include: { milestones: { select: { photoUrl: true } }, photos: { select: { url: true } } },
+  const pet = await prisma.pet.findUniqueOrThrow({
+    where: { id: petId },
+    include: {
+      milestones: { select: { photoUrl: true } },
+      photos: { select: { url: true } },
+    },
   });
-  if (!pet) throw new Error("Pet not found");
 
-  // Delete all files in the user's storage folder for this pet
-  // Pet avatars are stored at {userId}/profile/ and pet-specific at {userId}/{petId}/
-  const foldersToClean = [`${user.id}/${petId}`, `${user.id}/profile`];
-
+  // Clean up storage files under this pet's folder, plus any referenced URLs.
+  const foldersToClean = [
+    `${session.user.id}/${petId}`,
+    `${session.user.id}/profile`,
+  ];
   for (const folder of foldersToClean) {
     const { data: files } = await supabase.storage
       .from("pet-photos")
@@ -138,7 +122,6 @@ export async function deletePet(petId: string) {
     }
   }
 
-  // Also delete any files referenced by URL that might be in unexpected paths
   const urls = [
     pet.photoUrl,
     ...pet.milestones.map((m) => m.photoUrl),
@@ -147,7 +130,6 @@ export async function deletePet(petId: string) {
 
   const paths = urls
     .map((url) => {
-      // Handle both /storage/v1/object/public/pet-photos/... and full https:// URLs
       const marker = "/pet-photos/";
       const idx = url.indexOf(marker);
       return idx !== -1 ? url.slice(idx + marker.length) : null;
@@ -160,20 +142,17 @@ export async function deletePet(petId: string) {
 
   await prisma.pet.delete({ where: { id: petId } });
 
-  // If the deleted pet was active, activate the next one
-  if (pet.isActive) {
-    const nextPet = await prisma.pet.findFirst({
-      where: { userId: user.id },
-      orderBy: { createdAt: "desc" },
-    });
-    if (nextPet) {
-      await prisma.pet.update({
-        where: { id: nextPet.id },
-        data: { isActive: true },
-      });
-    }
-  }
+  // If any member had this pet active, fall back to the most recent remaining.
+  const fallback = await prisma.pet.findFirst({
+    where: { familyId: session.family.id },
+    orderBy: { createdAt: "desc" },
+  });
+  await prisma.familyMember.updateMany({
+    where: { familyId: session.family.id, activePetId: petId },
+    data: { activePetId: fallback?.id ?? null },
+  });
 
   revalidatePath("/");
   revalidatePath("/settings");
+  revalidatePath("/milestones");
 }

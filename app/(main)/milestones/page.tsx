@@ -1,9 +1,8 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Icon } from "@/components/icon";
-import { createClient } from "@/lib/supabase/server";
-import { getActivePet, getPetsForUser } from "@/lib/queries/pets";
+import { requireSession } from "@/lib/auth/session";
+import { getActivePetForMember, getPetsForFamily } from "@/lib/queries/pets";
 import { PetSwitcher } from "@/app/(main)/pet-switcher";
 import {
   formatDate,
@@ -177,16 +176,11 @@ function LocationCard() {
 }
 
 export default async function MilestonesPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) redirect("/login");
+  const session = await requireSession();
 
   const [activePet, pets, t, tHome, tPresets] = await Promise.all([
-    getActivePet(user.id),
-    getPetsForUser(user.id),
+    getActivePetForMember(session.family.id, session.member.id),
+    getPetsForFamily(session.family.id),
     getTranslations("milestones"),
     getTranslations("home"),
     getTranslations("presets"),

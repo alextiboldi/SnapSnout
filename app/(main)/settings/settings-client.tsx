@@ -146,7 +146,17 @@ function DeleteDialog({
   );
 }
 
-function PetManagementSection({ pets, t }: { pets: Pet[]; t: ReturnType<typeof useTranslations<"settings">> }) {
+function PetManagementSection({
+  pets,
+  activePetId,
+  canDelete,
+  t,
+}: {
+  pets: Pet[];
+  activePetId: string | null;
+  canDelete: boolean;
+  t: ReturnType<typeof useTranslations<"settings">>;
+}) {
   const [isPending, startTransition] = useTransition();
   const [deletingPet, setDeletingPet] = useState<Pet | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -190,7 +200,7 @@ function PetManagementSection({ pets, t }: { pets: Pet[]; t: ReturnType<typeof u
               <button
                 disabled={isPending}
                 onClick={() => {
-                  if (pet.id !== pets.find((p) => p.isActive)?.id) {
+                  if (pet.id !== activePetId) {
                     startTransition(() => switchActivePet(pet.id));
                   }
                 }}
@@ -216,7 +226,7 @@ function PetManagementSection({ pets, t }: { pets: Pet[]; t: ReturnType<typeof u
                     <p className="font-headline text-sm font-bold text-on-surface truncate">
                       {pet.name}
                     </p>
-                    {pet.isActive && (
+                    {pet.id === activePetId && (
                       <span className="shrink-0 px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-label font-bold rounded-full">
                         {t("active")}
                       </span>
@@ -236,13 +246,15 @@ function PetManagementSection({ pets, t }: { pets: Pet[]; t: ReturnType<typeof u
                 >
                   <Icon name="edit" className="text-lg text-primary" />
                 </Link>
-                <button
-                  onClick={() => setDeletingPet(pet)}
-                  className="p-2 rounded-full hover:bg-error/10 transition-colors spring-active"
-                  aria-label={`Delete ${pet.name}`}
-                >
-                  <Icon name="delete" className="text-lg text-error/60 hover:text-error" />
-                </button>
+                {canDelete && (
+                  <button
+                    onClick={() => setDeletingPet(pet)}
+                    className="p-2 rounded-full hover:bg-error/10 transition-colors spring-active"
+                    aria-label={`Delete ${pet.name}`}
+                  >
+                    <Icon name="delete" className="text-lg text-error/60 hover:text-error" />
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -578,7 +590,15 @@ function AboutSection() {
 
 /* ─── Client Shell ─── */
 
-export default function SettingsClient({ pets }: { pets: Pet[] }) {
+export default function SettingsClient({
+  pets,
+  activePetId,
+  isOwner,
+}: {
+  pets: Pet[];
+  activePetId: string | null;
+  isOwner: boolean;
+}) {
   const t = useTranslations("settings");
   const [milestoneReminders, setMilestoneReminders] = useState(true);
   const [photoReminders, setPhotoReminders] = useState(true);
@@ -591,7 +611,12 @@ export default function SettingsClient({ pets }: { pets: Pet[] }) {
       </h1>
 
       <div className="mt-5 space-y-5">
-        <PetManagementSection pets={pets} t={t} />
+        <PetManagementSection
+          pets={pets}
+          activePetId={activePetId}
+          canDelete={isOwner}
+          t={t}
+        />
 
         <NotificationsSection
           milestoneReminders={milestoneReminders}
@@ -605,7 +630,7 @@ export default function SettingsClient({ pets }: { pets: Pet[] }) {
 
         <LanguageSection />
 
-        <SubscriptionSection />
+        {isOwner && <SubscriptionSection />}
 
         <AboutSection />
 

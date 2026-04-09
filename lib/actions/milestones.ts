@@ -2,24 +2,19 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
-import { createClient } from "@/lib/supabase/server";
+import { requireSession, assertPetInFamily } from "@/lib/auth/session";
 
 export async function completeMilestone(
   milestoneId: string,
   data?: { notes?: string; photoUrl?: string }
 ) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) throw new Error("Unauthorized");
+  const session = await requireSession();
 
-  // Verify the milestone belongs to the user's pet
   const milestone = await prisma.milestone.findUnique({
     where: { id: milestoneId },
-    include: { pet: { select: { userId: true } } },
+    include: { pet: { select: { familyId: true } } },
   });
-  if (!milestone || milestone.pet.userId !== user.id) {
+  if (!milestone || milestone.pet.familyId !== session.family.id) {
     throw new Error("Milestone not found");
   }
 
@@ -45,18 +40,9 @@ export async function createCustomMilestone(
     targetDate?: string;
   }
 ) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) throw new Error("Unauthorized");
+  const session = await requireSession();
+  await assertPetInFamily(session, petId);
 
-  const pet = await prisma.pet.findFirst({
-    where: { id: petId, userId: user.id },
-  });
-  if (!pet) throw new Error("Pet not found");
-
-  // Get the highest sortOrder for this pet
   const lastMilestone = await prisma.milestone.findFirst({
     where: { petId },
     orderBy: { sortOrder: "desc" },

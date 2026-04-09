@@ -1,16 +1,16 @@
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
-import { getPetsForUser } from "@/lib/queries/pets";
+import { requireSession } from "@/lib/auth/session";
+import { getPetsForFamily } from "@/lib/queries/pets";
 import SettingsClient from "./settings-client";
 
 export default async function SettingsPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
+  const session = await requireSession();
+  const pets = await getPetsForFamily(session.family.id);
 
-  const pets = await getPetsForUser(user.id);
-
-  return <SettingsClient pets={pets} />;
+  return (
+    <SettingsClient
+      pets={pets}
+      activePetId={session.member.activePetId}
+      isOwner={session.member.role === "owner"}
+    />
+  );
 }
