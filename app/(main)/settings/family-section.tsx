@@ -62,11 +62,12 @@ export function FamilySection({
     });
   };
 
-  const handleInvite = () => {
+  const handleInvite = (withEmail: boolean) => {
     setError(null);
     startTransition(async () => {
       try {
-        const { url, emailStatus } = await createInvite(inviteEmail || null);
+        const emailToSend = withEmail ? inviteEmail.trim() || null : null;
+        const { url, emailStatus } = await createInvite(emailToSend);
         setInviteUrl(url);
         setInviteEmailStatus(emailStatus);
         setCopied(false);
@@ -379,7 +380,8 @@ export function FamilySection({
               <InviteForm
                 email={inviteEmail}
                 setEmail={setInviteEmail}
-                onSubmit={handleInvite}
+                onSendEmail={() => handleInvite(true)}
+                onGenerateLink={() => handleInvite(false)}
                 isPending={isPending}
                 error={error}
                 t={t}
@@ -436,19 +438,21 @@ export function FamilySection({
 function InviteForm({
   email,
   setEmail,
-  onSubmit,
+  onSendEmail,
+  onGenerateLink,
   isPending,
   error,
   t,
 }: {
   email: string;
   setEmail: (v: string) => void;
-  onSubmit: () => void;
+  onSendEmail: () => void;
+  onGenerateLink: () => void;
   isPending: boolean;
   error: string | null;
   t: ReturnType<typeof useTranslations<"family">>;
 }) {
-  const hasEmail = email.trim().length > 0;
+  const hasValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   return (
     <div>
       <div className="flex items-center gap-3">
@@ -467,7 +471,7 @@ function InviteForm({
 
       <div className="mt-5">
         <label className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">
-          {t("emailLabel")}
+          {t("emailLabelOptional")}
         </label>
         <div className="mt-2 relative">
           <input
@@ -483,34 +487,43 @@ function InviteForm({
             className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-base text-on-surface-variant/60"
           />
         </div>
-        <p className="mt-1.5 font-body text-[11px] text-on-surface-variant/70">
-          {hasEmail ? t("emailHintSend") : t("emailHintLink")}
-        </p>
       </div>
 
       {error && (
         <p className="mt-3 font-body text-xs text-error">{error}</p>
       )}
 
+      {/* Primary: send email (only when a valid address is in the field) */}
       <button
-        onClick={onSubmit}
-        disabled={isPending}
-        className="mt-5 w-full rounded-xl bg-primary px-4 py-3.5 font-headline text-sm font-bold text-on-primary spring-active shadow-ambient hover:shadow-ambient-lg disabled:opacity-50 flex items-center justify-center gap-2"
+        onClick={onSendEmail}
+        disabled={isPending || !hasValidEmail}
+        className="mt-5 w-full rounded-xl bg-primary px-4 py-3.5 font-headline text-sm font-bold text-on-primary spring-active shadow-ambient hover:shadow-ambient-lg disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none flex items-center justify-center gap-2"
       >
-        {isPending ? (
-          t("creating")
-        ) : hasEmail ? (
-          <>
-            <Icon name="send" className="text-base" />
-            {t("sendInvitation")}
-          </>
-        ) : (
-          <>
-            <Icon name="link" className="text-base" />
-            {t("generateLink")}
-          </>
-        )}
+        <Icon name="send" className="text-base" />
+        {isPending ? t("creating") : t("sendInvitation")}
       </button>
+
+      {/* Divider */}
+      <div className="mt-4 flex items-center gap-3">
+        <div className="h-px flex-1 bg-outline-variant/30" />
+        <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant/60">
+          {t("or")}
+        </span>
+        <div className="h-px flex-1 bg-outline-variant/30" />
+      </div>
+
+      {/* Secondary: copy link without email */}
+      <button
+        onClick={onGenerateLink}
+        disabled={isPending}
+        className="mt-4 w-full rounded-xl border-2 border-dashed border-outline-variant/40 bg-surface-container/30 px-4 py-3 font-headline text-sm font-bold text-on-surface spring-active hover:bg-surface-container/60 disabled:opacity-50 flex items-center justify-center gap-2"
+      >
+        <Icon name="link" className="text-base text-primary" />
+        {t("generateLink")}
+      </button>
+      <p className="mt-2 text-center font-body text-[11px] text-on-surface-variant/70">
+        {t("generateLinkHint")}
+      </p>
     </div>
   );
 }
