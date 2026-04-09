@@ -8,6 +8,8 @@ import { switchActivePet, deletePet } from "@/lib/actions/pets";
 import { signOut, deleteAccount } from "@/lib/actions/auth";
 import { locales, localeNames, type Locale } from "@/i18n/config";
 import type { Pet } from "@/lib/generated/prisma/client";
+import type { FamilyDetails } from "@/lib/queries/family";
+import { FamilySection } from "./family-section";
 
 /* ─── Toggle Switch ─── */
 
@@ -594,10 +596,16 @@ export default function SettingsClient({
   pets,
   activePetId,
   isOwner,
+  isPremium,
+  currentUserId,
+  familyDetails,
 }: {
   pets: Pet[];
   activePetId: string | null;
   isOwner: boolean;
+  isPremium: boolean;
+  currentUserId: string;
+  familyDetails: FamilyDetails;
 }) {
   const t = useTranslations("settings");
   const [milestoneReminders, setMilestoneReminders] = useState(true);
@@ -616,6 +624,13 @@ export default function SettingsClient({
           activePetId={activePetId}
           canDelete={isOwner}
           t={t}
+        />
+
+        <FamilySection
+          details={familyDetails}
+          currentUserId={currentUserId}
+          isOwner={isOwner}
+          isPremium={isPremium}
         />
 
         <NotificationsSection
