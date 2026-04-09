@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { requireSession, assertOwner } from "@/lib/auth/session";
+import { createAdminClient } from "@/lib/supabase/admin";
 import type { FamilyInvite } from "@/lib/generated/prisma/client";
 
 export type InviteValidation =
@@ -193,16 +194,26 @@ export async function renameFamily(name: string) {
   revalidatePath("/settings");
 }
 
+export type CreateInviteResult = {
+  inviteId: string;
+  url: string;
+  emailStatus: "sent" | "user_exists" | "failed" | "skipped";
+  emailError?: string;
+};
+
 /**
- * Owner creates an invite. Returns the invite URL so the client can display it
- * for copy/share. Email is optional — when present it's stored for Phase 3's
- * email dispatch; for now the owner shares the link manually.
+ * Owner creates an invite. Always creates a `FamilyInvite` row + token; when
+ * an email address is supplied we additionally fire Supabase Auth's
+ * `inviteUserByEmail` so the recipient receives the official "Invite user"
+ * email template, with `redirectTo` pointing at our `/invite/<token>` page.
+ * The invite link is also returned so the owner can copy-share it manually
+ * regardless of whether email delivery succeeded.
  *
  * Requires `owner.isPremium` — the freemium gate.
  */
 export async function createInvite(
   email: string | null
-): Promise<{ inviteId: string; url: string }> {
+): Promise<CreateInviteResult> {
   const session = await requireSession();
   assertOwner(session);
 
@@ -229,15 +240,56 @@ export async function createInvite(
     },
   });
 
-  revalidatePath("/settings");
-
   const baseUrl =
     process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
     process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "") ||
     "";
   const url = `${baseUrl}/invite/${token}`;
 
-  return { inviteId: invite.id, url };
+  // Dispatch the official Supabase invite email when an address is provided.
+  let emailStatus: CreateInviteResult["emailStatus"] = "skipped";
+  let emailError: string | undefined;
+
+  if (normalizedEmail) {
+    try {
+      const admin = createAdminClient();
+      const redirectTo = `${baseUrl}/auth/callback?next=${encodeURIComponent(`/invite/${token}`)}`;
+      const { error } = await admin.auth.admin.inviteUserByEmail(
+        normalizedEmail,
+        {
+          redirectTo,
+          // Surface metadata to the email template + downstream user record.
+          data: {
+            family_id: session.family.id,
+            family_name: session.family.name,
+            family_invite_token: token,
+            invited_by: session.user.name ?? session.user.email,
+          },
+        }
+      );
+
+      if (error) {
+        // The most common case: the user already exists in auth.users — the
+        // invite endpoint can't be used. We still have a working share-link.
+        const msg = error.message?.toLowerCase() ?? "";
+        if (msg.includes("already") || msg.includes("registered")) {
+          emailStatus = "user_exists";
+        } else {
+          emailStatus = "failed";
+          emailError = error.message;
+        }
+      } else {
+        emailStatus = "sent";
+      }
+    } catch (err) {
+      emailStatus = "failed";
+      emailError = err instanceof Error ? err.message : String(err);
+    }
+  }
+
+  revalidatePath("/settings");
+
+  return { inviteId: invite.id, url, emailStatus, emailError };
 }
 
 /** Owner revokes a pending invite. */

@@ -40,6 +40,9 @@ export function FamilySection({
   const [inviteOpen, setInviteOpen] = useState(false);
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteUrl, setInviteUrl] = useState<string | null>(null);
+  const [inviteEmailStatus, setInviteEmailStatus] = useState<
+    "sent" | "user_exists" | "failed" | "skipped" | null
+  >(null);
   const [copied, setCopied] = useState(false);
 
   // Confirmation state
@@ -63,8 +66,9 @@ export function FamilySection({
     setError(null);
     startTransition(async () => {
       try {
-        const { url } = await createInvite(inviteEmail || null);
+        const { url, emailStatus } = await createInvite(inviteEmail || null);
         setInviteUrl(url);
+        setInviteEmailStatus(emailStatus);
         setCopied(false);
       } catch (e) {
         setError(e instanceof Error ? e.message : t("errorGeneric"));
@@ -135,6 +139,7 @@ export function FamilySection({
     setInviteOpen(false);
     setInviteEmail("");
     setInviteUrl(null);
+    setInviteEmailStatus(null);
     setCopied(false);
     setError(null);
   };
@@ -389,23 +394,39 @@ export function FamilySection({
                     {copied ? t("copied") : t("copy")}
                   </button>
                 </div>
-                {inviteEmail && (
-                  <a
-                    href={`mailto:${encodeURIComponent(
-                      inviteEmail
-                    )}?subject=${encodeURIComponent(
-                      t("emailSubject", { family: details.family.name })
-                    )}&body=${encodeURIComponent(
-                      t("emailBody", {
-                        family: details.family.name,
-                        url: inviteUrl,
-                      })
-                    )}`}
-                    className="mt-3 flex items-center justify-center gap-2 rounded-xl bg-tertiary/10 px-4 py-2.5 font-label text-xs font-bold text-tertiary hover:bg-tertiary/20 transition-colors"
-                  >
-                    <Icon name="mail" className="text-base" />
-                    {t("openMail")}
-                  </a>
+                {inviteEmailStatus === "sent" && (
+                  <div className="mt-3 flex items-center gap-2 rounded-xl bg-tertiary/10 px-4 py-2.5">
+                    <Icon
+                      name="mark_email_read"
+                      filled
+                      className="text-base text-tertiary shrink-0"
+                    />
+                    <p className="font-label text-xs font-bold text-tertiary">
+                      {t("emailSent", { email: inviteEmail })}
+                    </p>
+                  </div>
+                )}
+                {inviteEmailStatus === "user_exists" && (
+                  <div className="mt-3 flex items-start gap-2 rounded-xl bg-secondary-fixed/20 px-4 py-2.5">
+                    <Icon
+                      name="info"
+                      className="text-base text-on-secondary-fixed shrink-0 mt-0.5"
+                    />
+                    <p className="font-label text-xs text-on-secondary-fixed">
+                      {t("emailUserExists")}
+                    </p>
+                  </div>
+                )}
+                {inviteEmailStatus === "failed" && (
+                  <div className="mt-3 flex items-start gap-2 rounded-xl bg-error/10 px-4 py-2.5">
+                    <Icon
+                      name="error"
+                      className="text-base text-error shrink-0 mt-0.5"
+                    />
+                    <p className="font-label text-xs text-error">
+                      {t("emailFailed")}
+                    </p>
+                  </div>
                 )}
                 <button
                   onClick={closeInviteModal}
