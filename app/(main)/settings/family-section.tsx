@@ -357,107 +357,33 @@ export function FamilySection({
             onClick={isPending ? undefined : closeInviteModal}
           />
           <div className="relative w-full max-w-sm irregular-border bg-surface-container-lowest p-6 shadow-ambient-lg animate-fade-up">
-            <div className="flex items-start justify-between">
-              <div>
-                <h3 className="font-headline text-lg font-bold text-on-surface">
-                  {t("inviteTitle")}
-                </h3>
-                <p className="mt-1 font-body text-sm text-on-surface-variant">
-                  {t("inviteSubtitle")}
-                </p>
-              </div>
-              <button
-                onClick={closeInviteModal}
-                className="rounded-full p-1 hover:bg-surface-container transition-colors"
-                aria-label={t("close")}
-              >
-                <Icon name="close" className="text-lg text-on-surface-variant" />
-              </button>
-            </div>
+            <button
+              onClick={closeInviteModal}
+              className="absolute top-3 right-3 rounded-full p-1.5 hover:bg-surface-container transition-colors"
+              aria-label={t("close")}
+            >
+              <Icon name="close" className="text-lg text-on-surface-variant" />
+            </button>
 
             {inviteUrl ? (
-              <div className="mt-5">
-                <label className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">
-                  {t("shareLink")}
-                </label>
-                <div className="mt-2 flex gap-2">
-                  <input
-                    readOnly
-                    value={inviteUrl}
-                    onFocus={(e) => e.currentTarget.select()}
-                    className="flex-1 rounded-xl bg-surface-container border border-outline/20 px-3 py-2 font-body text-xs text-on-surface"
-                  />
-                  <button
-                    onClick={handleCopy}
-                    className="rounded-xl bg-primary px-4 py-2 font-label text-xs font-bold text-on-primary spring-active"
-                  >
-                    {copied ? t("copied") : t("copy")}
-                  </button>
-                </div>
-                {inviteEmailStatus === "sent" && (
-                  <div className="mt-3 flex items-center gap-2 rounded-xl bg-tertiary/10 px-4 py-2.5">
-                    <Icon
-                      name="mark_email_read"
-                      filled
-                      className="text-base text-tertiary shrink-0"
-                    />
-                    <p className="font-label text-xs font-bold text-tertiary">
-                      {t("emailSent", { email: inviteEmail })}
-                    </p>
-                  </div>
-                )}
-                {inviteEmailStatus === "user_exists" && (
-                  <div className="mt-3 flex items-start gap-2 rounded-xl bg-secondary-fixed/20 px-4 py-2.5">
-                    <Icon
-                      name="info"
-                      className="text-base text-on-secondary-fixed shrink-0 mt-0.5"
-                    />
-                    <p className="font-label text-xs text-on-secondary-fixed">
-                      {t("emailUserExists")}
-                    </p>
-                  </div>
-                )}
-                {inviteEmailStatus === "failed" && (
-                  <div className="mt-3 flex items-start gap-2 rounded-xl bg-error/10 px-4 py-2.5">
-                    <Icon
-                      name="error"
-                      className="text-base text-error shrink-0 mt-0.5"
-                    />
-                    <p className="font-label text-xs text-error">
-                      {t("emailFailed")}
-                    </p>
-                  </div>
-                )}
-                <button
-                  onClick={closeInviteModal}
-                  className="mt-4 w-full rounded-xl bg-surface-container-highest px-4 py-2.5 font-headline text-sm font-bold text-on-surface"
-                >
-                  {t("done")}
-                </button>
-              </div>
+              <InviteResult
+                emailStatus={inviteEmailStatus}
+                email={inviteEmail}
+                inviteUrl={inviteUrl}
+                onCopy={handleCopy}
+                copied={copied}
+                onClose={closeInviteModal}
+                t={t}
+              />
             ) : (
-              <div className="mt-5">
-                <label className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">
-                  {t("emailLabelOptional")}
-                </label>
-                <input
-                  type="email"
-                  value={inviteEmail}
-                  onChange={(e) => setInviteEmail(e.target.value)}
-                  placeholder={t("emailPlaceholder")}
-                  className="mt-2 w-full rounded-xl bg-surface-container border border-outline/20 px-4 py-3 font-body text-sm text-on-surface focus:outline-none focus:border-primary"
-                />
-                {error && (
-                  <p className="mt-2 font-body text-xs text-error">{error}</p>
-                )}
-                <button
-                  onClick={handleInvite}
-                  disabled={isPending}
-                  className="mt-4 w-full rounded-xl bg-primary px-4 py-3 font-headline text-sm font-bold text-on-primary spring-active disabled:opacity-50"
-                >
-                  {isPending ? t("creating") : t("createInvite")}
-                </button>
-              </div>
+              <InviteForm
+                email={inviteEmail}
+                setEmail={setInviteEmail}
+                onSubmit={handleInvite}
+                isPending={isPending}
+                error={error}
+                t={t}
+              />
             )}
           </div>
         </div>
@@ -504,6 +430,206 @@ export function FamilySection({
         />
       )}
     </section>
+  );
+}
+
+function InviteForm({
+  email,
+  setEmail,
+  onSubmit,
+  isPending,
+  error,
+  t,
+}: {
+  email: string;
+  setEmail: (v: string) => void;
+  onSubmit: () => void;
+  isPending: boolean;
+  error: string | null;
+  t: ReturnType<typeof useTranslations<"family">>;
+}) {
+  const hasEmail = email.trim().length > 0;
+  return (
+    <div>
+      <div className="flex items-center gap-3">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10">
+          <Icon name="diversity_3" filled className="text-2xl text-primary" />
+        </div>
+        <div className="min-w-0">
+          <h3 className="font-headline text-lg font-bold text-on-surface">
+            {t("inviteTitle")}
+          </h3>
+          <p className="font-body text-xs text-on-surface-variant">
+            {t("inviteSubtitle")}
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-5">
+        <label className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">
+          {t("emailLabel")}
+        </label>
+        <div className="mt-2 relative">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder={t("emailPlaceholder")}
+            autoFocus
+            className="w-full rounded-xl bg-surface-container border border-outline/20 pl-10 pr-4 py-3 font-body text-sm text-on-surface focus:outline-none focus:border-primary"
+          />
+          <Icon
+            name="alternate_email"
+            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-base text-on-surface-variant/60"
+          />
+        </div>
+        <p className="mt-1.5 font-body text-[11px] text-on-surface-variant/70">
+          {hasEmail ? t("emailHintSend") : t("emailHintLink")}
+        </p>
+      </div>
+
+      {error && (
+        <p className="mt-3 font-body text-xs text-error">{error}</p>
+      )}
+
+      <button
+        onClick={onSubmit}
+        disabled={isPending}
+        className="mt-5 w-full rounded-xl bg-primary px-4 py-3.5 font-headline text-sm font-bold text-on-primary spring-active shadow-ambient hover:shadow-ambient-lg disabled:opacity-50 flex items-center justify-center gap-2"
+      >
+        {isPending ? (
+          t("creating")
+        ) : hasEmail ? (
+          <>
+            <Icon name="send" className="text-base" />
+            {t("sendInvitation")}
+          </>
+        ) : (
+          <>
+            <Icon name="link" className="text-base" />
+            {t("generateLink")}
+          </>
+        )}
+      </button>
+    </div>
+  );
+}
+
+function InviteResult({
+  emailStatus,
+  email,
+  inviteUrl,
+  onCopy,
+  copied,
+  onClose,
+  t,
+}: {
+  emailStatus: "sent" | "user_exists" | "failed" | "skipped" | null;
+  email: string;
+  inviteUrl: string;
+  onCopy: () => void;
+  copied: boolean;
+  onClose: () => void;
+  t: ReturnType<typeof useTranslations<"family">>;
+}) {
+  // Choose hero card based on email status
+  const variant: {
+    icon: string;
+    iconBg: string;
+    iconColor: string;
+    title: string;
+    body: string;
+    showLinkAsPrimary: boolean;
+  } =
+    emailStatus === "sent"
+      ? {
+          icon: "mark_email_read",
+          iconBg: "bg-tertiary/15",
+          iconColor: "text-tertiary",
+          title: t("resultSentTitle"),
+          body: t("resultSentBody", { email }),
+          showLinkAsPrimary: false,
+        }
+      : emailStatus === "user_exists"
+        ? {
+            icon: "info",
+            iconBg: "bg-secondary-fixed/30",
+            iconColor: "text-on-secondary-fixed",
+            title: t("resultUserExistsTitle"),
+            body: t("resultUserExistsBody"),
+            showLinkAsPrimary: true,
+          }
+        : emailStatus === "failed"
+          ? {
+              icon: "error",
+              iconBg: "bg-error/10",
+              iconColor: "text-error",
+              title: t("resultFailedTitle"),
+              body: t("resultFailedBody"),
+              showLinkAsPrimary: true,
+            }
+          : {
+              // skipped — link-only flow
+              icon: "link",
+              iconBg: "bg-primary/10",
+              iconColor: "text-primary",
+              title: t("resultLinkTitle"),
+              body: t("resultLinkBody"),
+              showLinkAsPrimary: true,
+            };
+
+  return (
+    <div>
+      <div className="flex items-center gap-3">
+        <div
+          className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${variant.iconBg}`}
+        >
+          <Icon name={variant.icon} filled className={`text-2xl ${variant.iconColor}`} />
+        </div>
+        <div className="min-w-0">
+          <h3 className="font-headline text-lg font-bold text-on-surface">
+            {variant.title}
+          </h3>
+          <p className="font-body text-xs text-on-surface-variant">
+            {variant.body}
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-5">
+        <label className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">
+          {variant.showLinkAsPrimary ? t("shareLink") : t("shareLinkAlt")}
+        </label>
+        <div className="mt-2 flex gap-2">
+          <input
+            readOnly
+            value={inviteUrl}
+            onFocus={(e) => e.currentTarget.select()}
+            className="flex-1 rounded-xl bg-surface-container border border-outline/20 px-3 py-2.5 font-body text-xs text-on-surface min-w-0 truncate"
+          />
+          <button
+            onClick={onCopy}
+            className={`shrink-0 rounded-xl px-4 py-2 font-label text-xs font-bold spring-active transition-colors ${
+              copied
+                ? "bg-tertiary text-on-tertiary"
+                : "bg-primary text-on-primary"
+            }`}
+          >
+            {copied ? t("copied") : t("copy")}
+          </button>
+        </div>
+        <p className="mt-2 font-label text-[10px] uppercase tracking-wider text-on-surface-variant/60">
+          {t("expiresInDays", { days: 7 })}
+        </p>
+      </div>
+
+      <button
+        onClick={onClose}
+        className="mt-5 w-full rounded-xl bg-surface-container-highest px-4 py-2.5 font-headline text-sm font-bold text-on-surface spring-active hover:shadow-ambient transition-shadow"
+      >
+        {t("done")}
+      </button>
+    </div>
   );
 }
 
