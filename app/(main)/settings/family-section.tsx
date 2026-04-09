@@ -9,6 +9,7 @@ import {
   revokeInvite,
   removeMember,
   leaveFamily,
+  transferOwnership,
 } from "@/lib/actions/family";
 import type {
   FamilyDetails,
@@ -43,6 +44,7 @@ export function FamilySection({
 
   // Confirmation state
   const [removingMember, setRemovingMember] = useState<FamilyMemberWithUser | null>(null);
+  const [transferringTo, setTransferringTo] = useState<FamilyMemberWithUser | null>(null);
   const [leavingFamily, setLeavingFamily] = useState(false);
 
   const handleRename = () => {
@@ -99,6 +101,19 @@ export function FamilySection({
       try {
         await removeMember(removingMember.userId);
         setRemovingMember(null);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : t("errorGeneric"));
+      }
+    });
+  };
+
+  const handleTransfer = () => {
+    if (!transferringTo) return;
+    setError(null);
+    startTransition(async () => {
+      try {
+        await transferOwnership(transferringTo.userId);
+        setTransferringTo(null);
       } catch (e) {
         setError(e instanceof Error ? e.message : t("errorGeneric"));
       }
@@ -224,14 +239,25 @@ export function FamilySection({
                 </span>
               )}
               {canRemove && (
-                <button
-                  onClick={() => setRemovingMember(m)}
-                  disabled={isPending}
-                  className="p-2 rounded-full hover:bg-error/10 transition-colors spring-active"
-                  aria-label={t("removeMember")}
-                >
-                  <Icon name="person_remove" className="text-lg text-error/60" />
-                </button>
+                <>
+                  <button
+                    onClick={() => setTransferringTo(m)}
+                    disabled={isPending}
+                    className="p-2 rounded-full hover:bg-primary/10 transition-colors spring-active"
+                    aria-label={t("transferOwnership")}
+                    title={t("transferOwnership")}
+                  >
+                    <Icon name="workspace_premium" className="text-lg text-primary/70" />
+                  </button>
+                  <button
+                    onClick={() => setRemovingMember(m)}
+                    disabled={isPending}
+                    className="p-2 rounded-full hover:bg-error/10 transition-colors spring-active"
+                    aria-label={t("removeMember")}
+                  >
+                    <Icon name="person_remove" className="text-lg text-error/60" />
+                  </button>
+                </>
               )}
             </div>
           );
@@ -427,6 +453,19 @@ export function FamilySection({
           isPending={isPending}
           onCancel={() => setRemovingMember(null)}
           onConfirm={handleRemoveMember}
+        />
+      )}
+
+      {/* Transfer-ownership confirmation */}
+      {transferringTo && (
+        <ConfirmDialog
+          title={t("transferTitle", { name: memberName(transferringTo) })}
+          body={t("transferBody")}
+          confirmLabel={t("transferConfirm")}
+          cancelLabel={t("cancel")}
+          isPending={isPending}
+          onCancel={() => setTransferringTo(null)}
+          onConfirm={handleTransfer}
         />
       )}
 

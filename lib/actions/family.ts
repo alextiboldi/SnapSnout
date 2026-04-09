@@ -139,6 +139,41 @@ export async function acceptInvite(token: string) {
 const INVITE_TTL_DAYS = 7;
 const MAX_FAMILY_NAME_LENGTH = 60;
 
+/**
+ * Owner hands over their family to another member. After this the caller
+ * becomes a regular member of the same family.
+ */
+export async function transferOwnership(toUserId: string) {
+  const session = await requireSession();
+  assertOwner(session);
+
+  if (toUserId === session.user.id) {
+    throw new Error("You're already the owner");
+  }
+
+  const target = await prisma.familyMember.findFirst({
+    where: { familyId: session.family.id, userId: toUserId },
+  });
+  if (!target) throw new Error("Member not found");
+
+  await prisma.$transaction([
+    prisma.family.update({
+      where: { id: session.family.id },
+      data: { ownerId: toUserId },
+    }),
+    prisma.familyMember.update({
+      where: { id: target.id },
+      data: { role: "owner" },
+    }),
+    prisma.familyMember.update({
+      where: { id: session.member.id },
+      data: { role: "member" },
+    }),
+  ]);
+
+  revalidatePath("/settings");
+}
+
 /** Owner renames their family. */
 export async function renameFamily(name: string) {
   const session = await requireSession();
