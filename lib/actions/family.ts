@@ -3,29 +3,11 @@
 import { randomBytes } from "crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { requireSession, assertOwner } from "@/lib/auth/session";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { resolveSiteUrl } from "@/lib/url";
 import type { FamilyInvite } from "@/lib/generated/prisma/client";
-
-/**
- * Resolve the public origin of the running app. Prefers an explicit env var,
- * then falls back to the actual request headers (works on Vercel/local/proxy)
- * so the link is always pointing at the app, never at the Supabase host.
- */
-async function resolveSiteUrl(): Promise<string> {
-  const fromEnv = process.env.NEXT_PUBLIC_SITE_URL;
-  if (fromEnv) return fromEnv.replace(/\/$/, "");
-
-  const h = await headers();
-  const host =
-    h.get("x-forwarded-host") ?? h.get("host") ?? "localhost:3000";
-  const proto =
-    h.get("x-forwarded-proto") ??
-    (host.startsWith("localhost") ? "http" : "https");
-  return `${proto}://${host}`;
-}
 
 export type InviteValidation =
   | { status: "valid"; invite: FamilyInvite; familyName: string }

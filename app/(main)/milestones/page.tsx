@@ -4,9 +4,9 @@ import { Icon } from "@/components/icon";
 import { requireSession } from "@/lib/auth/session";
 import { getActivePetForMember, getPetsForFamily } from "@/lib/queries/pets";
 import { PetSwitcher } from "@/app/(main)/pet-switcher";
+import { MilestonesList } from "./milestones-list";
 import {
   formatDate,
-  daysUntil,
   getMilestoneStatus,
   isTranslationKey,
 } from "@/lib/utils";
@@ -290,39 +290,19 @@ export default async function MilestonesPage() {
           <h2 className="font-headline text-lg font-bold text-on-surface mb-4">
             {t("comingUp")}
           </h2>
-          <div className="space-y-3">
-            {upcomingMilestones.map((milestone) => {
-              const days = milestone.targetDate
-                ? daysUntil(milestone.targetDate)
-                : 0;
-              return (
-                <div
-                  key={milestone.id}
-                  className="flex items-center gap-4 p-4 bg-surface-container-lowest irregular-border-sm shadow-ambient spring-active cursor-pointer hover:-translate-y-0.5 transition-transform duration-300"
-                >
-                  <span className="text-2xl">{milestone.emoji}</span>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-headline text-sm font-bold text-on-surface truncate">
-                      {milestone.title}
-                    </h3>
-                    <p className="font-body text-xs text-on-surface-variant truncate">
-                      {milestone.description}
-                    </p>
-                  </div>
-                  <div className="text-right shrink-0">
-                    <p className="font-label text-xs text-primary font-bold">
-                      {days > 0 ? t("daysShort", { days }) : t("todayLabel")}
-                    </p>
-                    <p className="font-label text-[10px] text-outline">
-                      {milestone.targetDate
-                        ? formatDate(milestone.targetDate)
-                        : ""}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <MilestonesList
+            milestones={upcomingMilestones.map((m) => ({
+              id: m.id,
+              emoji: m.emoji,
+              title: m.title,
+              description: m.description,
+              notes: m.notes,
+              photoUrl: m.photoUrl,
+              completedDate: m.completedDate,
+              targetDate: m.targetDate,
+            }))}
+            petName={activePet.name}
+          />
         </div>
       )}
 

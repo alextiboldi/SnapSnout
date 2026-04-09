@@ -27,7 +27,6 @@ export async function seedMilestonesForPet(pet: Pet) {
       emoji: preset.emoji,
       targetDate,
       completedDate: isAutoCompleted ? pet.gotchaDay : null,
-      isShareable: preset.isShareable,
       isCustom: false,
       sortOrder: index,
     };

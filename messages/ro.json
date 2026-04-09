@@ -304,6 +304,30 @@
     "settings": "Setari",
     "signOut": "Deconectare"
   },
+  "milestoneShare": {
+    "shareMilestone": "Partajeaza reperul",
+    "shareMilestoneTitle": "Partajeaza acest moment",
+    "shareMilestoneSubtitle": "Oricine are link-ul poate vedea acest reper.",
+    "linkReady": "Link-ul e gata",
+    "linkReadyBody": "Oricine are acest link poate vedea reperul.",
+    "copy": "Copiaza",
+    "copied": "Copiat",
+    "openShareSheet": "Partajeaza prin...",
+    "creating": "Se creeaza...",
+    "revokeShare": "Opreste partajarea",
+    "revokeConfirmTitle": "Opresti partajarea acestui reper?",
+    "revokeConfirmBody": "Link-ul va inceta sa functioneze imediat. Poti crea unul nou oricand.",
+    "revoke": "Opreste partajarea",
+    "cancel": "Anuleaza",
+    "errorGeneric": "Ceva nu a functionat"
+  },
+  "share": {
+    "unavailableTitle": "Acest link nu este disponibil",
+    "unavailableBody": "Link-ul a fost revocat sau reperul a fost eliminat.",
+    "madeWith": "Facut cu SnapSnout",
+    "signUpCta": "Urmareste reperele animalutului tau",
+    "goHome": "Viziteaza SnapSnout"
+  },
   "studio": {
     "title": "Studioul de magie AI",
     "subtitle": "Creeaza carduri si arta superba cu pozele animalutului tau",

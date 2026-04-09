@@ -304,6 +304,30 @@
     "settings": "Instellingen",
     "signOut": "Uitloggen"
   },
+  "milestoneShare": {
+    "shareMilestone": "Mijlpaal delen",
+    "shareMilestoneTitle": "Deel dit moment",
+    "shareMilestoneSubtitle": "Iedereen met de link kan deze mijlpaal bekijken.",
+    "linkReady": "Link is klaar",
+    "linkReadyBody": "Iedereen met deze link kan de mijlpaal bekijken.",
+    "copy": "Kopiëren",
+    "copied": "Gekopieerd",
+    "openShareSheet": "Delen via...",
+    "creating": "Aanmaken...",
+    "revokeShare": "Stoppen met delen",
+    "revokeConfirmTitle": "Stoppen met deze mijlpaal te delen?",
+    "revokeConfirmBody": "De link werkt direct niet meer. Je kunt later altijd een nieuwe maken.",
+    "revoke": "Stoppen met delen",
+    "cancel": "Annuleren",
+    "errorGeneric": "Er is iets misgegaan"
+  },
+  "share": {
+    "unavailableTitle": "Deze deel-link is niet beschikbaar",
+    "unavailableBody": "De link is mogelijk ingetrokken of de mijlpaal is verwijderd.",
+    "madeWith": "Gemaakt met SnapSnout",
+    "signUpCta": "Houd de mijlpalen van je huisdier bij",
+    "goHome": "Bezoek SnapSnout"
+  },
   "studio": {
     "title": "AI-magiestudio",
     "subtitle": "Maak prachtige kaarten en kunst met de foto's van je huisdier",

@@ -56,7 +56,6 @@ export async function createCustomMilestone(
       emoji: data.emoji || "🎯",
       targetDate: data.targetDate ? new Date(data.targetDate) : null,
       isCustom: true,
-      isShareable: true,
       sortOrder: (lastMilestone?.sortOrder ?? 0) + 1,
     },
   });

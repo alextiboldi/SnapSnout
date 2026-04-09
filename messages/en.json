@@ -213,6 +213,30 @@
     "settings": "Settings",
     "signOut": "Sign out"
   },
+  "milestoneShare": {
+    "shareMilestone": "Share milestone",
+    "shareMilestoneTitle": "Share this moment",
+    "shareMilestoneSubtitle": "Anyone with the link can view this milestone.",
+    "linkReady": "Link is ready",
+    "linkReadyBody": "Anyone with this link can view the milestone.",
+    "copy": "Copy",
+    "copied": "Copied",
+    "openShareSheet": "Share via...",
+    "creating": "Creating...",
+    "revokeShare": "Stop sharing",
+    "revokeConfirmTitle": "Stop sharing this milestone?",
+    "revokeConfirmBody": "The link will stop working immediately. You can always create a new one later.",
+    "revoke": "Stop sharing",
+    "cancel": "Cancel",
+    "errorGeneric": "Something went wrong"
+  },
+  "share": {
+    "unavailableTitle": "This share isn't available",
+    "unavailableBody": "The link may have been revoked or the milestone removed.",
+    "madeWith": "Made with SnapSnout",
+    "signUpCta": "Track your pet's milestones",
+    "goHome": "Visit SnapSnout"
+  },
   "inviteAccept": {
     "invitedTitle": "Join {family}",
     "invitedDescLoggedOut": "Create your SnapSnout account to join this family. You'll get instant access to all their pets, photos, and milestones.",
