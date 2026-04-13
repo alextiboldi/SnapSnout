@@ -148,6 +148,19 @@
     "deleteAccountOwnerWarningBody": "Door je account te verwijderen wordt de familie permanent verwijderd en {count, plural, one {het andere lid} other {de # andere leden}} eruit gegooid.",
     "deleteAccountOwnerHint": "Tip: <link>draag eerst het eigenaarschap over</link> om de familie in leven te houden."
   },
+  "profile": {
+    "title": "Profiel bewerken",
+    "subtitle": "Werk je naam en foto bij.",
+    "name": "Weergavenaam",
+    "namePlaceholder": "Je naam",
+    "email": "E-mail",
+    "emailReadOnly": "E-mail kan hier niet worden gewijzigd.",
+    "avatar": "Profielfoto",
+    "avatarChange": "Foto wijzigen",
+    "save": "Wijzigingen opslaan",
+    "saving": "Opslaan...",
+    "saved": "Profiel bijgewerkt!"
+  },
   "petForm": {
     "petPhoto": "Huisdierfoto",
     "petPhotoDesc": "Voeg je favoriete foto van je huisdier toe. JPG of PNG.",

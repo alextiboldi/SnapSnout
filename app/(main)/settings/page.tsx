@@ -18,6 +18,9 @@ export default async function SettingsPage() {
       isPremium={session.user.isPremium}
       currentUserId={session.user.id}
       familyDetails={familyDetails}
+      userName={session.user.name}
+      userEmail={session.user.email}
+      userAvatarUrl={session.user.avatarUrl}
     />
   );
 }

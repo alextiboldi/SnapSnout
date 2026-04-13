@@ -148,6 +148,19 @@
     "deleteAccountOwnerWarningBody": "Stergerea contului va elimina definitiv familia si {count, plural, one {celalalt membru} few {ceilalti # membri} other {ceilalti # de membri}}.",
     "deleteAccountOwnerHint": "Sfat: <link>transfera mai intai dreptul de proprietar</link> pentru a pastra familia."
   },
+  "profile": {
+    "title": "Editeaza profilul",
+    "subtitle": "Actualizeaza-ti numele si poza.",
+    "name": "Nume afisat",
+    "namePlaceholder": "Numele tau",
+    "email": "Email",
+    "emailReadOnly": "Emailul nu poate fi schimbat aici.",
+    "avatar": "Poza de profil",
+    "avatarChange": "Schimba poza",
+    "save": "Salveaza modificarile",
+    "saving": "Se salveaza...",
+    "saved": "Profil actualizat!"
+  },
   "petForm": {
     "petPhoto": "Poza animalutului",
     "petPhotoDesc": "Adauga poza ta preferata cu animalutul. JPG sau PNG.",
