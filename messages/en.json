@@ -79,7 +79,9 @@
     "createCard": "Create Card",
     "aiMagic": "AI magic",
     "share": "Share",
-    "showWorld": "Show the world"
+    "showWorld": "Show the world",
+    "monthlyDue": "Month {month} photo time!",
+    "monthlyDueDesc": "Capture a monthly growth photo"
   },
   "milestones": {
     "title": "Milestones",
@@ -420,5 +422,16 @@
     "firstHeadBumpDesc": "You've been accepted.",
     "anotherYearTogether": "Another Year Together",
     "anotherYearTogetherDesc": "A year of love."
+  },
+  "monthlyPhotos": {
+    "title": "Monthly Photos",
+    "subtitle": "{name}'s growth journey",
+    "month": "Month {n}",
+    "captured": "Captured",
+    "addPhoto": "Add photo",
+    "due": "Due",
+    "future": "Coming soon",
+    "noPhotosYet": "No photos yet",
+    "by": "by {name}"
   }
 }

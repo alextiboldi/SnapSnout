@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { getPetsForFamily, getActivePetForMember } from "@/lib/queries/pets";
+import { isMonthlyPhotoDue } from "@/lib/queries/photos";
 import { requireSession } from "@/lib/auth/session";
 import { getAge, daysUntil, formatDate, getMilestoneStatus, isTranslationKey } from "@/lib/utils";
 import type { Pet, Milestone } from "@/lib/generated/prisma/client";
@@ -258,6 +259,48 @@ function QuickActions({ t }: { t: (key: string, values?: Record<string, string |
   );
 }
 
+async function MonthlyPhotoDue({
+  petId,
+  gotchaDay,
+  t,
+}: {
+  petId: string;
+  gotchaDay: Date;
+  t: (key: string, values?: Record<string, string | number | Date>) => string;
+}) {
+  const monthlyDue = await isMonthlyPhotoDue(petId, gotchaDay);
+  if (!monthlyDue.isDue) return null;
+
+  return (
+    <div className="px-5 mb-2">
+      <Link
+        href="/milestones/monthly"
+        className="spring-active flex items-center gap-3 rounded-[20px] bg-secondary-fixed/30 p-4 shadow-clay transition-all hover:-translate-y-0.5"
+      >
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary-fixed">
+          <Icon
+            name="photo_camera"
+            filled
+            className="text-lg text-on-secondary-fixed"
+          />
+        </div>
+        <div>
+          <p className="font-display text-sm font-bold text-on-surface">
+            {t("monthlyDue", { month: monthlyDue.monthNumber })}
+          </p>
+          <p className="font-friendly text-xs text-on-surface-variant">
+            {t("monthlyDueDesc")}
+          </p>
+        </div>
+        <Icon
+          name="arrow_forward"
+          className="ml-auto text-on-surface-variant"
+        />
+      </Link>
+    </div>
+  );
+}
+
 export default async function HomePage() {
   const session = await requireSession();
 
@@ -319,6 +362,7 @@ export default async function HomePage() {
       <div className="animate-fade-up mx-auto max-w-lg pb-6">
         <PetSwitcher pets={pets} activePetId={activePet?.id ?? pets[0].id} />
         {activePet && <PetProfileHero pet={activePet} t={t} />}
+        {activePet && <MonthlyPhotoDue petId={activePet.id} gotchaDay={activePet.gotchaDay} t={t} />}
         {nextMilestone && <NextMilestoneCard milestone={nextMilestone} t={t} />}
         <RecentMilestones milestones={completedMilestones} t={t} />
         <QuickActions t={t} />
