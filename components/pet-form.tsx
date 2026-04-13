@@ -70,6 +70,7 @@ export interface PetFormData {
   photoUrl: string | null;
   isDeceased: boolean;
   deceasedDate: Date | null;
+  tributeNote: string | null;
 }
 
 interface PetFormProps {
@@ -103,6 +104,9 @@ export function PetForm({
   );
   const [deceasedDate, setDeceasedDate] = useState(
     formatDateForInput(initialData?.deceasedDate)
+  );
+  const [tributeNote, setTributeNote] = useState(
+    initialData?.tributeNote ?? ""
   );
   const isDeceased = lifestage === "memorial";
   const [avatarPreview, setAvatarPreview] = useState<string | null>(
@@ -210,6 +214,7 @@ export function PetForm({
     formData.set("gotchaDate", gotchaDate);
     formData.set("isDeceased", String(isDeceased));
     formData.set("deceasedDate", isDeceased ? deceasedDate : "");
+    formData.set("tributeNote", isDeceased ? tributeNote : "");
     if (photoUrl) {
       formData.set("photoUrl", photoUrl);
     }
@@ -434,6 +439,20 @@ export function PetForm({
               {t("datePassed")}
             </label>
             <DatePicker value={deceasedDate} onChange={setDeceasedDate} />
+
+            <div className="mt-4">
+              <label className="block font-label uppercase text-[10px] tracking-widest text-on-surface-variant mb-2 ml-3 md:ml-4">
+                {t("tributeNote")}
+              </label>
+              <textarea
+                name="tributeNote"
+                value={tributeNote}
+                onChange={(e) => setTributeNote(e.target.value)}
+                placeholder={t("tributeNotePlaceholder")}
+                rows={3}
+                className="mt-1.5 w-full rounded-2xl bg-surface-container/60 px-4 py-3 font-body text-sm text-on-surface shadow-inner focus:outline-none focus:ring-2 focus:ring-primary/40 resize-none"
+              />
+            </div>
           </div>
         )}
 

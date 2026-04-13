@@ -79,11 +79,14 @@
     "createCard": "Creeaza card",
     "aiMagic": "Magie AI",
     "share": "Distribuie",
-    "showWorld": "Arata-i lumii"
+    "showWorld": "Arata-i lumii",
+    "inLovingMemory": "In amintirea lui draga",
+    "rainbowBridge": "Podul Curcubeului"
   },
   "milestones": {
     "title": "Repere",
     "journey": "Calatoria lui {name}",
+    "lifeStory": "Povestea de viata a lui {name}",
     "completed": "{count} completate",
     "today": "{count} azi",
     "upcoming": "{count} in curand",
@@ -185,7 +188,9 @@
     "createProfile": "Creeaza profilul",
     "creating": "Se creeaza...",
     "saveChanges": "Salveaza modificarile",
-    "saving": "Se salveaza..."
+    "saving": "Se salveaza...",
+    "tributeNote": "Nota de omagiu",
+    "tributeNotePlaceholder": "Scrie cateva cuvinte in memoria animalutului tau drag..."
   },
   "createPet": {
     "title": "Adauga-ti",

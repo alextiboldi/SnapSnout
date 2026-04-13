@@ -79,11 +79,14 @@
     "createCard": "Kaart maken",
     "aiMagic": "AI-magie",
     "share": "Delen",
-    "showWorld": "Laat het de wereld zien"
+    "showWorld": "Laat het de wereld zien",
+    "inLovingMemory": "In liefdevolle herinnering",
+    "rainbowBridge": "Regenboogbrug"
   },
   "milestones": {
     "title": "Mijlpalen",
     "journey": "De reis van {name}",
+    "lifeStory": "Het levensverhaal van {name}",
     "completed": "{count} voltooid",
     "today": "{count} vandaag",
     "upcoming": "{count} aankomend",
@@ -185,7 +188,9 @@
     "createProfile": "Profiel aanmaken",
     "creating": "Aanmaken...",
     "saveChanges": "Wijzigingen opslaan",
-    "saving": "Opslaan..."
+    "saving": "Opslaan...",
+    "tributeNote": "Herdenkingstekst",
+    "tributeNotePlaceholder": "Schrijf een paar woorden ter nagedachtenis aan je geliefde huisdier..."
   },
   "createPet": {
     "title": "Voeg je",
