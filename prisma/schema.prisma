@@ -38,11 +38,13 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  family         Family?        @relation("UserCurrentFamily", fields: [familyId], references: [id], onDelete: SetNull)
-  ownedFamilies  Family[]       @relation("FamilyOwner")
-  memberships    FamilyMember[]
-  uploadedPhotos Photo[]        @relation("PhotoUploader")
-  sentInvites    FamilyInvite[] @relation("InviteSender")
+  family                  Family?                  @relation("UserCurrentFamily", fields: [familyId], references: [id], onDelete: SetNull)
+  ownedFamilies           Family[]                 @relation("FamilyOwner")
+  memberships             FamilyMember[]
+  uploadedPhotos          Photo[]                  @relation("PhotoUploader")
+  sentInvites             FamilyInvite[]           @relation("InviteSender")
+  milestoneShares         MilestoneShare[]         @relation("MilestoneShareCreator")
+  notificationPreferences NotificationPreference?
 
   @@map("users")
 }
@@ -131,17 +133,33 @@ model Milestone {
   completedDate DateTime? @map("completed_date")
   photoUrl      String?   @map("photo_url")
   notes         String?
-  isShareable   Boolean   @default(true) @map("is_shareable")
   isCustom      Boolean   @default(false) @map("is_custom")
   tags          String[]  @default([])
   sortOrder     Int       @default(0) @map("sort_order")
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
 
-  pet    Pet     @relation(fields: [petId], references: [id], onDelete: Cascade)
+  pet    Pet             @relation(fields: [petId], references: [id], onDelete: Cascade)
   photos Photo[]
+  share  MilestoneShare?
 
   @@map("milestones")
+}
+
+model MilestoneShare {
+  id           String    @id @default(uuid()) @db.Uuid
+  milestoneId  String    @unique @map("milestone_id") @db.Uuid
+  token        String    @unique
+  createdById  String    @map("created_by_id") @db.Uuid
+  createdAt    DateTime  @default(now()) @map("created_at")
+  revokedAt    DateTime? @map("revoked_at")
+  viewCount    Int       @default(0) @map("view_count")
+  lastViewedAt DateTime? @map("last_viewed_at")
+
+  milestone Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+  createdBy User      @relation("MilestoneShareCreator", fields: [createdById], references: [id], onDelete: Cascade)
+
+  @@map("milestone_shares")
 }
 
 model Photo {
@@ -161,4 +179,18 @@ model Photo {
   uploader  User?      @relation("PhotoUploader", fields: [uploaderId], references: [id], onDelete: SetNull)
 
   @@map("photos")
+}
+
+model NotificationPreference {
+  id                  String   @id @default(uuid()) @db.Uuid
+  userId              String   @unique @map("user_id") @db.Uuid
+  milestoneReminders  Boolean  @default(true) @map("milestone_reminders")
+  photoReminders      Boolean  @default(true) @map("photo_reminders")
+  birthdayCountdown   Boolean  @default(true) @map("birthday_countdown")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notification_preferences")
 }
