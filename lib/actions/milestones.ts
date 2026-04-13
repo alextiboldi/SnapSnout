@@ -63,3 +63,21 @@ export async function createCustomMilestone(
 
   revalidatePath("/milestones");
 }
+
+export async function updateMilestoneTags(milestoneId: string, tags: string[]) {
+  const session = await requireSession();
+  const milestone = await prisma.milestone.findUnique({
+    where: { id: milestoneId },
+    include: { pet: { select: { familyId: true } } },
+  });
+  if (!milestone || milestone.pet.familyId !== session.family.id) {
+    throw new Error("Milestone not found");
+  }
+  const normalized = [...new Set(tags.map(t => t.trim().toLowerCase()).filter(Boolean))];
+  await prisma.milestone.update({
+    where: { id: milestoneId },
+    data: { tags: normalized },
+  });
+  revalidatePath("/milestones");
+  revalidatePath("/");
+}

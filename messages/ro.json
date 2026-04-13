@@ -98,7 +98,12 @@
     "galleryCount": "{count, plural, =0 {Nicio poza inca} one {# poza cu {name}} few {# poze cu {name}} other {# de poze cu {name}}}",
     "galleryEmpty": "Nicio poza inca",
     "galleryEmptyDesc": "Imortalizeaza prima amintire pentru a umple galeria.",
-    "addedBy": "de {name}"
+    "addedBy": "de {name}",
+    "tags": "Etichete",
+    "addTag": "Adauga o eticheta...",
+    "filterByTag": "Filtru",
+    "clearFilter": "Sterge",
+    "noTagsYet": "Nicio eticheta inca"
   },
   "settings": {
     "title": "Setari",
