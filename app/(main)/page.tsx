@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { getPetsForFamily, getActivePetForMember } from "@/lib/queries/pets";
+import { isMonthlyPhotoDue } from "@/lib/queries/photos";
 import { requireSession } from "@/lib/auth/session";
 import {
   getAge,
@@ -322,7 +323,6 @@ function EmptyState({
 }) {
   return (
     <div className="animate-fade-up mx-auto flex max-w-lg flex-col items-center justify-center px-5 py-20 text-center">
-      {/* Big squishy mascot circle */}
       <div className="relative">
         <div className="flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-br from-primary-fixed/40 via-pop-container to-secondary-fixed/50 shadow-clay-lg">
           <Icon name="pets" filled className="text-6xl text-primary" />
@@ -344,6 +344,48 @@ function EmptyState({
       >
         <Icon name="add" className="text-xl" />
         {t("addFirst")}
+      </Link>
+    </div>
+  );
+}
+
+async function MonthlyPhotoDue({
+  petId,
+  gotchaDay,
+  t,
+}: {
+  petId: string;
+  gotchaDay: Date;
+  t: (key: string, values?: Record<string, string | number | Date>) => string;
+}) {
+  const monthlyDue = await isMonthlyPhotoDue(petId, gotchaDay);
+  if (!monthlyDue.isDue) return null;
+
+  return (
+    <div className="px-5 mb-2">
+      <Link
+        href="/milestones/monthly"
+        className="spring-active flex items-center gap-3 rounded-[20px] bg-secondary-fixed/30 p-4 shadow-clay transition-all hover:-translate-y-0.5"
+      >
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary-fixed">
+          <Icon
+            name="photo_camera"
+            filled
+            className="text-lg text-on-secondary-fixed"
+          />
+        </div>
+        <div>
+          <p className="font-display text-sm font-bold text-on-surface">
+            {t("monthlyDue", { month: monthlyDue.monthNumber })}
+          </p>
+          <p className="font-friendly text-xs text-on-surface-variant">
+            {t("monthlyDueDesc")}
+          </p>
+        </div>
+        <Icon
+          name="arrow_forward"
+          className="ml-auto text-on-surface-variant"
+        />
       </Link>
     </div>
   );
@@ -399,6 +441,7 @@ export default async function HomePage() {
       <div className="mx-auto max-w-lg pb-8">
         <PetSwitcher pets={pets} activePetId={activePet?.id ?? pets[0].id} />
         {activePet && <PetProfileHero pet={activePet} t={t} />}
+        {activePet && <MonthlyPhotoDue petId={activePet.id} gotchaDay={activePet.gotchaDay} t={t} />}
         {nextMilestone && <NextMilestoneCard milestone={nextMilestone} t={t} />}
         <RecentMilestones milestones={completedMilestones} t={t} />
         <QuickActions t={t} />

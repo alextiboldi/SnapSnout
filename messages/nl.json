@@ -80,7 +80,9 @@
     "createCard": "Kaart maken",
     "aiMagic": "AI-magie",
     "share": "Delen",
-    "showWorld": "Laat het de wereld zien"
+    "showWorld": "Laat het de wereld zien",
+    "monthlyDue": "Tijd voor maand {month} foto!",
+    "monthlyDueDesc": "Leg een maandelijkse groeifoto vast"
   },
   "milestones": {
     "title": "Mijlpalen",
@@ -479,5 +481,16 @@
     "firstHeadBumpDesc": "Je bent geaccepteerd.",
     "anotherYearTogether": "Weer een jaar samen",
     "anotherYearTogetherDesc": "Een jaar vol liefde."
+  },
+  "monthlyPhotos": {
+    "title": "Maandelijkse foto's",
+    "subtitle": "De groeireis van {name}",
+    "month": "Maand {n}",
+    "captured": "Vastgelegd",
+    "addPhoto": "Foto toevoegen",
+    "due": "Te doen",
+    "future": "Binnenkort",
+    "noPhotosYet": "Nog geen foto's",
+    "by": "door {name}"
   }
 }

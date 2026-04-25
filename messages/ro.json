@@ -80,7 +80,9 @@
     "createCard": "Creeaza card",
     "aiMagic": "Magie AI",
     "share": "Distribuie",
-    "showWorld": "Arata-i lumii"
+    "showWorld": "Arata-i lumii",
+    "monthlyDue": "E timpul pentru poza din luna {month}!",
+    "monthlyDueDesc": "Surprinde o poza lunara de crestere"
   },
   "milestones": {
     "title": "Repere",
@@ -479,5 +481,16 @@
     "firstHeadBumpDesc": "Ai fost acceptat.",
     "anotherYearTogether": "Inca un an impreuna",
     "anotherYearTogetherDesc": "Un an de dragoste."
+  },
+  "monthlyPhotos": {
+    "title": "Poze lunare",
+    "subtitle": "Calatoria de crestere a lui {name}",
+    "month": "Luna {n}",
+    "captured": "Surprinsa",
+    "addPhoto": "Adauga poza",
+    "due": "De facut",
+    "future": "In curand",
+    "noPhotosYet": "Nicio poza inca",
+    "by": "de {name}"
   }
 }
