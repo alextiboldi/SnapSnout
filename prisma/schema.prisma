@@ -38,12 +38,13 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  family          Family?          @relation("UserCurrentFamily", fields: [familyId], references: [id], onDelete: SetNull)
-  ownedFamilies   Family[]         @relation("FamilyOwner")
-  memberships     FamilyMember[]
-  uploadedPhotos  Photo[]          @relation("PhotoUploader")
-  sentInvites     FamilyInvite[]   @relation("InviteSender")
-  milestoneShares MilestoneShare[] @relation("MilestoneShareCreator")
+  family                  Family?                  @relation("UserCurrentFamily", fields: [familyId], references: [id], onDelete: SetNull)
+  ownedFamilies           Family[]                 @relation("FamilyOwner")
+  memberships             FamilyMember[]
+  uploadedPhotos          Photo[]                  @relation("PhotoUploader")
+  sentInvites             FamilyInvite[]           @relation("InviteSender")
+  milestoneShares         MilestoneShare[]         @relation("MilestoneShareCreator")
+  notificationPreferences NotificationPreference?
 
   @@map("users")
 }
@@ -178,4 +179,18 @@ model Photo {
   uploader  User?      @relation("PhotoUploader", fields: [uploaderId], references: [id], onDelete: SetNull)
 
   @@map("photos")
+}
+
+model NotificationPreference {
+  id                  String   @id @default(uuid()) @db.Uuid
+  userId              String   @unique @map("user_id") @db.Uuid
+  milestoneReminders  Boolean  @default(true) @map("milestone_reminders")
+  photoReminders      Boolean  @default(true) @map("photo_reminders")
+  birthdayCountdown   Boolean  @default(true) @map("birthday_countdown")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notification_preferences")
 }

@@ -10,6 +10,8 @@ import { locales, localeNames, type Locale } from "@/i18n/config";
 import type { Pet } from "@/lib/generated/prisma/client";
 import type { FamilyDetails } from "@/lib/queries/family";
 import type { ActiveShare } from "@/lib/queries/milestone-shares";
+import type { NotificationPreferences } from "@/lib/queries/notifications";
+import { updateNotificationPreference } from "@/lib/actions/notifications";
 import { FamilySection } from "./family-section";
 import { ActiveSharesSection } from "./active-shares-section";
 
@@ -644,6 +646,7 @@ export default function SettingsClient({
   userName,
   userEmail,
   userAvatarUrl,
+  notificationPreferences,
 }: {
   pets: Pet[];
   activePetId: string | null;
@@ -655,11 +658,19 @@ export default function SettingsClient({
   userName: string | null;
   userEmail: string;
   userAvatarUrl: string | null;
+  notificationPreferences: NotificationPreferences;
 }) {
   const t = useTranslations("settings");
-  const [milestoneReminders, setMilestoneReminders] = useState(true);
-  const [photoReminders, setPhotoReminders] = useState(true);
-  const [birthdayCountdown, setBirthdayCountdown] = useState(true);
+  const [milestoneReminders, setMilestoneReminders] = useState(notificationPreferences.milestoneReminders);
+  const [photoReminders, setPhotoReminders] = useState(notificationPreferences.photoReminders);
+  const [birthdayCountdown, setBirthdayCountdown] = useState(notificationPreferences.birthdayCountdown);
+
+  const handleToggle = (key: "milestoneReminders" | "photoReminders" | "birthdayCountdown", value: boolean) => {
+    if (key === "milestoneReminders") setMilestoneReminders(value);
+    else if (key === "photoReminders") setPhotoReminders(value);
+    else setBirthdayCountdown(value);
+    updateNotificationPreference(key, value);
+  };
 
   return (
     <div className="animate-fade-up mx-auto max-w-lg px-5 pb-8">
@@ -713,11 +724,11 @@ export default function SettingsClient({
 
         <NotificationsSection
           milestoneReminders={milestoneReminders}
-          setMilestoneReminders={setMilestoneReminders}
+          setMilestoneReminders={(v) => handleToggle("milestoneReminders", v)}
           photoReminders={photoReminders}
-          setPhotoReminders={setPhotoReminders}
+          setPhotoReminders={(v) => handleToggle("photoReminders", v)}
           birthdayCountdown={birthdayCountdown}
-          setBirthdayCountdown={setBirthdayCountdown}
+          setBirthdayCountdown={(v) => handleToggle("birthdayCountdown", v)}
           t={t}
         />
 
