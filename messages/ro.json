@@ -82,11 +82,14 @@
     "share": "Distribuie",
     "showWorld": "Arata-i lumii",
     "monthlyDue": "E timpul pentru poza din luna {month}!",
-    "monthlyDueDesc": "Surprinde o poza lunara de crestere"
+    "monthlyDueDesc": "Surprinde o poza lunara de crestere",
+    "inLovingMemory": "In amintirea lui draga",
+    "rainbowBridge": "Podul Curcubeului"
   },
   "milestones": {
     "title": "Repere",
     "journey": "Calatoria lui {name}",
+    "lifeStory": "Povestea de viata a lui {name}",
     "completed": "{count} completate",
     "today": "{count} azi",
     "upcoming": "{count} in curand",
@@ -206,7 +209,9 @@
     "createProfile": "Creeaza profilul",
     "creating": "Se creeaza...",
     "saveChanges": "Salveaza modificarile",
-    "saving": "Se salveaza..."
+    "saving": "Se salveaza...",
+    "tributeNote": "Nota de omagiu",
+    "tributeNotePlaceholder": "Scrie cateva cuvinte in memoria animalutului tau drag..."
   },
   "createPet": {
     "title": "Adauga-ti",

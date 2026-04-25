@@ -15,6 +15,7 @@ import type { MilestoneStatus } from "@/lib/utils";
 import { PetSwitcher } from "./pet-switcher";
 import { Icon } from "@/components/icon";
 import { AppShell } from "@/components/home/app-shell";
+import { MemorialHero } from "@/components/home/memorial-hero";
 
 type MilestoneWithStatus = Milestone & { status: MilestoneStatus };
 
@@ -440,11 +441,15 @@ export default async function HomePage() {
     <AppShell showOnboarding={false}>
       <div className="mx-auto max-w-lg pb-8">
         <PetSwitcher pets={pets} activePetId={activePet?.id ?? pets[0].id} />
-        {activePet && <PetProfileHero pet={activePet} t={t} />}
-        {activePet && <MonthlyPhotoDue petId={activePet.id} gotchaDay={activePet.gotchaDay} t={t} />}
-        {nextMilestone && <NextMilestoneCard milestone={nextMilestone} t={t} />}
+        {activePet && activePet.isDeceased ? (
+          <MemorialHero pet={activePet} t={t} />
+        ) : (
+          activePet && <PetProfileHero pet={activePet} t={t} />
+        )}
+        {activePet && !activePet.isDeceased && <MonthlyPhotoDue petId={activePet.id} gotchaDay={activePet.gotchaDay} t={t} />}
+        {!activePet?.isDeceased && nextMilestone && <NextMilestoneCard milestone={nextMilestone} t={t} />}
         <RecentMilestones milestones={completedMilestones} t={t} />
-        <QuickActions t={t} />
+        {!activePet?.isDeceased && <QuickActions t={t} />}
       </div>
     </AppShell>
   );

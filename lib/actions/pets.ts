@@ -32,6 +32,7 @@ export async function createPet(formData: FormData) {
       deceasedDate: formData.get("deceasedDate")
         ? new Date(formData.get("deceasedDate") as string)
         : null,
+      tributeNote: (formData.get("tributeNote") as string) || null,
     },
   });
 
@@ -84,6 +85,7 @@ export async function updatePet(petId: string, formData: FormData) {
       deceasedDate: formData.get("deceasedDate")
         ? new Date(formData.get("deceasedDate") as string)
         : null,
+      tributeNote: (formData.get("tributeNote") as string) || null,
     },
   });
 

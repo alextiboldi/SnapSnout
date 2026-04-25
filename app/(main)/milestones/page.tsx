@@ -263,7 +263,9 @@ export default async function MilestonesPage({
       <div className="flex items-center justify-between mb-6 animate-fade-up">
         <div>
           <p className="font-label text-xs tracking-widest text-on-surface-variant uppercase">
-            {t("journey", { name: activePet.name })}
+            {activePet.isDeceased
+              ? t("lifeStory", { name: activePet.name })
+              : t("journey", { name: activePet.name })}
           </p>
           <h1 className="font-headline text-2xl md:text-3xl font-bold text-on-surface mt-1">
             {t("title")}
@@ -288,20 +290,24 @@ export default async function MilestonesPage({
             {t("completed", { count: completedMilestones.length })}
           </span>
         </div>
-        <div className="w-px h-4 bg-outline-variant/40" />
-        <div className="flex items-center gap-1.5">
-          <Icon name="today" className="text-secondary text-base" />
-          <span className="font-label text-sm text-on-surface-variant">
-            {t("today", { count: todayMilestones.length })}
-          </span>
-        </div>
-        <div className="w-px h-4 bg-outline-variant/40" />
-        <div className="flex items-center gap-1.5">
-          <Icon name="upcoming" className="text-tertiary text-base" />
-          <span className="font-label text-sm text-on-surface-variant">
-            {t("upcoming", { count: upcomingMilestones.length })}
-          </span>
-        </div>
+        {!activePet.isDeceased && (
+          <>
+            <div className="w-px h-4 bg-outline-variant/40" />
+            <div className="flex items-center gap-1.5">
+              <Icon name="today" className="text-secondary text-base" />
+              <span className="font-label text-sm text-on-surface-variant">
+                {t("today", { count: todayMilestones.length })}
+              </span>
+            </div>
+            <div className="w-px h-4 bg-outline-variant/40" />
+            <div className="flex items-center gap-1.5">
+              <Icon name="upcoming" className="text-tertiary text-base" />
+              <span className="font-label text-sm text-on-surface-variant">
+                {t("upcoming", { count: upcomingMilestones.length })}
+              </span>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Tag filter */}
@@ -329,7 +335,7 @@ export default async function MilestonesPage({
       </div>
 
       {/* Upcoming milestones list */}
-      {upcomingMilestones.length > 0 && (
+      {!activePet.isDeceased && upcomingMilestones.length > 0 && (
         <div className="mt-8 animate-fade-up" style={{ animationDelay: "0.3s" }}>
           <h2 className="font-headline text-lg font-bold text-on-surface mb-4">
             {t("comingUp")}
@@ -351,13 +357,15 @@ export default async function MilestonesPage({
       )}
 
       {/* Floating Action Button */}
-      <Link
-        href="/studio/generate"
-        className="fixed bottom-24 right-5 md:bottom-8 md:right-8 z-40 w-14 h-14 rounded-full btn-sculpted text-on-primary flex items-center justify-center shadow-ambient-lg spring-active hover:scale-105 transition-transform duration-300"
-        aria-label={t("createCard")}
-      >
-        <Icon name="auto_awesome" filled className="text-2xl" />
-      </Link>
+      {!activePet.isDeceased && (
+        <Link
+          href="/studio/generate"
+          className="fixed bottom-24 right-5 md:bottom-8 md:right-8 z-40 w-14 h-14 rounded-full btn-sculpted text-on-primary flex items-center justify-center shadow-ambient-lg spring-active hover:scale-105 transition-transform duration-300"
+          aria-label={t("createCard")}
+        >
+          <Icon name="auto_awesome" filled className="text-2xl" />
+        </Link>
+      )}
     </div>
   );
 }

@@ -82,11 +82,14 @@
     "share": "Delen",
     "showWorld": "Laat het de wereld zien",
     "monthlyDue": "Tijd voor maand {month} foto!",
-    "monthlyDueDesc": "Leg een maandelijkse groeifoto vast"
+    "monthlyDueDesc": "Leg een maandelijkse groeifoto vast",
+    "inLovingMemory": "In liefdevolle herinnering",
+    "rainbowBridge": "Regenboogbrug"
   },
   "milestones": {
     "title": "Mijlpalen",
     "journey": "De reis van {name}",
+    "lifeStory": "Het levensverhaal van {name}",
     "completed": "{count} voltooid",
     "today": "{count} vandaag",
     "upcoming": "{count} aankomend",
@@ -206,7 +209,9 @@
     "createProfile": "Profiel aanmaken",
     "creating": "Aanmaken...",
     "saveChanges": "Wijzigingen opslaan",
-    "saving": "Opslaan..."
+    "saving": "Opslaan...",
+    "tributeNote": "Herdenkingstekst",
+    "tributeNotePlaceholder": "Schrijf een paar woorden ter nagedachtenis aan je geliefde huisdier..."
   },
   "createPet": {
     "title": "Voeg je",

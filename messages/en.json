@@ -82,11 +82,14 @@
     "share": "Share",
     "showWorld": "Show the world",
     "monthlyDue": "Month {month} photo time!",
-    "monthlyDueDesc": "Capture a monthly growth photo"
+    "monthlyDueDesc": "Capture a monthly growth photo",
+    "inLovingMemory": "In loving memory",
+    "rainbowBridge": "Rainbow Bridge"
   },
   "milestones": {
     "title": "Milestones",
     "journey": "{name}'s Journey",
+    "lifeStory": "{name}'s Life Story",
     "completed": "{count} completed",
     "today": "{count} today",
     "upcoming": "{count} upcoming",
@@ -206,7 +209,9 @@
     "createProfile": "Create Profile",
     "creating": "Creating...",
     "saveChanges": "Save Changes",
-    "saving": "Saving..."
+    "saving": "Saving...",
+    "tributeNote": "Tribute Note",
+    "tributeNotePlaceholder": "Write a few words in memory of your beloved pet..."
   },
   "createPet": {
     "title": "Add Your",
