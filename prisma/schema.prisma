@@ -135,6 +135,7 @@ model Milestone {
   photoUrl      String?   @map("photo_url")
   notes         String?
   isCustom      Boolean   @default(false) @map("is_custom")
+  isShareable   Boolean   @default(true) @map("is_shareable")
   tags          String[]  @default([])
   sortOrder     Int       @default(0) @map("sort_order")
   createdAt     DateTime  @default(now()) @map("created_at")

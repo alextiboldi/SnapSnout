@@ -83,6 +83,7 @@ export default function EditPetClient({ pet }: { pet: Pet }) {
             photoUrl: pet.photoUrl,
             isDeceased: pet.isDeceased,
             deceasedDate: pet.deceasedDate,
+            tributeNote: pet.tributeNote ?? "",
           }}
           onSubmit={handleUpdate}
           submitLabel={tForm("saveChanges")}

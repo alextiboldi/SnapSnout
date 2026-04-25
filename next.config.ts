@@ -4,9 +4,6 @@ import createNextIntlPlugin from "next-intl/plugin";
 const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
 const nextConfig: NextConfig = {
-  serverActions: {
-    bodySizeLimit: "10mb",
-  },
   images: {
     remotePatterns: [
       {
