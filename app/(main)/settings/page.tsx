@@ -21,6 +21,9 @@ export default async function SettingsPage() {
       currentUserId={session.user.id}
       familyDetails={familyDetails}
       activeShares={activeShares}
+      userName={session.user.name}
+      userEmail={session.user.email}
+      userAvatarUrl={session.user.avatarUrl}
     />
   );
 }

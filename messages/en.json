@@ -154,6 +154,19 @@
     "deleteAccountOwnerWarningBody": "Deleting your account will permanently remove the family and kick out the other {count, plural, one {member} other {# members}}.",
     "deleteAccountOwnerHint": "Tip: <link>transfer ownership</link> first to keep the family alive."
   },
+  "profile": {
+    "title": "Edit Profile",
+    "subtitle": "Update your name and photo.",
+    "name": "Display Name",
+    "namePlaceholder": "Your name",
+    "email": "Email",
+    "emailReadOnly": "Email can't be changed here.",
+    "avatar": "Profile Photo",
+    "avatarChange": "Change photo",
+    "save": "Save Changes",
+    "saving": "Saving...",
+    "saved": "Profile updated!"
+  },
   "petForm": {
     "petPhoto": "Pet Photo",
     "petPhotoDesc": "Add your favourite photo of your pet. JPG or PNG.",

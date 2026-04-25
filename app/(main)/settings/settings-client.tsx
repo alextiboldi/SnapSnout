@@ -641,6 +641,9 @@ export default function SettingsClient({
   currentUserId,
   familyDetails,
   activeShares,
+  userName,
+  userEmail,
+  userAvatarUrl,
 }: {
   pets: Pet[];
   activePetId: string | null;
@@ -649,6 +652,9 @@ export default function SettingsClient({
   currentUserId: string;
   familyDetails: FamilyDetails;
   activeShares: ActiveShare[];
+  userName: string | null;
+  userEmail: string;
+  userAvatarUrl: string | null;
 }) {
   const t = useTranslations("settings");
   const [milestoneReminders, setMilestoneReminders] = useState(true);
@@ -662,6 +668,33 @@ export default function SettingsClient({
       </h1>
 
       <div className="mt-5 space-y-5">
+        {/* Profile Link */}
+        <Link
+          href="/settings/profile"
+          className="spring-active flex items-center gap-4 irregular-border bg-surface-container-low p-5 shadow-ambient transition-shadow hover:shadow-ambient-lg"
+        >
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary/25 via-secondary-fixed/30 to-tertiary/20 overflow-hidden">
+            {userAvatarUrl ? (
+              <img
+                src={userAvatarUrl}
+                alt=""
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <Icon name="person" filled className="text-2xl text-primary/70" />
+            )}
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="font-headline text-sm font-bold text-on-surface truncate">
+              {userName || userEmail.split("@")[0]}
+            </p>
+            <p className="font-body text-xs text-on-surface-variant/70 truncate">
+              {userEmail}
+            </p>
+          </div>
+          <Icon name="chevron_right" className="text-xl text-outline-variant" />
+        </Link>
+
         <PetManagementSection
           pets={pets}
           activePetId={activePetId}
