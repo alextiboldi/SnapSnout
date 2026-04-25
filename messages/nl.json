@@ -66,6 +66,7 @@
     "noPetsDesc": "Begin met het bijhouden van de mijlpalen en herinneringen van je huisdier.",
     "addFirst": "Voeg je eerste huisdier toe",
     "homeFor": "Thuis voor {months} {months, plural, one {maand} other {maanden}}",
+    "homeForYears": "Thuis voor {years} {years, plural, one {jaar} other {jaar}}{months, plural, =0 {} other { en {months} {months, plural, one {maand} other {maanden}}}}",
     "old": "{age} oud",
     "happeningNow": "Nu aan de beurt",
     "upNext": "Binnenkort",

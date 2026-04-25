@@ -66,6 +66,7 @@
     "noPetsDesc": "Incepe sa urmaresti reperele si amintirile animalutului tau.",
     "addFirst": "Adauga primul tau animalut",
     "homeFor": "Acasa de {months} {months, plural, one {luna} other {luni}}",
+    "homeForYears": "Acasa de {years} {years, plural, one {an} other {ani}}{months, plural, =0 {} other { si {months} {months, plural, one {luna} other {luni}}}}",
     "old": "{age} varsta",
     "happeningNow": "Se intampla acum",
     "upNext": "Urmeaza",

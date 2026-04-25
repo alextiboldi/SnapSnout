@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { Icon } from "@/components/icon";
 import { DatePicker } from "@/components/date-picker";
-import { uploadPhoto } from "@/lib/actions/upload";
+import { uploadPhotoClient } from "@/lib/upload-client";
 import { getBreedsFor } from "@/lib/breeds";
 import type { Locale } from "@/i18n/config";
 
@@ -191,9 +191,7 @@ export function PetForm({
     const file = fileInputRef.current?.files?.[0];
     if (file) {
       try {
-        const uploadData = new FormData();
-        uploadData.set("file", file);
-        photoUrl = await uploadPhoto(uploadData);
+        photoUrl = await uploadPhotoClient(file, `uploads/${Date.now()}`);
       } catch (err) {
         setError(err instanceof Error ? err.message : t("photoUploadFailed"));
         setIsSubmitting(false);

@@ -71,15 +71,22 @@ async function bootstrapSoloFamily(
   return prisma.$transaction(async (tx) => {
     // Ensure user exists — may have been created lazily before the family
     // schema landed, or may not exist at all.
-    const user = await tx.user.upsert({
-      where: { id: userId },
-      update: {},
-      create: {
-        id: userId,
-        email,
-        // isPremium defaults to true in schema during testing phase.
-      },
-    });
+    let user = await tx.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      // A row with this email may exist under an old auth ID (e.g. re-signup).
+      // Reclaim it by updating the ID to the current auth user.
+      const existing = await tx.user.findUnique({ where: { email } });
+      if (existing) {
+        user = await tx.user.update({
+          where: { email },
+          data: { id: userId },
+        });
+      } else {
+        user = await tx.user.create({
+          data: { id: userId, email },
+        });
+      }
+    }
 
     // Does a family already exist (e.g. partial bootstrap)? Prefer it.
     let family = user.familyId

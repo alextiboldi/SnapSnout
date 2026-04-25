@@ -30,12 +30,14 @@ function PetProfileHero({
   t: (key: string, values?: Record<string, string | number | Date>) => string;
 }) {
   const age = pet.dateOfBirth ? getAge(pet.dateOfBirth) : null;
-  const monthsHome = Math.abs(
+  const totalMonthsHome = Math.abs(
     Math.round(
       (new Date().getTime() - new Date(pet.gotchaDay).getTime()) /
         (1000 * 60 * 60 * 24 * 30.44)
     )
   );
+  const homeYears = Math.floor(totalMonthsHome / 12);
+  const homeMonths = totalMonthsHome % 12;
 
   return (
     <section className="relative px-5 pt-4 pb-6">
@@ -63,7 +65,9 @@ function PetProfileHero({
         {/* "X months home" sticker — pure cuteness */}
         <div className="sticker-tilt absolute -bottom-2 -right-1 rounded-full bg-pop px-3 py-1.5 text-on-pop shadow-clay">
           <p className="font-display text-[11px] font-bold uppercase tracking-wide leading-none">
-            🏠 {t("homeFor", { months: monthsHome })}
+            🏠 {homeYears >= 1
+              ? t("homeForYears", { years: homeYears, months: homeMonths })
+              : t("homeFor", { months: totalMonthsHome })}
           </p>
         </div>
       </div>

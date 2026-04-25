@@ -66,6 +66,7 @@
     "noPetsDesc": "Start tracking your pet's milestones and memories.",
     "addFirst": "Add your first pet",
     "homeFor": "Home for {months} {months, plural, one {month} other {months}}",
+    "homeForYears": "Home for {years} {years, plural, one {year} other {years}}{months, plural, =0 {} other { and {months} {months, plural, one {month} other {months}}}}",
     "old": "{age} old",
     "happeningNow": "Happening now",
     "upNext": "Up next",
