@@ -1,0 +1,9 @@
+  1. One family per user, or many? Can someone belong to both their parents' family and their partner's? One-family is dramatically simpler — I'd start there unless you have a reason not to.
+  2. Roles? Flat membership (everyone is equal), or owner/member distinction (only the owner can delete pets, invite, manage billing)? I'd lean toward owner + members for the first version — keeps moderation simple.
+  3. Invite UX? Email-only (invitee gets a link, signs up/logs in, auto-joins), or a shareable code/QR they type in? Email feels right for "family" — but it assumes the invitee has email, which isn't always true for, say, a grandparent adding grandkids. Maybe both.
+  4. What happens to existing data on migration? Every current user becomes the owner of a one-person family containing their existing pets. That's the safe default.
+  5. What's actually shared? Just pets + photos + milestones? Or also the onboarding state, notification preferences, AI studio history? I'd keep personal preferences (notifications, locale) on the User and share the pet graph on the Family.
+  6. Write permissions. Can a member delete a pet? Edit a milestone the owner created? My default: members can read everything and add/edit their own contributions (photos, milestone notes); only the owner can delete pets or remove members. Matches how people actually
+  behave in a family.
+  7. Billing. "Family plan" often implies a paid tier. Is this a free feature wrapped in your existing Premium placeholder, or its own SKU? If paid, does the owner's subscription cover members?
+  8. Leaving. When someone leaves a family (or is removed), do their uploaded photos stay or go with them? I'd say stay — they were contributed to the shared pet. But that should be explicit in the UI.

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Icon } from "@/components/icon";
@@ -6,6 +7,7 @@ import { getActivePetForMember, getPetsForFamily } from "@/lib/queries/pets";
 import { PetSwitcher } from "@/app/(main)/pet-switcher";
 import { MilestonesList } from "./milestones-list";
 import { MilestoneOpener } from "./milestone-opener";
+import { TagFilter } from "./tag-filter";
 import {
   formatDate,
   getMilestoneStatus,
@@ -193,7 +195,12 @@ function LocationCard() {
   );
 }
 
-export default async function MilestonesPage() {
+export default async function MilestonesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tag?: string }>;
+}) {
+  const { tag: activeTag } = await searchParams;
   const session = await requireSession();
 
   const [activePet, pets, t, tHome, tPresets] = await Promise.all([
@@ -236,11 +243,17 @@ export default async function MilestonesPage() {
     })
   );
 
-  const completedMilestones = allMilestones.filter(
+  const allTags = [...new Set(allMilestones.flatMap((m) => m.tags))].sort();
+
+  const filtered = activeTag
+    ? allMilestones.filter((m) => m.tags.includes(activeTag))
+    : allMilestones;
+
+  const completedMilestones = filtered.filter(
     (m) => m.status === "completed"
   );
-  const todayMilestones = allMilestones.filter((m) => m.status === "today");
-  const upcomingMilestones = allMilestones.filter(
+  const todayMilestones = filtered.filter((m) => m.status === "today");
+  const upcomingMilestones = filtered.filter(
     (m) => m.status === "upcoming"
   );
 
@@ -290,6 +303,18 @@ export default async function MilestonesPage() {
           </span>
         </div>
       </div>
+
+      {/* Tag filter */}
+      {allTags.length > 0 && (
+        <div
+          className="mb-4 animate-fade-up"
+          style={{ animationDelay: "0.06s" }}
+        >
+          <Suspense>
+            <TagFilter tags={allTags} />
+          </Suspense>
+        </div>
+      )}
 
       {/* Bento Grid */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-5">

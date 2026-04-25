@@ -99,7 +99,12 @@
     "galleryCount": "{count, plural, =0 {No photos yet} one {# photo of {name}} other {# photos of {name}}}",
     "galleryEmpty": "No photos yet",
     "galleryEmptyDesc": "Snap your first memory to start filling this gallery.",
-    "addedBy": "by {name}"
+    "addedBy": "by {name}",
+    "tags": "Tags",
+    "addTag": "Add a tag...",
+    "filterByTag": "Filter",
+    "clearFilter": "Clear",
+    "noTagsYet": "No tags yet"
   },
   "settings": {
     "title": "Settings",

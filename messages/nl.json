@@ -99,7 +99,12 @@
     "galleryCount": "{count, plural, =0 {Nog geen foto's} one {# foto van {name}} other {# foto's van {name}}}",
     "galleryEmpty": "Nog geen foto's",
     "galleryEmptyDesc": "Leg je eerste herinnering vast om deze galerij te vullen.",
-    "addedBy": "door {name}"
+    "addedBy": "door {name}",
+    "tags": "Tags",
+    "addTag": "Voeg een tag toe...",
+    "filterByTag": "Filter",
+    "clearFilter": "Wissen",
+    "noTagsYet": "Nog geen tags"
   },
   "settings": {
     "title": "Instellingen",
